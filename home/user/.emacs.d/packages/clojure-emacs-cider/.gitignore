@@ -1,0 +1,8 @@
+home/user/.emacs.d/backup/**/*
+home/user/.emacs.d/auto-save/**/*
+home/user/.emacs.d/auto-save-list/**/*
+
+home/user/.xmonad/**/*.o
+home/user/.xmonad/**/*.hi
+home/user/.xmonad/xmonad-x86_64-linux
+home/user/.xmonad/xmonad.errors
