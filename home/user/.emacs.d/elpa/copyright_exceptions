@@ -1,0 +1,83 @@
+./ada-mode/ada-prj.el
+./ada-mode/ada-skel.el:    ("copyright_license"
+./ada-mode/ada-skel.el:  "--  Copyright (C) " (format-time-string "%Y ") user-full-name " All Rights Reserved.\n"
+./ada-mode/ada-skel.el:  "--  Copyright (C) " (format-time-string "%Y ") user-full-name " All Rights Reserved.\n"
+./ada-mode/ada-skel.el:  "--  Copyright (C) " (format-time-string "%Y ") user-full-name " All Rights Reserved.\n"
+./ada-mode/ada-skel.el:  "Example copyright/license skeleton, with automatic year and owner, GPLv3."
+./ada-mode/ada-skel.el:  "Example copyright/license skeleton, with automatic year and owner."
+./ada-mode/ada-skel.el:  "Insert a file header comment, with automatic copyright year and prompt for copyright owner/license.
+./ada-mode/ada-skel.el:  "Modified GPLv3 copyright/license skeleton, with automatic year and owner."
+./ada-mode/ada-skel.el:  "{copyright_license}\n"
+./ada-mode/ada-stmt.el
+./ada-mode/ada-xref.el
+./ada-mode/gpr-skel.el:    ("copyright_license"
+./ada-mode/gpr-skel.el:  "--  Copyright (C) " (format-time-string "%Y ") user-full-name " All Rights Reserved.\n"
+./ada-mode/gpr-skel.el:  "--  Copyright (C) " (format-time-string "%Y ") user-full-name " All Rights Reserved.\n"
+./ada-mode/gpr-skel.el:  "Example copyright/license skeleton, with automatic year and owner, GPLv3."
+./ada-mode/gpr-skel.el:  "Example copyright/license skeleton, with automatic year and owner."
+./ada-mode/gpr-skel.el:  "Insert a file header comment, with automatic copyright year and prompt for copyright owner/license.
+./ada-mode/gpr-skel.el:  "{copyright_license}\n"
+./auctex/latex.el:   "pounds" "copyright"
+./auctex/plain-tex.el:   "copyright"
+./auctex/style/amsart.el
+./auctex/style/amsbook.el
+./auctex/style/amsbsy.el
+./auctex/style/amsmath.el:;; FIXME: What about the copyright for <= 2001?
+./auctex/style/amstext.el
+./auctex/style/article.el
+./auctex/style/beamer.el
+./auctex/style/bidibeamer.el
+./auctex/style/book.el
+./auctex/style/czech.el
+./auctex/style/danish.el
+./auctex/style/dk.el
+./auctex/style/dutch.el
+./auctex/style/english.el
+./auctex/style/german.el
+./auctex/style/graphics.el
+./auctex/style/j-article.el
+./auctex/style/j-book.el
+./auctex/style/j-report.el
+./auctex/style/jarticle.el
+./auctex/style/jbook.el
+./auctex/style/jreport.el
+./auctex/style/jsarticle.el
+./auctex/style/jsbook.el
+./auctex/style/jurabib.el:;; you assign the copyright to the FSF.
+./auctex/style/latexinfo.el:     '("copyright" nil)
+./auctex/style/mflogo.el
+./auctex/style/ngerman.el
+./auctex/style/plfonts.el
+./auctex/style/plhb.el
+./auctex/style/report.el
+./auctex/style/scrartcl.el
+./auctex/style/scrbook.el
+./auctex/style/scrlttr2.el
+./auctex/style/scrpage2.el
+./auctex/style/scrreprt.el
+./auctex/style/slovak.el
+./auctex/style/swedish.el
+./auctex/style/textcomp.el:    '("textcopyright"            0)     ; Type: Symbol -- Slot: 169
+./auctex/style/virtex.el
+./auctex/tex-fold.el:    ("(C)" ("copyright"))
+./auctex/tex-info.el:   '("copyright" nil)
+./debbugs/debbugs-gnu.el:	  (insert "  Copyright-paperwork-exempt: yes"))
+./ergoemacs-mode/ergoemacs-advices.el:                         emacs-copyright
+./ergoemacs-mode/ergoemacs-themes.el:                 ,(lambda () emacs-copyright)
+./gnugo/gnugo.el:    (CP "Copyright"       game  simpletext)
+./hyperbole/hib-doc-id.el:;;  Copyright:        
+./math-symbol-lists/math-symbol-lists.el:    "columnsep" "columnseprule" "columnwidth" "contentsline" "copyright"
+./muse/htmlize-hack.el
+./rudel/rudel-loaddefs.el
+./uni-confusables/gen-confusables.el:;; Copyright (C) 1991-2009, 2010 Unicode, Inc.
+./uni-confusables/gen-confusables.el:;; gen-confusables.el.  The copyright and permissions are the same
+./uni-confusables/gen-confusables.el:;; list (covered by the Unicode copyright terms in copyright.html)
+./uni-confusables/uni-confusables.el
+./uni-confusables/uni-confusables.el:;; Copyright (C) 1991-2009, 2010 Unicode, Inc.
+./uni-confusables/uni-confusables.el:;; for the copyright and permission notice.
+./w3/w3-cus.el:    "copyright" "bookmark" "help" "made" "contents" "top")
+./w3/w3-cus.el:  ;; Glossary, Copyright, Chapter, Section, Subsection, Appendix,
+./w3/w3-latex.el:    (copy . "\\copyright ")
+./w3/w3-toolbar.el:     "Copyright"]
+./w3/w3-toolbar.el:     (w3-fetch (w3-link-is-defined "copyright"))
+./w3/w3-toolbar.el:     (w3-link-is-defined "copyright")

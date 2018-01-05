@@ -1,0 +1,108 @@
+project ARM_Info is
+  for Source_Dirs use
+    ("../progs");
+
+  for Main use ("arm_form.ada");
+
+  for Object_Dir use "objects";
+  for Exec_Dir use ".";
+
+  package Naming is
+     for Spec ("ARM_Contents") use "arm_cont.ads";
+     for Body ("ARM_Contents") use "arm_cont.adb";
+
+     for Spec ("ARM_Corr") use "arm_corr.ads";
+     for Body ("ARM_Corr") use "arm_corr.adb";
+
+     for Spec ("ARM_Database") use "arm_db.ads";
+     for Body ("ARM_Database") use "arm_db.adb";
+
+     for Spec ("ARM_File") use "arm_file.ads";
+     for Body ("ARM_File") use "arm_file.adb";
+
+     for Spec ("ARM_Format") use "arm_frm.ads";
+     for Body ("ARM_Format") use "arm_frm.adb";
+
+     for Spec ("ARM_Format.Data") use "arm_frmd.ads";
+     for Body ("ARM_Format.Data") use "arm_frmd.adb";
+
+     for Body ("ARM_Format.Scan") use "arm_frms.adb";
+
+     for body ("ARM_Formatter") use "arm_form.ada";
+
+     for spec ("ARM_HTML") use "arm_html.ads";
+     for Body ("ARM_HTML") use "arm_html.adb";
+
+     for Spec ("ARM_Index") use "arm_indx.ads";
+     for Body ("ARM_Index") use "arm_indx.adb";
+
+     for Spec ("ARM_Input") use "arm_inp.ads";
+     for Body ("ARM_Input") use "arm_inp.adb";
+
+     for Spec ("ARM_Master") use "arm_mast.ads";
+     for Body ("ARM_Master") use "arm_mast.adb";
+
+     for Spec ("ARM_Output") use "arm_out.ads";
+
+     for spec ("ARM_RTF") use "arm_rtf.ads";
+     for Body ("ARM_RTF") use "arm_rtf.adb";
+
+     for Spec ("ARM_String") use "arm_str.ads";
+     for Body ("ARM_String") use "arm_str.adb";
+
+     for Spec ("ARM_Subindex") use "arm_sub.ads";
+     for Body ("ARM_Subindex") use "arm_sub.adb";
+
+     for Spec ("ARM_Syntax") use "arm_syn.ads";
+     for Body ("ARM_Syntax") use "arm_syn.adb";
+
+     for Spec ("ARM_Text") use "arm_text.ads";
+     for Body ("ARM_Text") use "arm_text.adb";
+
+     for Spec ("ARM_Texinfo") use "arm_texi.ads";
+     for Body ("ARM_Texinfo") use "arm_texi.adb";
+
+  end Naming;
+
+  package Compiler is
+     --  upstream wants Ada 2005 syntax, no GNAT-specific pragmas.
+     --  We disable some warnings to minimize source diff with upstream.
+     --  We append ADAFLAGS so the Makefile can add or override options.
+     Switches :=
+       ("-g",
+        "-O0",
+        "-gnat2005",
+        "-gnatfoqQ",
+        "-gnatVa",
+        "-gnatwaCeFKLMP",
+        "-fstack-check",
+        "-gnatybefp")
+       & External_As_List ("ADAFLAGS", " ");
+
+     for Default_Switches ("Ada") use Switches;
+
+     -- arm_frm has code that passes the same object via two 'in out'
+     -- params; GNAT 4.8 warns about that, so we suppress the warning
+     -- here.
+     for Switches ("arm_frm.adb") use Switches & ("-gnatw.I");
+
+  end Compiler;
+
+  package Binder is
+     for Default_Switches ("Ada") use ("-E");
+  end Binder;
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-C");
+
+      --  We use ".exe" extension even on non-Windows, to simplify the makefiles.
+      for Executable_Suffix use ".exe";
+
+      for Executable ("ARM_FORM.ADA") use "arm_form.exe";
+   end Builder;
+
+  package Linker is
+     for Default_Switches ("Ada") use External_As_List ("LDFLAGS", " ");
+  end Linker;
+
+end ARM_Info;

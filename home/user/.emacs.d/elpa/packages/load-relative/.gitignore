@@ -1,0 +1,17 @@
+/*.elc
+/*~
+/Makefile
+/Makefile.in
+/README
+/aclocal.m4
+/autom4te.cache
+/config.log
+/config.status
+/configure
+/configure.lineno
+/elc-stamp
+/elc-temp
+/elpa
+/emacs-load-relative-*.tar.gz
+/install-sh
+/missing

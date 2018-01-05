@@ -1,0 +1,745 @@
+This is paced.info, produced by makeinfo version 6.5 from paced.texi.
+
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* Paced: (paced).       Predictive Abbreviation Completion and Expansion using Dictionaries.
+END-INFO-DIR-ENTRY
+
+
+File: paced.info,  Node: Top,  Next: Copying,  Up: (dir)
+
+Paced
+*****
+
+* Menu:
+
+* Copying::
+* Introduction::                 Brief Introduction to paced
+* Dictionaries::                 Paced’s bread and butter
+* Population Commands::          The good stuff
+* Example Setups::               Some examples
+* Contributing::                 I wanna help!
+
+— The Detailed Node Listing —
+
+Introduction
+
+* Similar Packages::             Packages with similar goals
+* Installation::                 How to install paced
+* Basic Setup::                  The simplest setup
+
+Similar Packages
+
+* pabbrev::
+* predictive::
+
+
+Dictionaries
+
+* Creating a Dictionary::        First steps
+* Editing a Dictionary::         How to edit your new dictionary
+* Selective Dictionaries::       Enabling certain dictionaries under certain conditions
+* Dictionary Files::             Loading and Saving the Dictionaries
+
+Population Commands
+
+* Built-in Commands::            Basics
+* Properties::                   Tweaking the defaults
+* Custom Commands::              Defining new population commands
+* Asynchronous Population::      Populating without blocking
+
+Example Setups
+
+* Org Agenda Files::
+* Project Files::
+
+Contributing
+
+* Bugs::                         Submitting bug reports
+* Development::                  Helping with development
+* Documentation::                Improving the documentation
+* Working with EDE::             And all its quirks
+
+
+
+File: paced.info,  Node: Copying,  Next: Introduction,  Prev: Top,  Up: Top
+
+Copying
+*******
+
+Copyright (C) 2017 Free Software Foundation, Inc.
+
+     This program is free software: you can redistribute it and/or
+     modify it under the terms of the GNU General Public License as
+     published by the Free Software Foundation, either version 3 of the
+     License, or (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful, but
+     WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+     General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see
+     <http://www.gnu.org/licenses/>.
+
+
+File: paced.info,  Node: Introduction,  Next: Dictionaries,  Prev: Copying,  Up: Top
+
+Introduction
+************
+
+Paced (Predictive Abbreviation Completion and Expansion using
+Dictionaries) scans a group of files (determined by “population
+commands”) to construct a usage table (dictionary).  Words (or symbols)
+are sorted by their usage, and may be later presented to the user for
+completion.  A dictionary can then be saved to a file, to be loaded
+later.
+
+   Population commands determine how a dictionary should be filled with
+words or symbols.  A dictionary may have multiple population commands,
+and population may be performed asynchronously.  Once population is
+finished, the contents are sorted, with more commonly used words at the
+front.  Dictionaries may be edited through EIEIO’s customize-object
+interface.
+
+   Completion is done through ‘completion-at-point’.  The dictionary to
+use for completion can be customized.
+
+* Menu:
+
+* Similar Packages::             Packages with similar goals
+* Installation::                 How to install paced
+* Basic Setup::                  The simplest setup
+
+
+File: paced.info,  Node: Similar Packages,  Next: Installation,  Up: Introduction
+
+Similar Packages
+================
+
+There are a few Emacs packages that have similar goals to paced, and
+provided some of the inspiration and motivation behind it.
+
+* Menu:
+
+* pabbrev::
+* predictive::
+
+
+File: paced.info,  Node: pabbrev,  Next: predictive,  Up: Similar Packages
+
+pabbrev
+-------
+
+The pabbrev (https://github.com/phillord/pabbrev) package by Phillip
+Lord automatically scans text of the current buffer while Emacs is idle
+and presents the user with the most common completions.
+
+   One of the major downsides to pabbrev is that the data it collects
+doesn’t persist between Emacs sessions.  For a few files that are always
+open, such as org agenda files, pabbrev works great.  If you want to
+train it from a few files that aren’t always open, you’ll have to open
+each file and retrain pabbrev from that file.  And you’ll have to do
+this every time you restart Emacs.
+
+   It keeps up-to-date usage and prefix hashes of all buffers of the
+same mode, and scanning, or “scavenging”, blends seamlessly into the
+background.  Completion is just a hash table lookup, so it can handle
+completion in microseconds.  There’s also no setup required; it will
+start working right away.  The downside to this is that dictionaries
+aren’t flexible; each dictionary corresponds to a major mode, and
+there’s no way to change that.
+
+
+File: paced.info,  Node: predictive,  Prev: pabbrev,  Up: Similar Packages
+
+predictive
+----------
+
+The predictive (https://www.dr-qubit.org/predictive.html) package by
+Toby Cubitt scans text of the current buffer on user command.  The usage
+data is stored in a dictionary, which can then be saved to a disk.
+Extensions are provided to ‘completion-at-point’, or predictive’s
+built-in frontend can be used.  It has a safety precaution where it only
+adds existing words to a dictionary, unless the user allows this.  This
+is to avoid adding typos to a dictionary.
+
+   Completion was also done intelligently, grouping commonly used words
+together and optionally suggesting shorter words before longer words.
+
+   While the frontend and backend are separate, the frontend is required
+to populate a dictionary.  There is no way to exclude part of the
+buffer’s text from dictionary population.  The safety precaution
+predictive has where it only adds a word to a dictionary if it already
+exists was tedious, since I didn’t need it to do that.
+
+
+File: paced.info,  Node: Installation,  Next: Basic Setup,  Prev: Similar Packages,  Up: Introduction
+
+Installation
+============
+
+*Requirements*
+
+Emacs   25.1
+async   1.9.1
+
+   Right now, the only way to install paced is from source.
+
+   From Source:
+
+     bzr branch https://bzr.savannah.gnu.org/r/paced-el paced
+
+   After that, add the following to your init file (typically .emacs):
+
+     (add-to-list 'load-path "/full/path/to/paced/")
+     (require 'paced)
+
+
+File: paced.info,  Node: Basic Setup,  Prev: Installation,  Up: Introduction
+
+Basic Setup
+===========
+
+Paced needn’t have a lot of setup to run.  In fact, the simplest setup
+is as follows:
+
+  1. Create a new dictionary, “Default” (See *note Creating a
+     Dictionary::)
+  2. Set paced-global-dict-enable-alist to ‘((t . "Default"))’ (See
+     *note Selective Dictionaries::)
+  3. Run ‘M-x global-paced-mode’
+  4. To add a file to the dictionary, use ‘M-x
+     paced-add-buffer-file-to-dictionary’
+
+   This will create a default dictionary and populate it from buffers
+you specify.
+
+
+File: paced.info,  Node: Dictionaries,  Next: Population Commands,  Prev: Introduction,  Up: Top
+
+Dictionaries
+************
+
+* Menu:
+
+* Creating a Dictionary::        First steps
+* Editing a Dictionary::         How to edit your new dictionary
+* Selective Dictionaries::       Enabling certain dictionaries under certain conditions
+* Dictionary Files::             Loading and Saving the Dictionaries
+
+
+File: paced.info,  Node: Creating a Dictionary,  Next: Editing a Dictionary,  Up: Dictionaries
+
+Creating a Dictionary
+=====================
+
+Now that you’ve got paced installed, it’s time to create a new
+dictionary.
+
+     M-x paced-create-new-dictionary RET DICTIONARY_NAME RET DICTIONARY_FILE RET
+
+   Let’s explain those two arguments:
+
+   First, you’ve got DICTIONARY_NAME. This is a string that will be used
+to reference the new dictionary.  We recommend something short, like
+’new-dict’, ’my-dict’, ’writing’, etc.
+
+   Next is the file where the dictionary will be stored.  This is
+typically stored in ‘paced-dictionary-directory’, from which all
+dictionaries will be loaded with ‘paced-load-all-dictionaries’ (more on
+that later).  For now, it’s important to know that
+‘paced-load-all-dictionaries’ is the easiest way to load dictionaries
+when paced is loaded.
+
+   After you’ve run the above command, you will be taken to the
+customization buffer.  This is where you can set population commands.
+
+
+File: paced.info,  Node: Editing a Dictionary,  Next: Selective Dictionaries,  Prev: Creating a Dictionary,  Up: Dictionaries
+
+Editing a Dictionary
+====================
+
+In order to edit a dictionary, paced provides
+‘paced-edit-named-dictionary’ and ‘paced-edit-current-dictionary’.
+
+   The edit buffer provides the options to change the population
+commands, case handling, dictionary storage name, and sort method.  Each
+of these is documented in the edit buffer.
+
+
+File: paced.info,  Node: Selective Dictionaries,  Next: Dictionary Files,  Prev: Editing a Dictionary,  Up: Dictionaries
+
+Selective Dictionaries
+======================
+
+Paced provides a mechanism called the “enable list”, that allows a user
+to enable certain dictionaries for completion given certain conditions.
+
+   There are two enable lists: a global and local one.  They both work
+the same, with the local one taking precedence.  Each entry in the list
+has a condition and a key.
+
+   The conditions are one of the following:
+
+   • A mode name, such as ‘org-mode’ or ‘text-mode’, indicating that the
+     named dictionary should be active in any mode derived from that
+     mode.
+
+   • A symbol, in which case the named dictionary is active whenever the
+     value of that symbol is non-nil.  This includes the symbol ‘t’.
+
+   • A function symbol, in which case the function is called with no
+     arguments to determine if the given dictionary should be enabled.
+     If the function returns non-nil the dictionary is enabled.
+
+   • A lambda function, in which case it is called with no arguments,
+     and if it returns non-nil, the dictionary is enabled.
+
+   • The form (or CONDITION1 CONDITION2 ...), which enables the given
+     dictionary if any of the conditions are met.
+
+   • The form (and CONDITION1 CONDITION2 ...), which enables the given
+     dictionary if all of the conditions are met.
+
+   Remember that paced-mode must be active for completion to occur.
+Neither list will activate it, just determine which dictionary is
+active.
+
+   The key is the dictionary name you set during dictionary creation.
+
+
+File: paced.info,  Node: Dictionary Files,  Prev: Selective Dictionaries,  Up: Dictionaries
+
+Dictionary Files
+================
+
+Paced provides ‘paced-load-all-dictionaries’ to load all dictionaries in
+‘paced-dictionary-directory’.  Paced determines which dictionaries to
+load based on two variables:
+‘paced-dictionary-directory-whitelist-regexp’ and
+‘paced-dictionary-directory-blacklist-regexp’.  Paced can also be told
+to search recursively by setting
+‘paced-load-all-dictionaries-recursively’ to t.  All four of these
+variables may be set using Emacs’s customization interface.
+
+   An individual dictionary file may also be loaded:
+
+     M-x paced-load-dictionary-from-file RET /path/to/file RET
+
+   Once a file has been modified, it may then be saved:
+
+     M-x paced-save-named-dictionary RET dictionary name RET
+
+   Or, all dictionaries may be saved:
+
+     M-x paced-save-all-dictionaries RET
+
+   Dictionaries may also be automatically saved whenever changed by
+setting ‘paced-repopulate-saves-dictionary’ to t.  Population is covered
+in the next section.
+
+
+File: paced.info,  Node: Population Commands,  Next: Example Setups,  Prev: Dictionaries,  Up: Top
+
+Population Commands
+*******************
+
+Part of the beauty of paced is the ease of reconstructing a dictionary.
+When you’ve got a bunch of files from which you want to populate your
+dictionary, it’d be a pain to go to each of them and say “populate from
+this one, next, populate from this one, next”.
+
+   Instead, paced provides population commands.  Each dictionary has one
+or more population commands it uses to recreate its contents, run in
+order during population.
+
+   In order to trigger population, run the following:
+
+     M-x paced-repopulate-named-dictionary RET DICTIONARY-NAME RET
+
+* Menu:
+
+* Built-in Commands::            Basics
+* Properties::                   Tweaking the defaults
+* Custom Commands::              Defining new population commands
+* Asynchronous Population::      Populating without blocking
+
+
+File: paced.info,  Node: Built-in Commands,  Next: Properties,  Up: Population Commands
+
+Built-in Commands
+=================
+
+There are five built-in population commands:
+
+file
+     Populates a dictionary from all words in a given file
+buffer
+     Populates a dictionary from all words in a given buffer, which must
+     exist during population
+file-function
+     Like the file command, but allows a custom setup function.  This
+     function is called with no arguments in a temporary buffer
+     containing the file’s contents, and must return non-nil if
+     population may continue.
+directory-regexp
+     Populates from all files in a directory that match the given
+     regexp.  Also optionally allows recursion.
+file-list
+     Populates from all files returned by a generator function.
+
+
+File: paced.info,  Node: Properties,  Next: Custom Commands,  Prev: Built-in Commands,  Up: Population Commands
+
+Properties
+==========
+
+When setting the population commands of a dictionary, one may also set
+certain properties.  Each property is a variable binding, bound while
+the population command runs.
+
+   Two variables are of note here:
+
+paced-exclude-function
+     Function of no arguments that returns non-nil if the thing at point
+     should be excluded from population.
+paced-thing-at-point-constituent
+     Symbol defining thing on which population works.  Typically set to
+     either ’symbol or ’word.
+
+   For convenience, properties that are intended for all population
+commands of a given dictionary may be set in the dictionary itself.  In
+the event of a conflict, population command properties take precedence
+over dictionary properties.
+
+
+File: paced.info,  Node: Custom Commands,  Next: Asynchronous Population,  Prev: Properties,  Up: Population Commands
+
+Custom Commands
+===============
+
+Since the population commands all derive from paced-population-command,
+it’s possible to add additional commands.
+
+   As an example, let’s make a population command that populates a
+dictionary from a file like so:
+
+     alpha 5
+     beta 7
+     gamma 21
+     delta 54
+     epsilon 2
+
+   We want to make a population command that takes a file like this,
+with word in one column and weight in the other, and add it to a
+dictionary.
+
+   There are two ways to approach this, but we’re going to start with
+the basic one.
+
+   We need to define two functions: paced-population-command-source-list
+and paced-population-command-setup-buffer.  The first returns a list of
+sources from which to populate, and the second sets up a temporary
+buffer based on those sources.
+
+   For our command, we want to return the specified file, and replicate
+each word by the amount given.
+
+   Inheriting from ‘paced-file-population-command’ gives us the source
+list and file slot for free.
+
+     (defclass paced-weight-file-population-command (paced-file-population-command))
+
+   Now, we need to set up the buffer to replicate the words.
+
+     (cl-defmethod paced-population-command-setup-buffer ((cmd paced-weight-file-population-command) source)
+       ;; Use the built-in `paced--insert-file-contents' to insert contents.
+       (paced--insert-file-contents source)
+       ;; Jump to the start of the buffer
+       (goto-char (point-min))
+       ;; Search for lines with the form WORD WEIGHT
+       (while (re-search-forward (rx line-start ;; Start of line
+                                     (submatch (one-or-more (not (syntax whitespace)))) ;; Our word
+                                     (syntax whitespace) ;; Space between word and weight
+                                     (submatch (one-or-more (any digit))) ;; Weight
+                                     line-end) ;; End of line
+                                 nil t)
+         (let* ((word (match-string 1))
+                (weight (string-to-number (match-string 2)))
+                ;; Repeat WORD WEIGHT times
+                (new-text (string-join (make-list weight word) " ")))
+           ;; Replace the matched text with our repeated word
+           (replace-match new-text))))
+
+   That’s all there is to it.  When you go to edit a dictionary, the
+“weight-file” population command will automatically be added as an
+option for a population command.
+
+   The even easier way to do this would’ve been to use
+‘paced-file-function-population-command’, but it doesn’t make for a good
+example in this case.
+
+
+File: paced.info,  Node: Asynchronous Population,  Prev: Custom Commands,  Up: Population Commands
+
+Asynchronous Population
+=======================
+
+A common problem is that population can take a long time.  Some of us
+populate dictionaries from org agenda files, which can get pretty big.
+
+   To solve this, paced uses the async
+(https://github.com/jwiegley/emacs-async) package.  Setup should be
+seamless; just stick whatever code you need in
+‘~/.emacs.d/paced-async.el’, type M-x
+paced-repopulate-named-dictionary-async, and push enter.
+
+   A few things to note about this:
+
+  1. Dictionaries will be automatically saved by this method after
+     population
+  2. Asynchronous population doesn’t change anything until after
+     population is finished, so a user may continue to use their
+     dictionary while population is happening.
+  3. Because async runs population in a separate Emacs process, any
+     custom code required for population must be in paced-async.el.
+     This includes additional population command types, but doesn’t
+     include the following variables:
+
+        • load-path
+        • paced-thing-at-point-constituent
+        • paced-async-load-file
+
+
+File: paced.info,  Node: Example Setups,  Next: Contributing,  Prev: Population Commands,  Up: Top
+
+Example Setups
+**************
+
+* Menu:
+
+* Org Agenda Files::
+* Project Files::
+
+
+File: paced.info,  Node: Org Agenda Files,  Next: Project Files,  Up: Example Setups
+
+Org Agenda Files
+================
+
+As some of us record everything about our lives in our agenda files, it
+might be helpful to have a dictionary tuned to ourselves.
+
+   We use a file-list command that returns the agenda files, and an
+exclude command to block out all of Org’s extra features such as source
+code and drawers.
+
+   The generator for file-list is easy:
+
+     (lambda nil org-agenda-files)
+
+   Done.
+
+   Now, the exclude command, which sits inside the properties option:
+
+     (defun org-paced-exclude ()
+       (or
+        ;; Drawers
+        (org-between-regexps-p org-drawer-regexp ":END:") ;; Doesn't catch END
+        (org-in-regexp ":END:") ;; but this does
+
+        (org-at-comment-p) ;; comments
+        (org-in-regexp org-any-link-re) ;; links
+        (org-in-block-p '("src" "quote" "verse")) ;; blocks
+        (org-at-planning-p) ;; deadline, etc.
+        (org-at-table-p) ;; tables
+        ))
+
+   As explained earlier, this can be put inside properties in the
+customize buffer as such:
+
+     Properties :
+     [INS] [DEL] Variable: paced-exclude-function
+     Lisp expression: 'org-paced-exclude
+
+   And you’re done.  See how easy that was?
+
+
+File: paced.info,  Node: Project Files,  Prev: Org Agenda Files,  Up: Example Setups
+
+Project Files
+=============
+
+Now we get to the interesting one.  There are tons of ways to collect
+project files in Emacs, so we’re going to stick with one for now, being
+Emacs’s built-in VC package.
+
+     (defun vc-paced-find-project-files (path-to-project-root)
+       "Use VC to collect all version-controlled files."
+       (let ((file-list))
+         (vc-file-tree-walk path-to-project-root (lambda (f) (push f file-list)))
+         file-list))
+
+   We’d then need to use the following for our file-list generator:
+
+     Generator : (lambda nil (vc-paced-find-project-files "/home/me/programming/paced"))
+
+   Now, we (probably) don’t want commented code to get in our way, so
+we’ll use a small function for excluding those:
+
+     (defun paced-at-comment-p ()
+       (nth 8 (syntax-ppss)))
+
+   Use that for paced-exclude-function, and you’re done.  We can’t
+necessarily recommend this for any programming language, as there are
+dedicated solutions for almost everything, but it makes an excellent
+fallback.
+
+
+File: paced.info,  Node: Contributing,  Prev: Example Setups,  Up: Top
+
+Contributing
+************
+
+We are all happy for any help you may provide.
+
+   First, check out the source code on Savannah:
+<https://savannah.nongnu.org/projects/paced-el>
+
+     bzr branch https://bzr.savannah.gnu.org/r/paced-el/ paced
+
+   Build the Makefile with EDE:
+
+  1. Open any file from paced (See *note Working with EDE:: if you
+     encounter “Corrupt object on disk” error)
+  2. Run ‘C-c . C’ or ‘M-x ede-compile-project’
+
+* Menu:
+
+* Bugs::                         Submitting bug reports
+* Development::                  Helping with development
+* Documentation::                Improving the documentation
+* Working with EDE::             And all its quirks
+
+
+File: paced.info,  Node: Bugs,  Next: Development,  Up: Contributing
+
+Bugs
+====
+
+There are two ways to submit bug reports:
+
+  1. Using the bug tracker at Savannah
+  2. Sending an email using ‘paced-submit-bug-report’
+
+   When submitting a bug report, be sure to include a description of the
+dictionary or population command that caused the problem, with as much
+detail as possible.
+
+
+File: paced.info,  Node: Development,  Next: Documentation,  Prev: Bugs,  Up: Contributing
+
+Development
+===========
+
+If you’re new to bazaar, we recommend using Emacs’s built-in VC package.
+It eases the overhead of dealing with a brand new VCS with a few
+standard commands.  For more information, see the info page on it (In
+Emacs, this is C-h r m Introduction to VC RET).
+
+   To contribute with bazaar, you can do the following:
+
+     # Hack away and make your changes
+     $ bzr commit -m "Changes I've made"
+     $ bzr send -o file-name.txt
+
+   Then, use ‘paced-submit-bug-report’ and attach “file-name.txt”.  We
+can then merge that into the main development branch.
+
+   There are a few rules to follow:
+
+   • New population commands should be named
+     paced-POPULATION-COMMAND-TYPE-population-command
+   • Run ’make check’ to verify that your mods don’t break anything
+   • Avoid additional or altered dependencies if at all possible
+
+
+File: paced.info,  Node: Documentation,  Next: Working with EDE,  Prev: Development,  Up: Contributing
+
+Documentation
+=============
+
+Documentation is always helpful to us.  Please be sure to do the
+following after making any changes:
+
+  1. Update the info page in the repository with ‘C-c C-e i i’
+  2. If you’re updating the HTML documentation, switch to a theme that
+     can easily be read on a white background; we recommend the
+     “adwaita” theme
+
+
+File: paced.info,  Node: Working with EDE,  Prev: Documentation,  Up: Contributing
+
+Working with EDE
+================
+
+EDE can be a little finicky at times, but we feel the benefits, namely
+package dependency handling and Makefile generation, outweigh the costs.
+
+   One of the issues that many will likely encounter is the error
+“Corrupt file on disk”.  This is most often due to EDE not loading all
+its subprojects as needed.  If you find yourself dealing with this error
+often, place the following in your .emacs file:
+
+     ;; Target types needed for working with paced
+     (require 'ede/proj-elisp)
+     (require 'ede/proj-aux)
+     (require 'ede/proj-misc)
+
+   These are the three target types that paced uses: elisp for
+compilation and autoloads; aux for auxiliary files such as
+documentation; and misc for tests.
+
+   When creating a new file, EDE will ask if you want to add it to a
+target.  Consult with one of the paced devs for guidance, but usually
+selecting “none” and letting one of us handle it is a good way to go.
+
+
+
+Tag Table:
+Node: Top228
+Node: Copying1675
+Node: Introduction2489
+Node: Similar Packages3609
+Node: pabbrev3895
+Node: predictive5038
+Node: Installation6086
+Node: Basic Setup6551
+Node: Dictionaries7154
+Node: Creating a Dictionary7558
+Node: Editing a Dictionary8598
+Node: Selective Dictionaries9074
+Node: Dictionary Files10723
+Node: Population Commands11814
+Node: Built-in Commands12750
+Node: Properties13547
+Node: Custom Commands14409
+Node: Asynchronous Population17136
+Node: Example Setups18329
+Node: Org Agenda Files18511
+Node: Project Files19767
+Node: Contributing20880
+Node: Bugs21636
+Node: Development22025
+Node: Documentation22992
+Node: Working with EDE23459
+
+End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:
