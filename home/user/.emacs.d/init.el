@@ -22,6 +22,11 @@
 (require 'better-defaults)
 
 (add-to-list 'load-path
+	     (format "%s/%s" package-dir "clojure-emacs-clojure-mode"))
+
+(require 'clojure-mode)
+
+(add-to-list 'load-path
 	     (format "%s/%s" package-dir "clojure-emacs-cider"))
 
 (require 'cider)
