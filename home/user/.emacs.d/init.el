@@ -1,4 +1,4 @@
-(defconst elpa-dir "~/.emacs.d/elpa")
+(defconst elpa-dir "~/.emacs.d/elpa/packages")
 (defconst package-dir "~/.emacs.d/packages")
 
 (add-to-list 'load-path
