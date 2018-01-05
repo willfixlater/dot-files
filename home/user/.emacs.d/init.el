@@ -1,7 +1,14 @@
+(defconst package-dir "~/.emacs.d/packages")
+
 (add-to-list 'load-path
-	     "~/.emacs.d/packages/technomancy-better-defaults")
+	     (format "%s/%s" package-dir "technomancy-better-defaults"))
 
 (require 'better-defaults)
+
+(add-to-list 'load-path
+	     (format "%s/%s" package-dir "clojure-emacs-cider"))
+
+(require 'cider)
 
 (setq inhibit-startup-screen t)
 (setq create-lockfiles nil)
