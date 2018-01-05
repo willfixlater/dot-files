@@ -1,0 +1,18 @@
+This package is now installable from inside Emacs and melpa. 
+
+We have an old-style GNU autoconf configuration as well and an install
+script to pick that up from git sources. For this, you will need:
+
+   * Emacs, of course. Version 23 or better
+   * _autoconf_ and _autoreconf_ to build the configure script. Usually _autoreconf_ comes with an "autoconf" package
+   * GNU Make -- or even better "remake":http//bashdb.sf.net/remake
+  
+If you are feeling lucky, you can try running the install script from the github repository:
+
+    $ bash < <( curl https://raw.github.com/rocky/emacs-test-simple/master/install-from-git.sh )
+
+Otherwise:
+
+   git clone http://github.com/rocky/emacs-test-simple
+   cd emacs-test-simple
+   ./configure && make && [sudo] make install
