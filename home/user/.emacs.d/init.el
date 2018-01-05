@@ -1,4 +1,20 @@
+(defconst elpa-dir "~/.emacs.d/elpa")
 (defconst package-dir "~/.emacs.d/packages")
+
+(add-to-list 'load-path
+	     (format "%s/%s" elpa-dir "seq"))
+
+(require 'seq)
+
+(add-to-list 'load-path
+	     (format "%s/%s" elpa-dir "queue"))
+
+(require 'queue)
+
+(add-to-list 'load-path
+	     (format "%s/%s" elpa-dir "spinner"))
+
+(require 'spinner)
 
 (add-to-list 'load-path
 	     (format "%s/%s" package-dir "technomancy-better-defaults"))
