@@ -40,7 +40,7 @@ mergeMyKeys keys config = union (myKeys config) (keys config)
 myKeys config =
     let (XConfig {modMask = modMask}) = config
     in fromList $
-        [ ((modMask .|. K.shiftMask, K.xK_x), io exitSuccess)
+        [ ((modMask .|. K.shiftMask, K.xK_q), io exitSuccess)
         , ((modMask .|. K.shiftMask, K.xK_r), spawn $
             "if type xmonad; then xmonad --recompile && xmonad --restart; " ++
             "else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
@@ -52,10 +52,10 @@ myKeys config =
         , ((modMask .|. K.shiftMask, K.xK_f), spawn "rofi -show drun")
         , ((modMask, K.xK_Return), spawn $ terminal config)
 
-        , ((modMask, K.xK_k), windows W.focusUp)
-        , ((modMask .|. K.shiftMask, K.xK_k), windows W.swapUp)
-        , ((modMask, K.xK_j), windows W.focusDown)
-        , ((modMask .|. K.shiftMask, K.xK_j), windows W.swapDown)
+        , ((modMask, K.xK_p), windows W.focusUp)
+        , ((modMask .|. K.shiftMask, K.xK_p), windows W.swapUp)
+        , ((modMask, K.xK_n), windows W.focusDown)
+        , ((modMask .|. K.shiftMask, K.xK_n), windows W.swapDown)
 
         , ((modMask, K.xK_v), sendMessage NextLayout)
         , ((modMask .|. K.shiftMask, K.xK_v), sendMessage FirstLayout)
@@ -63,12 +63,12 @@ myKeys config =
         , ((modMask, K.xK_space), windows W.focusMaster)
         , ((modMask .|. K.shiftMask, K.xK_space), windows W.swapMaster)
 
-        , ((modMask, K.xK_h), sendMessage Shrink)
-        , ((modMask, K.xK_l), sendMessage Expand)
-        , ((modMask, K.xK_r), refresh)
+        , ((modMask, K.xK_comma), sendMessage Shrink)
+        , ((modMask, K.xK_period), sendMessage Expand)
+        , ((modMask .|. K.shiftMask, K.xK_comma), sendMessage (IncMasterN 1))
+        , ((modMask .|. K.shiftMask, K.xK_period), sendMessage (IncMasterN (-1)))
 
-        , ((modMask .|. K.shiftMask, K.xK_h), sendMessage (IncMasterN 1))
-        , ((modMask .|. K.shiftMask, K.xK_l), sendMessage (IncMasterN (-1)))
+        , ((modMask, K.xK_r), refresh)
 
         , ((modMask, K.xK_w), viewScreen 0)
         , ((modMask, K.xK_e), viewScreen 1)
