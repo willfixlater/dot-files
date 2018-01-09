@@ -42,3 +42,4 @@
 	     `(font . ,(concat "Triplicate T3c-11"
 		       	       ":weight=semi-bold"
 			       ":antialias=true")))
+(put 'dired-find-alternate-file 'disabled nil)
