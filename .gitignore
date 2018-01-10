@@ -8,3 +8,5 @@ home/user/.xmonad/**/*.o
 home/user/.xmonad/**/*.hi
 home/user/.xmonad/xmonad-x86_64-linux
 home/user/.xmonad/xmonad.errors
+
+home/user/.config/Code/User/workspaceStorage/**/*
