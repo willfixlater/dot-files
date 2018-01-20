@@ -1,40 +1,10 @@
-(defconst elpa-dir "~/.emacs.d/elpa/packages")
-(defconst package-dir "~/.emacs.d/packages")
-
-(add-to-list 'load-path
-	     (format "%s/%s" elpa-dir "seq"))
-
-(require 'seq)
-
-(add-to-list 'load-path
-	     (format "%s/%s" elpa-dir "queue"))
-
-(require 'queue)
-
-(add-to-list 'load-path
-	     (format "%s/%s" elpa-dir "spinner"))
-
-(require 'spinner)
-
-(add-to-list 'load-path
-	     (format "%s/%s" package-dir "technomancy-better-defaults"))
-
-(require 'better-defaults)
-
-(add-to-list 'load-path
-	     (format "%s/%s" package-dir "purcell-color-theme-sanityinc-tomorrow"))
-
-(require 'color-theme-sanityinc-tomorrow)
-
-(add-to-list 'load-path
-	     (format "%s/%s" package-dir "clojure-emacs-clojure-mode"))
-
-(require 'clojure-mode)
-
-(add-to-list 'load-path
-	     (format "%s/%s" package-dir "clojure-emacs-cider"))
-
-(require 'cider)
+(load "~/.emacs.d/packaging.el")
+(load-package-list
+ '(("~/.emacs.d/elpa/packages" (seq queue spinner))
+   ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
+                                (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
+                                (clojure-mode "clojure-emacs-clojure-mode")
+                                (cider "clojure-emacs-cider")))))
 
 (custom-set-variables
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
