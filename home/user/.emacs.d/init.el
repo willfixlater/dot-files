@@ -20,6 +20,14 @@
                    "%p [%l,%c]"
                    "")
 
+(dolist (hook '(emacs-lisp-mode-hook
+                eval-expression-minibuffer-setup-hook
+                lisp-mode-hook
+                lisp-interaction-mode-hook
+                scheme-mode-hook
+                clojure-mode-hook))
+  (add-hook hook #'paredit-mode))
+
 (setq create-lockfiles nil)
 (setq inhibit-startup-screen t)
 (setq backup-directory-alist
@@ -27,7 +35,6 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (put 'dired-find-alternate-file 'disabled nil)
-(add-hook 'clojure-mode-hook #'paredit-mode)
 (set-cursor-color "#ffffff")
 (add-to-list 'default-frame-alist `(cursor-type . hbar))
 (set-face-attribute 'default nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
