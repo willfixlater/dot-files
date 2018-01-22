@@ -4,6 +4,7 @@
  '(("~/.emacs.d/elpa/packages" (seq queue spinner))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
+                                (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
                                 (cider "clojure-emacs-cider")))))
 
@@ -25,8 +26,9 @@
       `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
-(set-cursor-color "#ffffff")
 (put 'dired-find-alternate-file 'disabled nil)
+(add-hook 'clojure-mode-hook #'paredit-mode)
+(set-cursor-color "#ffffff")
 (add-to-list 'default-frame-alist `(cursor-type . hbar))
 (set-face-attribute 'default nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
 (set-face-attribute 'mode-line nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
