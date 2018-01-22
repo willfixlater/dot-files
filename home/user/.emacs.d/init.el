@@ -1,4 +1,5 @@
 (load "~/.emacs.d/packaging.el")
+(load "~/.emacs.d/mode-line.el")
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
@@ -12,17 +13,20 @@
    (quote
     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
 
-(setq inhibit-startup-screen t)
+(aligned-mode-line " "
+                   '(list "%b   " mode-line-modes)
+                   '(list (buffer-state-*) "λ" (buffer-state-+))
+                   "%p [%l,%c]"
+                   "")
+
 (setq create-lockfiles nil)
+(setq inhibit-startup-screen t)
 (setq backup-directory-alist
       `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (set-cursor-color "#ffffff")
 (put 'dired-find-alternate-file 'disabled nil)
-(add-to-list 'default-frame-alist
-             `(cursor-type . hbar))
-(add-to-list 'default-frame-alist
-	     `(font . ,(concat "Triplicate T3c-11"
-		       	       ":weight=semi-bold"
-			       ":antialias=true")))
+(add-to-list 'default-frame-alist `(cursor-type . hbar))
+(set-face-attribute 'default nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
+(set-face-attribute 'mode-line nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
