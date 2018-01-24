@@ -6,7 +6,8 @@
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
-                                (cider "clojure-emacs-cider")))))
+                                (cider "clojure-emacs-cider")
+                                (haskell-mode "haskell-haskell-mode")))))
 
 (custom-set-variables
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
