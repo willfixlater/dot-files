@@ -7,7 +7,8 @@
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
                                 (cider "clojure-emacs-cider")
-                                (haskell-mode-autoloads "haskell-haskell-mode")))))
+                                (haskell-mode-autoloads "haskell-haskell-mode")
+                                (geiser "jaor-geiser/elisp")))))
 
 (custom-set-variables
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
