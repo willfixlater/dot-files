@@ -17,8 +17,8 @@ height = 36
 bottom = true
 fixed-center = true
 
-background = #00000000
-foreground = #a3a5a5
+background = #6b000000
+foreground = #c6c9c9
 ;background = #f21d1f21
 ;foreground = #a3a5a5
 
@@ -31,8 +31,8 @@ padding-right = 3
 module-margin-left = 2
 module-margin-right = 2
 
-font-0 = Symbola:pixelsize=12:weight=bold
-font-1 = Typicons:pixelsize=14
+font-0 = Symbola:pixelsize=12:weight=bold;3
+font-1 = Typicons:pixelsize=14;3
 
 modules-left = powermenu xbacklight volume
 modules-center = 

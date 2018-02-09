@@ -68,7 +68,7 @@ myKeys config =
         , ((modMask .|. K.shiftMask, K.xK_comma), sendMessage (IncMasterN 1))
         , ((modMask .|. K.shiftMask, K.xK_period), sendMessage (IncMasterN (-1)))
 
-        , ((modMask, K.xK_r), refresh)
+        , ((modMask, K.xK_r), spawn "~/.fehbg")
 
         , ((modMask, K.xK_w), viewScreen 0)
         , ((modMask, K.xK_e), viewScreen 1)

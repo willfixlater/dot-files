@@ -18,9 +18,9 @@ import XMonad.Layout (Tall(Tall), Mirror(Mirror), Full(Full), (|||))
 import XMonad.Layout.Spacing (ModifySpacing(..), spacingWithEdge)
 
 myLayoutHook = tallLayout tall ||| fullLayout full ||| wideLayout wide
-  where full = spacing (0, 0, 0, 0) (0, 0, 6, 0) $ Full
-        tall = spacing (6, 6, 6, 6) (6, 6, 0, 6) $ Tall nMaster tallScreenDelta tallScreenRatio
-        wide = spacing (6, 6, 6, 6) (6, 6, 0, 6) $ Mirror (Tall nMaster wideScreenDelta wideScreenRatio)
+  where full = spacing (0, 0, 0, 0) (0, 0, 0, 0) $ Full
+        tall = spacing (4, 4, 4, 4) (4, 4, 4, 4) $ Tall nMaster tallScreenDelta tallScreenRatio
+        wide = spacing (4, 4, 4, 4) (4, 4, 4, 4) $ Mirror (Tall nMaster wideScreenDelta wideScreenRatio)
         nMaster = 1
         tallScreenDelta = 1/20
         wideScreenDelta = 1/20
