@@ -8,7 +8,6 @@
         (buffer-read-only "·")
         (t "-")))
 
-;; TODO: Handle overflow
 (defun aligned-mode-line (left-pad left center right right-pad)
   (let* ((left-pad-f  `(format-mode-line ,left-pad))
          (left-f      `(format-mode-line ,left))
@@ -19,6 +18,12 @@
          (available `(if (cl-oddp ,available)
                          (+ 1 ,available)
                          ,available))
+         (left      `(if (> (length ,left-f) (+ 1 ,available))
+                         (concat (seq-take ,left-f (- ,available 3)) "... ")
+                         ,left-f))
+         (right     `(if (> (length ,right-f) (+ 1 ,available))
+                         (concat (seq-take ,right-f (- ,available 3)) "... ")
+                         ,right))
          (left-space  `(make-list (- ,available (length ,left-f) (length ,left-pad-f)) " "))
          (right-space `(make-list (- ,available (length ,right-f) (length ,right-pad-f)) " ")))
     (setq-default mode-line-format

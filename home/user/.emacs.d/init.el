@@ -1,5 +1,4 @@
 (load "~/.emacs.d/packaging.el")
-(load "~/.emacs.d/mode-line.el")
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
@@ -16,11 +15,14 @@
    (quote
     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
 
+(load "~/.emacs.d/mode-line.el")
 (aligned-mode-line " "
                    '(list "%b   " mode-line-modes)
                    '(list (buffer-state-*) "λ" (buffer-state-+))
                    "%p [%l,%c]"
                    "")
+
+(add-hook 'cider-mode-hook #'eldoc-mode)
 
 (dolist (hook '(emacs-lisp-mode-hook
                 eval-expression-minibuffer-setup-hook
