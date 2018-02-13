@@ -7,10 +7,6 @@ primary = #8abeb7
 secondary = #b5bd68
 alert = #cc6666
 
-[global/wm]
-;margin-top = 5
-;margin-bottom = 5
-
 [bar/main]
 width = 100%
 height = 36
@@ -19,8 +15,6 @@ fixed-center = true
 
 background = #6b000000
 foreground = #c6c9c9
-;background = #f21d1f21
-;foreground = #a3a5a5
 
 line-size = 3
 line-color = #f00
@@ -36,14 +30,7 @@ font-1 = Typicons:pixelsize=14;3
 
 modules-left = powermenu xbacklight volume
 modules-center = 
-modules-right = filesystem memory cpu wlan eth battery date
-
-;tray-position = right
-;tray-padding = 2
-;tray-transparent = true
-;tray-background = #0063ff
-
-;override-redirect = true
+modules-right = wlan eth filesystem memory cpu battery date
 
 cursor-click = pointer
 cursor-scroll = ns-resize
