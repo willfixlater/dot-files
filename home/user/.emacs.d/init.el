@@ -11,11 +11,11 @@
                                 (geiser "jaor-geiser/elisp")
                                 (rjsx-mode "felipeochoa-rjsx-mode")))))
 
+(load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/clojure.el")
-(load "~/.emacs.d/paredit-hooks.el")
 (load "~/.emacs.d/haskell.el")
-(load "~/.emacs.d/mode-line.el")
 (load "~/.emacs.d/web.el")
+(load "~/.emacs.d/mode-line.el")
 
 (custom-set-variables
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
