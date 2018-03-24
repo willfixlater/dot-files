@@ -94,3 +94,4 @@ source ~/.aliases
 
 export VISUAL="em"
 export EDITOR="em"
+export BROWSER="chrome"
