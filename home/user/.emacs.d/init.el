@@ -7,7 +7,7 @@
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
                                 (cider "clojure-emacs-cider")
-                                (haskell-mode-autoloads "haskell-haskell-mode")
+                                (haskell-mode "haskell-haskell-mode")
                                 (geiser "jaor-geiser/elisp")
                                 (rjsx-mode "felipeochoa-rjsx-mode")))))
 
@@ -31,6 +31,7 @@
 
 (setq create-lockfiles nil)
 (setq inhibit-startup-screen t)
+(setq ring-bell-function 'ignore)
 (setq backup-directory-alist
       `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms
@@ -38,5 +39,3 @@
 (put 'dired-find-alternate-file 'disabled nil)
 (set-cursor-color "#ffffff")
 (add-to-list 'default-frame-alist `(cursor-type . hbar))
-(set-face-attribute 'default nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
-(set-face-attribute 'mode-line nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")

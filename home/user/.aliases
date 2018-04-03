@@ -1,5 +1,1 @@
-alias sudo='sudo '
-alias ls='ls --color'
 alias em='emacs -nw'
-alias chrome='google-chrome-stable'
-
