@@ -11,4 +11,16 @@ home/user/.xmonad/**/*.hi
 home/user/.xmonad/xmonad-x86_64-linux
 home/user/.xmonad/xmonad.errors
 
-home/user/.config/Code/User/workspaceStorage/**/*
+home/user/Library/Application Support/Code/Cookies
+home/user/Library/Application Support/Code/Cookies-journal
+home/user/Library/Application Support/Code/languagepacks.json
+home/user/Library/Application Support/Code/machineid
+home/user/Library/Application Support/Code/storage.json
+home/user/Library/Application Support/Code/Backups/**
+home/user/Library/Application Support/Code/Cache/**
+home/user/Library/Application Support/Code/CachedData/**
+home/user/Library/Application Support/Code/CachedExtensions/**
+home/user/Library/Application Support/Code/GPUCache/**
+home/user/Library/Application Support/Code/Local Storage/**
+home/user/Library/Application Support/Code/logs/**
+home/user/Library/Application Support/Code/User/workspaceStorage/**/*
