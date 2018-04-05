@@ -4,19 +4,14 @@
     "editor.cursorStyle": "underline",
     "workbench.colorTheme": "Base16 Dark Tomorrow",
     "workbench.startupEditor": "none",
-    "keyboard.dispatch": "keyCode",
     "editor.minimap.enabled": false,
     "git.confirmSync": false,
-    "workbench.activityBar.visible": false,
+    "workbench.activityBar.visible": true,
     "editor.fontLigatures": true,
     "explorer.autoReveal": false,
     "editor.links": false,
     "editor.renderLineHighlight": "gutter",
     "workbench.editor.enablePreviewFromQuickOpen": false,
-    "workbench.colorCustomizations": {
-        "statusBar.background": "#282a2e"
-    },
     "terminal.integrated.cursorStyle": "underline",
-    "editor.autoIndent": false,
     "workbench.editor.enablePreview": false
 }
