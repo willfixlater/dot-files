@@ -13,8 +13,8 @@ height = 36
 bottom = true
 fixed-center = true
 
-background = #6b000000
-foreground = #c6c9c9
+background = #00000000
+foreground = #ffffff
 
 line-size = 3
 line-color = #f00
@@ -86,10 +86,38 @@ bar-indicator-foreground = ${colors.foreground}
 bar-indicator-font = 2
 bar-fill = " ◦ "
 bar-fill-font = 2
-bar-fill-foreground = #b294bb
+bar-fill-foreground = #ffffff
 bar-empty = " ◦ "
 bar-empty-font = 2
 bar-empty-foreground = ${colors.foreground-alt}
+
+[module/volume]
+type = internal/volume
+
+format-volume = <label-volume> <bar-volume>
+label-volume = 
+label-volume-foreground = ${root.foreground}
+
+format-muted = <label-muted> <bar-volume>
+label-muted = "  "
+format-muted-foreground = ${colors.foreground-alt}
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #ffffff
+bar-volume-foreground-1 = #ffffff
+bar-volume-foreground-2 = #ffffff
+bar-volume-foreground-3 = #ffffff
+bar-volume-foreground-4 = #ffffff
+bar-volume-foreground-5 = #ffffff
+bar-volume-foreground-6 = #ffffff
+bar-volume-gradient = false
+bar-volume-indicator = ◎
+bar-volume-indicator-font = 2
+bar-volume-fill = " ◦ "
+bar-volume-fill-font = 2
+bar-volume-empty = " ◦ "
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
 
 [module/backlight-acpi]
 inherit = module/xbacklight
@@ -139,34 +167,6 @@ date = " %B %d · %H:%M"
 date-alt = " %Y-%m-%d"
 
 label = %date%
-
-[module/volume]
-type = internal/volume
-
-format-volume = <label-volume> <bar-volume>
-label-volume = 
-label-volume-foreground = ${root.foreground}
-
-format-muted = <label-muted> <bar-volume>
-label-muted = "  "
-format-muted-foreground = ${colors.foreground-alt}
-
-bar-volume-width = 10
-bar-volume-foreground-0 = #b5bd68
-bar-volume-foreground-1 = #b5bd68
-bar-volume-foreground-2 = #b5bd68
-bar-volume-foreground-3 = #b5bd68
-bar-volume-foreground-4 = #b5bd68
-bar-volume-foreground-5 = #f0c674
-bar-volume-foreground-6 = #cc6666
-bar-volume-gradient = false
-bar-volume-indicator = ◎
-bar-volume-indicator-font = 2
-bar-volume-fill = " ◦ "
-bar-volume-fill-font = 2
-bar-volume-empty = " ◦ "
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
 
 [module/battery]
 type = internal/battery
