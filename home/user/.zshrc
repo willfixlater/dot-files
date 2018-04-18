@@ -80,6 +80,6 @@ fi
 source $ZSH/oh-my-zsh.sh
 source ~/.aliases
 
-export VISUAL="em"
-export EDITOR="em"
+export VISUAL="emacs -nw"
+export EDITOR="emacs -nw"
 export BROWSER="chrome"
