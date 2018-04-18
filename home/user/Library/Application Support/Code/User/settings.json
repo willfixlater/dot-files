@@ -2,7 +2,7 @@
     "editor.tabSize": 2,
     "editor.fontSize": 12,
     "editor.cursorStyle": "underline",
-    "workbench.colorTheme": "Base16 Dark Tomorrow",
+    "workbench.colorTheme": "Tomorrow Night",
     "workbench.startupEditor": "none",
     "editor.minimap.enabled": false,
     "git.confirmSync": false,
