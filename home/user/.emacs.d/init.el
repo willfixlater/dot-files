@@ -3,6 +3,7 @@
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
+                                (shell-pop "kyagi-shell-pop")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
@@ -18,6 +19,9 @@
 (load "~/.emacs.d/mode-line.el")
 
 (custom-set-variables
+ '(shell-pop-universal-key "C-t")
+ '(shell-pop-shell-type (quote ("ansi-term" "*term*" (lambda nil (ansi-term shell-pop-term-shell)))))
+ '(shell-pop-term-shell "/bin/zsh")
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
  '(custom-safe-themes
    (quote
