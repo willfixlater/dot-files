@@ -3,6 +3,9 @@
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
+                                (dash "magnars-dash")
+                                (s "magnars-s")
+                                (ag "wilfred-ag")
                                 (shell-pop "kyagi-shell-pop")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
