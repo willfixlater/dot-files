@@ -37,6 +37,7 @@
 (require 'cider-overlays)
 
 (require 'button)
+(require 'cl-lib)
 (require 'easymenu)
 (require 'seq)
 
@@ -128,6 +129,7 @@ Add to this list to have CIDER recognize additional test defining macros."
 
 
 ;;; Report mode & key bindings
+;;
 ;; The primary mode of interacting with test results is the report buffer, which
 ;; allows navigation among tests, jumping to test definitions, expected/actual
 ;; diff-ing, and cause/stacktrace inspection for test errors.
@@ -139,6 +141,7 @@ Add to this list to have CIDER recognize additional test defining macros."
     (define-key map (kbd "C-t") #'cider-test-run-test)
     (define-key map (kbd "C-g") #'cider-test-rerun-test)
     (define-key map (kbd "C-n") #'cider-test-run-ns-tests)
+    (define-key map (kbd "C-s") #'cider-test-run-ns-tests-with-filters)
     (define-key map (kbd "C-l") #'cider-test-run-loaded-tests)
     (define-key map (kbd "C-p") #'cider-test-run-project-tests)
     (define-key map (kbd "C-b") #'cider-test-show-report)
@@ -147,6 +150,7 @@ Add to this list to have CIDER recognize additional test defining macros."
     (define-key map (kbd "t")   #'cider-test-run-test)
     (define-key map (kbd "g")   #'cider-test-rerun-test)
     (define-key map (kbd "n")   #'cider-test-run-ns-tests)
+    (define-key map (kbd "s")   #'cider-test-run-ns-tests-with-filters)
     (define-key map (kbd "l")   #'cider-test-run-loaded-tests)
     (define-key map (kbd "p")   #'cider-test-run-project-tests)
     (define-key map (kbd "b")   #'cider-test-show-report)
@@ -156,8 +160,11 @@ Add to this list to have CIDER recognize additional test defining macros."
   '("Test"
     ["Run test" cider-test-run-test]
     ["Run namespace tests" cider-test-run-ns-tests]
+    ["Run namespace tests with filters" cider-test-run-ns-tests-with-filters]
     ["Run all loaded tests" cider-test-run-loaded-tests]
+    ["Run all loaded tests with filters" (apply-partially cider-test-run-loaded-tests 'prompt-for-filters)]
     ["Run all project tests" cider-test-run-project-tests]
+    ["Run all project tests with filters" (apply-partially cider-test-run-project-tests 'prompt-for-filters)]
     ["Run tests after load-file" cider-auto-test-mode
      :style toggle :selected cider-auto-test-mode]
     "--"
@@ -184,6 +191,7 @@ Add to this list to have CIDER recognize additional test defining macros."
     ;; `f' for "run failed".
     (define-key map "f" #'cider-test-rerun-failed-tests)
     (define-key map "n" #'cider-test-run-ns-tests)
+    (define-key map "s" #'cider-test-run-ns-tests-with-filters)
     (define-key map "l" #'cider-test-run-loaded-tests)
     (define-key map "p" #'cider-test-run-project-tests)
     ;; `g' generally reloads the buffer.  The closest thing we have to that is
@@ -200,8 +208,11 @@ Add to this list to have CIDER recognize additional test defining macros."
         ["Rerun current test" cider-test-run-test]
         ["Rerun failed/erring tests" cider-test-rerun-failed-tests]
         ["Run all ns tests" cider-test-run-ns-tests]
+        ["Run all ns tests with filters" cider-test-run-ns-tests-with-filters]
         ["Run all loaded tests" cider-test-run-loaded-tests]
+        ["Run all loaded tests with filters" (apply-partially cider-test-run-loaded-tests 'prompt-for-filters)]
         ["Run all project tests" cider-test-run-project-tests]
+        ["Run all project tests with filters" (apply-partially cider-test-run-project-tests 'prompt-for-filters)]
         "--"
         ["Jump to test definition" cider-test-jump]
         ["Display test error" cider-test-stacktrace]
@@ -303,35 +314,48 @@ prompt and whether to use a new window.  Similar to `cider-find-var'."
 (defvar cider-test-ediff-buffers nil
   "The expected/actual buffers used to display diff.")
 
+(defun cider-test--extract-from-actual (actual n)
+  "Extract form N from ACTUAL, ignoring outermost not.
+
+ACTUAL is a string like \"(not (= 3 4))\", of the sort returned by
+clojure.test.
+
+N = 1 => 3, N = 2 => 4, etc."
+  (with-temp-buffer
+    (insert actual)
+    (clojure-mode)
+    (goto-char (point-min))
+    (re-search-forward "(" nil t 2)
+    (clojure-forward-logical-sexp n)
+    (forward-whitespace 1)
+    (let ((beg (point)))
+      (clojure-forward-logical-sexp)
+      (buffer-substring beg (point)))))
+
 (defun cider-test-ediff ()
   "Show diff of the expected vs actual value for the test at point.
 With the actual value, the outermost '(not ...)' s-expression is removed."
   (interactive)
-  (let ((expected (get-text-property (point) 'expected))
-        (actual   (get-text-property (point) 'actual)))
-    (if (and expected actual)
-        (let ((expected-buffer (generate-new-buffer " *expected*"))
-              (actual-buffer   (generate-new-buffer " *actual*")))
-          (with-current-buffer expected-buffer
-            (insert expected)
-            (clojure-mode))
-          (with-current-buffer actual-buffer
-            (insert actual)
-            (goto-char (point-min))
-            (forward-char)
-            (forward-sexp)
-            (forward-whitespace 1)
-            (let ((beg (point)))
-              (forward-sexp)
-              (let ((actual* (buffer-substring beg (point))))
-                (erase-buffer)
-                (insert actual*)))
-            (clojure-mode))
-          (apply 'ediff-buffers
-                 (setq cider-test-ediff-buffers
-                       (list (buffer-name expected-buffer)
-                             (buffer-name actual-buffer)))))
-      (message "No test failure at point"))))
+  (let* ((expected-buffer (generate-new-buffer " *expected*"))
+         (actual-buffer   (generate-new-buffer " *actual*"))
+         (diffs (get-text-property (point) 'diffs))
+         (actual* (get-text-property (point) 'actual))
+         (expected (cond (diffs (get-text-property (point) 'expected))
+                         (actual* (cider-test--extract-from-actual actual* 1))))
+         (actual (cond (diffs (caar diffs))
+                       (actual* (cider-test--extract-from-actual actual* 2)))))
+    (if (not (and expected actual))
+        (message "No test failure at point")
+      (with-current-buffer expected-buffer
+        (insert expected)
+        (clojure-mode))
+      (with-current-buffer actual-buffer
+        (insert actual)
+        (clojure-mode))
+      (apply #'ediff-buffers
+             (setq cider-test-ediff-buffers
+                   (list (buffer-name expected-buffer)
+                         (buffer-name actual-buffer)))))))
 
 (defun cider-test-ediff-cleanup ()
   "Cleanup expected/actual buffers used for diff."
@@ -374,36 +398,57 @@ With the actual value, the outermost '(not ...)' s-expression is removed."
 (defun cider-test-render-assertion (buffer test)
   "Emit into BUFFER report detail for the TEST assertion."
   (with-current-buffer buffer
-    (nrepl-dbind-response test (var context type message expected actual error gen-input)
-      (cider-propertize-region (cider-intern-keys (cdr test))
-        (let ((beg (point))
-              (type-face (cider-test-type-simple-face type))
-              (bg `(:background ,cider-test-items-background-color)))
-          (cider-insert (capitalize type) type-face nil " in ")
-          (cider-insert var 'font-lock-function-name-face t)
-          (when context  (cider-insert context 'font-lock-doc-face t))
-          (when message  (cider-insert message 'font-lock-doc-string-face t))
-          (when expected
-            (cider-insert "expected: " 'font-lock-comment-face nil
-                          (cider-font-lock-as-clojure expected)))
-          (when actual
-            (cider-insert "  actual: " 'font-lock-comment-face nil
-                          (cider-font-lock-as-clojure actual)))
-          (when error
-            (cider-insert "   error: " 'font-lock-comment-face nil)
-            (insert-text-button error
-                                'follow-link t
-                                'action '(lambda (_button) (cider-test-stacktrace))
-                                'help-echo "View causes and stacktrace")
-            (insert "\n"))
-          (when gen-input
-            (cider-insert "   input: " 'font-lock-comment-face nil
-                          (cider-font-lock-as-clojure gen-input)))
-          (overlay-put (make-overlay beg (point)) 'font-lock-face bg))
-        (insert "\n")))))
+    (nrepl-dbind-response test (var context type message expected actual diffs error gen-input)
+      (cl-flet ((insert-label (s)
+                  (cider-insert (format "%8s: " s) 'font-lock-comment-face))
+                (insert-align-label (s)
+                  (insert (format "%12s" s)))
+                (insert-rect (s)
+                  (insert-rectangle (thread-first s
+                                      cider-font-lock-as-clojure
+                                      (split-string "\n")))
+                  (beginning-of-line)))
+        (cider-propertize-region (cider-intern-keys (cdr test))
+          (let ((beg (point))
+                (type-face (cider-test-type-simple-face type))
+                (bg `(:background ,cider-test-items-background-color)))
+            (cider-insert (capitalize type) type-face nil " in ")
+            (cider-insert var 'font-lock-function-name-face t)
+            (when context  (cider-insert context 'font-lock-doc-face t))
+            (when message  (cider-insert message 'font-lock-doc-string-face t))
+            (when expected
+              (insert-label "expected")
+              (insert-rect expected)
+              (insert "\n"))
+            (if diffs
+                (dolist (d diffs)
+                  (cl-destructuring-bind (actual (removed added)) d
+                    (insert-label "actual")
+                    (insert-rect actual)
+                    (insert-label "diff")
+                    (insert "- ")
+                    (insert-rect removed)
+                    (insert-align-label "+ ")
+                    (insert-rect added)
+                    (insert "\n")))
+              (when actual
+                (insert-label "actual")
+                (insert-rect actual)))
+            (when error
+              (insert-label "error")
+              (insert-text-button error
+                                  'follow-link t
+                                  'action '(lambda (_button) (cider-test-stacktrace))
+                                  'help-echo "View causes and stacktrace")
+              (insert "\n"))
+            (when gen-input
+              (insert-label "input")
+              (insert (cider-font-lock-as-clojure gen-input)))
+            (overlay-put (make-overlay beg (point)) 'font-lock-face bg))
+          (insert "\n"))))))
 
 (defun cider-test-non-passing (tests)
-  "For a list of TESTS, each an nrepl-dict, return only those that did not pass."
+  "For a list of TESTS, each an `nrepl-dict`, return only those that did not pass."
   (seq-filter (lambda (test)
                 (unless (equal (nrepl-dict-get test "type") "pass")
                   test))
@@ -477,6 +522,7 @@ The optional arg TEST denotes an individual test name."
                test var fail error))))
 
 ;;; Test definition highlighting
+;;
 ;; On receipt of test results, failing/erring test definitions are highlighted.
 ;; Highlights are cleared on the next report run, and may be cleared manually
 ;; by the user.
@@ -490,11 +536,11 @@ The optional arg TEST denotes an individual test name."
 (defun cider-test-highlight-problem (buffer test)
   "Highlight the BUFFER test definition for the non-passing TEST."
   (with-current-buffer buffer
-    (nrepl-dbind-response test (type file line message expected actual)
-      ;; we have to watch out for vars without proper location metadata
-      ;; right now everything evaluated interactively lacks this data
-      ;; TODO: Figure out what to do when the metadata is missing
-      (when (and file line (not (cider--tooling-file-p file)))
+    ;; we don't need the file name here, as we always operate on the current
+    ;; buffer and the line data is correct even for vars that were
+    ;; defined interactively
+    (nrepl-dbind-response test (type line message expected actual)
+      (when line
         (save-excursion
           (goto-char (point-min))
           (forward-line (1- line))
@@ -545,6 +591,7 @@ Or nil if not found."
 
 
 ;;; Test namespaces
+;;
 ;; Test namespace inference exists to enable DWIM test running functions: the
 ;; same "run-tests" function should be able to be used in a source file, and in
 ;; its corresponding test namespace. To provide this, we need to map the
@@ -573,7 +620,7 @@ This uses the Leiningen convention of appending '-test' to the namespace name."
 (declare-function cider-emit-interactive-eval-output "cider-interaction")
 (declare-function cider-emit-interactive-eval-err-output "cider-interaction")
 
-(defun cider-test-execute (ns &optional tests silent)
+(defun cider-test-execute (ns &optional tests silent prompt-for-filters)
   "Run tests for NS, which may be a keyword, optionally specifying TESTS.
 
 This tests a single NS, or multiple namespaces when using keywords `:project',
@@ -581,53 +628,66 @@ This tests a single NS, or multiple namespaces when using keywords `:project',
 namespace is specified.  Upon test completion, results are echoed and a test
 report is optionally displayed.  When test failures/errors occur, their sources
 are highlighted.
-If SILENT is non-nil, suppress all messages other then test results."
+If SILENT is non-nil, suppress all messages other then test results.
+If PROMPT-FOR-FILTERS is non-nil, prompt the user for a test selector filters.
+The include/exclude selectors will be used to filter the tests before
+ running them."
   (cider-test-clear-highlights)
-  (cider-map-connections
-   (lambda (conn)
-     (unless silent
-       (if (and tests (= (length tests) 1))
-           ;; we generate a different message when running individual tests
-           (cider-test-echo-running ns (car tests))
-         (cider-test-echo-running ns)))
-     (cider-nrepl-send-request
-      `("op"     ,(cond ((stringp ns)         "test")
-                        ((eq :project ns)     "test-all")
-                        ((eq :loaded ns)      "test-all")
-                        ((eq :non-passing ns) "retest"))
-        "ns"     ,(when (stringp ns) ns)
-        "tests"  ,(when (stringp ns) tests)
-        "load?"  ,(when (or (stringp ns)
-                            (eq :project ns))
-                    "true"))
-      (lambda (response)
-        (nrepl-dbind-response response (summary results status out err)
-          (cond ((member "namespace-not-found" status)
-                 (unless silent
-                   (message "No test namespace: %s" (cider-propertize ns 'ns))))
-                (out (cider-emit-interactive-eval-output out))
-                (err (cider-emit-interactive-eval-err-output err))
-                (results
-                 (nrepl-dbind-response summary (error fail)
-                   (setq cider-test-last-summary summary)
-                   (setq cider-test-last-results results)
-                   (cider-test-highlight-problems results)
-                   (cider-test-echo-summary summary results)
-                   (if (or (not (zerop (+ error fail)))
-                           cider-test-show-report-on-success)
-                       (cider-test-render-report
-                        (cider-popup-buffer cider-test-report-buffer
-                                            cider-auto-select-test-report-buffer)
-                        summary results)
-                     (when (get-buffer cider-test-report-buffer)
-                       (with-current-buffer cider-test-report-buffer
-                         (let ((inhibit-read-only t))
-                           (erase-buffer)))
-                       (cider-test-render-report
-                        cider-test-report-buffer
-                        summary results))))))))
-      conn))
-   :clj))
+  (let ((include-selectors
+         (when prompt-for-filters
+           (split-string
+            (cider-read-from-minibuffer "Test selectors to include (space separated): "))))
+        (exclude-selectors
+         (when prompt-for-filters
+           (split-string
+            (cider-read-from-minibuffer "Test selectors to exclude (space separated): ")))))
+    (cider-map-connections
+     (lambda (conn)
+       (unless silent
+         (if (and tests (= (length tests) 1))
+             ;; we generate a different message when running individual tests
+             (cider-test-echo-running ns (car tests))
+           (cider-test-echo-running ns)))
+       (cider-nrepl-send-request
+        `("op"       ,(cond ((stringp ns)         "test")
+                            ((eq :project ns)     "test-all")
+                            ((eq :loaded ns)      "test-all")
+                            ((eq :non-passing ns) "retest"))
+          "includes" ,(when (listp include-selectors) include-selectors)
+          "excludes" ,(when (listp exclude-selectors) exclude-selectors)
+          "ns"       ,(when (stringp ns) ns)
+          "tests"    ,(when (stringp ns) tests)
+          "load?"    ,(when (or (stringp ns) (eq :project ns)) "true"))
+        (lambda (response)
+          (nrepl-dbind-response response (summary results status out err)
+            (cond ((member "namespace-not-found" status)
+                   (unless silent
+                     (message "No test namespace: %s" (cider-propertize ns 'ns))))
+                  (out (cider-emit-interactive-eval-output out))
+                  (err (cider-emit-interactive-eval-err-output err))
+                  (results
+                   (nrepl-dbind-response summary (error fail)
+                     (setq cider-test-last-summary summary)
+                     (setq cider-test-last-results results)
+                     (cider-test-highlight-problems results)
+                     (cider-test-echo-summary summary results)
+                     (if (or (not (zerop (+ error fail)))
+                             cider-test-show-report-on-success)
+                         (cider-test-render-report
+                          (cider-popup-buffer
+                           cider-test-report-buffer
+                           cider-auto-select-test-report-buffer)
+                          summary
+                          results)
+                       (when (get-buffer cider-test-report-buffer)
+                         (with-current-buffer cider-test-report-buffer
+                           (let ((inhibit-read-only t))
+                             (erase-buffer)))
+                         (cider-test-render-report
+                          cider-test-report-buffer
+                          summary results))))))))
+        conn))
+     :clj)))
 
 (defun cider-test-rerun-failed-tests ()
   "Rerun failed and erring tests from the last test run."
@@ -639,27 +699,40 @@ If SILENT is non-nil, suppress all messages other then test results."
           (message "No prior failures to retest")))
     (message "No prior results to retest")))
 
-(defun cider-test-run-loaded-tests ()
-  "Run all tests defined in currently loaded namespaces."
-  (interactive)
-  (cider-test-execute :loaded))
+(defun cider-test-run-loaded-tests (prompt-for-filters)
+  "Run all tests defined in currently loaded namespaces.
 
-(defun cider-test-run-project-tests ()
-  "Run all tests defined in all project namespaces, loading these as needed."
-  (interactive)
-  (cider-test-execute :project))
+If PROMPT-FOR-FILTERS is non-nil, prompt the user for a test selectors to filter the tests with."
+  (interactive "P")
+  (cider-test-execute :loaded nil nil prompt-for-filters))
 
-(defun cider-test-run-ns-tests (suppress-inference &optional silent)
+(defun cider-test-run-project-tests (prompt-for-filters)
+  "Run all tests defined in all project namespaces, loading these as needed.
+
+If PROMPT-FOR-FILTERS is non-nil, prompt the user for a test selectors to filter the tests with."
+  (interactive "P")
+  (cider-test-execute :project nil nil prompt-for-filters))
+
+(defun cider-test-run-ns-tests-with-filters (suppress-inference)
+  "Run tests filtered by selectors for the current Clojure namespace context.
+
+With a prefix arg SUPPRESS-INFERENCE it will try to run the tests in the
+current ns."
+  (interactive "P")
+  (cider-test-run-ns-tests suppress-inference nil 't))
+
+(defun cider-test-run-ns-tests (suppress-inference &optional silent prompt-for-filters)
   "Run all tests for the current Clojure namespace context.
 
 If SILENT is non-nil, suppress all messages other then test results.
 With a prefix arg SUPPRESS-INFERENCE it will try to run the tests in the
-current ns."
+current ns.  If PROMPT-FOR-FILTERS is non-nil, prompt the user for
+test selectors to filter the tests with."
   (interactive "P")
   (if-let* ((ns (if suppress-inference
                     (cider-current-ns t)
                   (funcall cider-test-infer-test-ns (cider-current-ns t)))))
-      (cider-test-execute ns nil silent)
+      (cider-test-execute ns nil silent prompt-for-filters)
     (if (eq major-mode 'cider-test-report-mode)
         (when (y-or-n-p (concat "Test report does not define a namespace. "
                                 "Rerun failed/erring tests?"))
@@ -688,15 +761,20 @@ is searched."
   (let ((ns  (get-text-property (point) 'ns))
         (var (get-text-property (point) 'var)))
     (if (and ns var)
+        ;; we're in a `cider-test-report-mode' buffer
+        ;; or on a highlighted failed/erred test definition
         (progn
           (cider-test-update-last-test ns var)
           (cider-test-execute ns (list var)))
-      (let ((ns  (clojure-find-ns))
-            (def (clojure-find-def)))
-        (if (and ns (member (car def) cider-test-defining-forms))
+      ;; we're in a `clojure-mode' buffer
+      (let* ((ns  (clojure-find-ns))
+             (def (clojure-find-def)) ; it's a list of the form (deftest something)
+             (deftype (car def))
+             (var (cadr def)))
+        (if (and ns (member deftype cider-test-defining-forms))
             (progn
-              (cider-test-update-last-test ns (cdr def))
-              (cider-test-execute ns (cdr def)))
+              (cider-test-update-last-test ns (list var))
+              (cider-test-execute ns (list var)))
           (message "No test at point"))))))
 
 (defun cider-test-rerun-test ()

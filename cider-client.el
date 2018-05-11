@@ -1,4 +1,4 @@
-;;; cider-client.el --- A layer of abstraction above the actual client code. -*- lexical-binding: t -*-
+;;; cider-client.el --- A layer of abstraction above low-level nREPL client code. -*- lexical-binding: t -*-
 
 ;; Copyright © 2013-2018 Bozhidar Batsov
 ;;
@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 
-;; A layer of abstraction above the actual client code.
+;; A layer of abstraction above the low-level nREPL client code.
 
 ;;; Code:
 
@@ -162,11 +162,11 @@ precedence over other connections associated with the same project.
 If ALL-CONNECTIONS is non-nil, the return value is a list and all matching
 connections are returned, instead of just the most recent."
   (when-let* ((project-directory (or project-directory
-                                    (clojure-project-dir (cider-current-dir))))
-             (fn (if all-connections #'seq-filter #'seq-find)))
+                                     (clojure-project-dir (cider-current-dir))))
+              (fn (if all-connections #'seq-filter #'seq-find)))
     (or (funcall fn (lambda (conn)
                       (when-let* ((conn-proj-dir (with-current-buffer conn
-                                                  nrepl-project-dir)))
+                                                   nrepl-project-dir)))
                         (equal (file-truename project-directory)
                                (file-truename conn-proj-dir))))
                  cider-connections)
@@ -180,7 +180,7 @@ connections are returned, instead of just the most recent."
 
 (defun cider-connection-type-for-buffer (&optional buffer)
   "Return the matching connection type (clj or cljs) for BUFFER.
-In cljc and cljx buffers return \"multi\". This function infers connection
+In cljc buffers return \"multi\". This function infers connection
 type based on the major mode. See `cider-project-connections-types' for a
 list of types of actual connections within a project.  BUFFER defaults to
 the `current-buffer'."
@@ -188,7 +188,6 @@ the `current-buffer'."
     (cond
      ((derived-mode-p 'clojurescript-mode) "cljs")
      ((derived-mode-p 'clojurec-mode) "multi")
-     ((derived-mode-p 'clojurex-mode) "multi")
      ((derived-mode-p 'clojure-mode) "clj")
      (cider-repl-type))))
 
@@ -238,7 +237,7 @@ using the default list of connections."
       (progn
         (kill-local-variable 'cider-connections)
         (let ((types (mapcar #'cider--connection-type (cider-connections))))
-          (message (format "Cider connections available: %s" types))))
+          (message (format "CIDER connections available: %s" types))))
     (let ((current-conn (cider-current-connection))
           (was-local (local-variable-p 'cider-connections))
           (original-connections (cider-connections)))
@@ -247,9 +246,9 @@ using the default list of connections."
       ;; obfuscation
       (kill-local-variable 'cider-connections)
       (if-let* ((other-conn (cider-other-connection current-conn)))
-        (progn
-          (setq-local cider-connections (list other-conn))
-          (message (format "Connection set to %s" (cider--connection-type other-conn))))
+          (progn
+            (setq-local cider-connections (list other-conn))
+            (message "Connection set to %s" (cider--connection-type other-conn)))
         (progn
           (when was-local
             (setq-local cider-connections original-connections))
@@ -328,7 +327,7 @@ at all."
 Only return connections in the same project or nil.
 CONNECTION defaults to `cider-current-connection'."
   (when-let* ((connection (or connection (cider-current-connection)))
-             (connection-type (cider--connection-type connection)))
+              (connection-type (cider--connection-type connection)))
     (cider-current-connection (pcase connection-type
                                 (`"clj" "cljs")
                                 (_ "clj")))))
@@ -339,16 +338,16 @@ CONNECTION defaults to `cider-current-connection'."
   "Hacky way to find a ClojureScript REPL.
 DO NOT USE THIS FUNCTION.
 It was written only to be used in `cider-map-connections', as a workaround
-to a still-undetermined bug in the state-stracker backend."
+to a still-undetermined bug in the state-tracker backend."
   (when-let* ((project-connections (cider-find-connection-buffer-for-project-directory
-                                   nil :all-connections))
-             (cljs-conn
-              ;; So we have multiple connections. Look for the connection type we
-              ;; want, prioritizing the current project.
-              (or (seq-find (lambda (c) (string-match "\\bCLJS\\b" (buffer-name c)))
-                            project-connections)
-                  (seq-find (lambda (c) (string-match "\\bCLJS\\b" (buffer-name c)))
-                            (cider-connections)))))
+                                    nil :all-connections))
+              (cljs-conn
+               ;; So we have multiple connections. Look for the connection type we
+               ;; want, prioritizing the current project.
+               (or (seq-find (lambda (c) (with-current-buffer c (equal cider-repl-type "cljs")))
+                             project-connections)
+                   (seq-find (lambda (c) (with-current-buffer c (equal cider-repl-type "cljs")))
+                             (cider-connections)))))
     (unless cider--has-warned-about-bad-repl-type
       (setq cider--has-warned-about-bad-repl-type t)
       (read-key
@@ -362,7 +361,7 @@ to a still-undetermined bug in the state-stracker backend."
   "Call FUNCTION once for each appropriate connection.
 The function is called with one argument, the connection buffer.
 The appropriate connections are found by inspecting the current buffer.  If
-the buffer is associated with a .cljc or .cljx file, BODY will be executed
+the buffer is associated with a .cljc file, BODY will be executed
 multiple times.
 
 WHICH is one of the following keywords identifying which connections to map
@@ -372,9 +371,8 @@ over.
         there is no Clojure connection (use this for commands only
         supported in Clojure).
  :cljs - Like :clj, but demands a ClojureScript connection instead.
- :both - In `clojurec-mode' or `clojurex-mode' act on both connections,
-         otherwise function like :any.  Obviously, this option might run
-         FUNCTION twice.
+ :both - In `clojurec-mode' act on both connections, otherwise function
+         like :any.  Obviously, this option might run FUNCTION twice.
 
 If ANY-MODE is non-nil, :clj and :cljs don't signal errors due to being in
 the wrong major mode (they still signal if the desired connection type
@@ -383,7 +381,7 @@ connection but can be invoked from any buffer (like `cider-refresh')."
   (cl-labels ((err (msg) (user-error (concat "`%s' " msg) this-command)))
     ;; :both in a clj or cljs buffer just means :any.
     (let* ((which (if (and (eq which :both)
-                           (not (cider--cljc-or-cljx-buffer-p)))
+                           (not (cider--cljc-buffer-p)))
                       :any
                     which))
            (curr
@@ -782,15 +780,41 @@ result, and is included in the request if non-nil."
            "pprint-fn" ,(or pprint-fn (cider--pprint-fn)))
          (and right-margin `("print-right-margin" ,right-margin))))
 
+(defun cider--nrepl-content-type-plist ()
+  "Plist to be appended to an eval request to make it use content-types."
+  '("content-type" "true"))
+
 (defun cider-tooling-eval (input callback &optional ns)
   "Send the request INPUT and register the CALLBACK as the response handler.
-NS specifies the namespace in which to evaluate the request."
+NS specifies the namespace in which to evaluate the request.
+
+Requests evaluated in the tooling nREPL session don't affect the
+thread-local bindings of the primary eval nREPL session (e.g. this is not
+going to clobber *1/2/3)."
   ;; namespace forms are always evaluated in the "user" namespace
   (nrepl-request:eval input
                       callback
                       (cider-current-connection)
                       ns nil nil nil t  ; tooling
                       ))
+
+(defun cider-sync-tooling-eval (input &optional ns)
+  "Send the request INPUT and evaluate in synchronously.
+NS specifies the namespace in which to evaluate the request.
+
+Requests evaluated in the tooling nREPL session don't affect the
+thread-local bindings of the primary eval nREPL session (e.g. this is not
+going to clobber *1/2/3)."
+  ;; namespace forms are always evaluated in the "user" namespace
+  (nrepl-sync-request:eval input
+                           (cider-current-connection)
+                           ns
+                           t  ; tooling
+                           ))
+
+(defun cider-library-present-p (lib)
+  "Check whether LIB is present on the classpath."
+  (seq-find (lambda (s) (string-match-p (concat lib ".*\\.jar") s)) (cider-sync-request:classpath)))
 
 (defalias 'cider-current-repl-buffer #'cider-current-connection
   "The current REPL buffer.
@@ -1182,8 +1206,10 @@ default connection."
           (append (cdr cider-connections)
                   (list (car cider-connections))))
     (message "Default nREPL connection: %s"
-           (cider--connection-info (car cider-connections)))))
+             (cider--connection-info (car cider-connections)))))
 
+
+(declare-function cider-connect "cider")
 (defun cider-replicate-connection (&optional conn)
   "Establish a new connection based on an existing connection.
 The new connection will use the same host and port.
