@@ -31,12 +31,16 @@
 
 ;;; Code:
 
-(require 'seq)
-(require 'clojure-mode)
-(require 'subr-x)
-(require 'cider-compat)
-(require 'nrepl-dict)
+;; Built-ins
 (require 'ansi-color)
+(require 'color)
+(require 'seq)
+(require 'subr-x)
+
+;; clojure-mode and CIDER
+(require 'cider-compat)
+(require 'clojure-mode)
+(require 'nrepl-dict)
 
 (defalias 'cider-pop-back 'pop-tag-mark)
 
@@ -83,12 +87,12 @@ which nREPL uses for temporary evaluation file names."
   (let ((fname (file-name-nondirectory file-name)))
     (string-match-p "^form-init" fname)))
 
-(defun cider--cljc-or-cljx-buffer-p (&optional buffer)
-  "Return non-nil if the current buffer is visiting a cljc or cljx file.
+(defun cider--cljc-buffer-p (&optional buffer)
+  "Return non-nil if the current buffer is visiting a cljc file.
 
 If BUFFER is provided act on that buffer instead."
   (with-current-buffer (or buffer (current-buffer))
-    (or (derived-mode-p 'clojurec-mode) (derived-mode-p 'clojurex-mode))))
+    (or (derived-mode-p 'clojurec-mode))))
 
 
 ;;; Thing at point
@@ -336,19 +340,12 @@ propertized (defaults to current buffer)."
 
 ;;; Colors
 
-(defun cider-scale-color (color scale)
-  "For a COLOR hex string or name, adjust intensity of RGB components by SCALE."
-  (let* ((rgb (color-values color))
-         (scaled-rgb (mapcar (lambda (n)
-                               (format "%04x" (round (+ n (* scale 65535)))))
-                             rgb)))
-    (apply #'concat "#" scaled-rgb)))
-
 (defun cider-scale-background-color ()
   "Scale the current background color to get a slighted muted version."
   (let ((color (frame-parameter nil 'background-color))
-        (dark (eq (frame-parameter nil 'background-mode) 'dark)))
-    (cider-scale-color color (if dark 0.05 -0.05))))
+        (darkp (eq (frame-parameter nil 'background-mode) 'dark)))
+    (unless (equal "unspecified-bg" color)
+      (color-lighten-name color (if darkp 5 -5)))))
 
 (autoload 'pkg-info-version-info "pkg-info.el")
 
@@ -399,7 +396,7 @@ plugin or dependency with:
 
 (defvar cider-version)
 
-(defconst cider-manual-url "http://cider.readthedocs.org/en/%s/"
+(defconst cider-manual-url "http://cider.readthedocs.io/en/%s/"
   "The URL to CIDER's manual.")
 
 (defun cider--manual-version ()
@@ -611,6 +608,7 @@ through a stack of help buffers.  Variables `help-back-label' and
     "Don't wish it were easier. Wish you were better. -Jim Rohn"
     "One chord is fine. Two chords is pushing it. Three chords and you're into jazz. -Lou Reed"
     "We are all apprentices in a craft where no one ever becomes a master. -Ernest Hemingway"
+    "A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away. -Antoine de Saint-Exupery"
     "Clojure isn't a language, it's a building material."
     "Think big!"
     "Think bold!"
@@ -645,6 +643,10 @@ through a stack of help buffers.  Variables `help-back-label' and
     "Oh, what a day... what a lovely day!"
     "What a day! What cannot be accomplished on such a splendid day!"
     "Home is where your REPL is."
+    "The worst day programming is better than the best day working."
+    "The only thing worse than a rebel without a cause is a REPL without a clause."
+    "In the absence of parentheses, chaos prevails."
+    "One REPL to rule them all, One REPL to find them, One REPL to bring them all, and in parentheses bind them!"
     ,(format "%s, I've a feeling we're not in Kansas anymore."
              (cider-user-first-name))
     ,(format "%s, this could be the start of a beautiful program."
@@ -741,6 +743,34 @@ KIND can be the symbols `ns', `var', `emph', `fn', or a face name."
               (vconcat x `[:help ,(documentation (elt x 1))]))
              (t x)))
           menu-list))
+
+(defcustom cider-jdk-src-paths '("/usr/lib/jvm/openjdk-8/src.zip")
+  "Used by `cider-stacktrace-navigate'.
+Zip/jar files work, but it's better to extract them and put the directory
+paths here.  Clojure sources here:
+https://repo1.maven.org/maven2/org/clojure/clojure/1.8.0/."
+  :group 'cider
+  :package-version '(cider . "0.17.0")
+  :type '(list string))
+
+(defun cider-resolve-java-class (class)
+  "Return a path to a Java source file that corresponds to CLASS.
+
+This will be a zip/jar path for archived sources and a normal
+file path otherwise."
+  (when class
+    (let ((file-name (concat (replace-regexp-in-string "\\." "/" class) ".java")))
+      (cl-find-if
+       'file-exists-p
+       (mapcar
+        (lambda (d)
+          (cond ((file-directory-p d)
+                 (expand-file-name file-name d))
+                ((and (file-exists-p d)
+                      (member (file-name-extension d) '("jar" "zip")))
+                 (format "zip:file:%s!/%s" d file-name))
+                (t (error "Unexpected archive: %s" d))))
+        cider-jdk-src-paths)))))
 
 (provide 'cider-util)
 

@@ -574,9 +574,12 @@ Achieved by destructively manipulating the `cider-stacktrace-suppressed-errors' 
          ;; Set `line-shift' to the number of lines from the beginning of defn.
          (line-shift (- (or (button-get button 'line) 0)
                         (or (nrepl-dict-get info "line") 1)))
+         (file (or
+                (and (null var) (cider-resolve-java-class class))
+                (nrepl-dict-get info "file")
+                (button-get button 'file)))
          ;; give priority to `info` files as `info` returns full paths.
-         (info (nrepl-dict-put info "file" (or (nrepl-dict-get info "file")
-                                               (button-get button 'file)))))
+         (info (nrepl-dict-put info "file" file)))
     (cider--jump-to-loc-from-info info t)
     (forward-line line-shift)
     (back-to-indentation)))

@@ -9,6 +9,7 @@
 ;;         Artur Malabarba <bruce.connor.am@gmail.com>
 ;;         Hugo Duncan <hugo@hugoduncan.org>
 ;;         Steve Purcell <steve@sanityinc.com>
+;;         Reid McKenzie <me@arrdem.com>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -38,7 +39,7 @@
 ;; The nREPL communication process can be broadly represented as follows:
 ;;
 ;;    1) The server process is started as an Emacs subprocess (usually by
-;;      `cider-jack-in', which in turn fires up leiningen or boot).  Note that
+;;       `cider-jack-in', which in turn fires up leiningen or boot).  Note that
 ;;       if a connection was established using `cider-connect' there won't be
 ;;       a server process.
 ;;
@@ -279,7 +280,8 @@ PROJECT-DIR, HOST and PORT are as in `nrepl-make-buffer-name'."
   "Read port from .nrepl-port, nrepl-port or target/repl-port files in directory DIR."
   (or (nrepl--port-from-file (expand-file-name "repl-port" dir))
       (nrepl--port-from-file (expand-file-name ".nrepl-port" dir))
-      (nrepl--port-from-file (expand-file-name "target/repl-port" dir))))
+      (nrepl--port-from-file (expand-file-name "target/repl-port" dir))
+      (nrepl--port-from-file (expand-file-name ".shadow-cljs/nrepl.port" dir))))
 
 (defun nrepl--port-from-file (file)
   "Attempts to read port from a file named by FILE."
@@ -763,7 +765,8 @@ to the REPL."
 (defun nrepl-make-response-handler (buffer value-handler stdout-handler
                                            stderr-handler done-handler
                                            &optional eval-error-handler
-                                           pprint-out-handler)
+                                           pprint-out-handler
+                                           content-type-handler)
   "Make a response handler for connection BUFFER.
 A handler is a function that takes one argument - response received from
 the server process.  The response is an alist that contains at least 'id'
@@ -772,20 +775,35 @@ and 'session' keys.  Other standard response keys are 'value', 'out', 'err',
 
 The presence of a particular key determines the type of the response.  For
 example, if 'value' key is present, the response is of type 'value', if
-'out' key is present the response is 'stdout' etc.  Depending on the type,
-the handler dispatches the appropriate value to one of the supplied
-handlers: VALUE-HANDLER, STDOUT-HANDLER, STDERR-HANDLER, DONE-HANDLER,
-EVAL-ERROR-HANDLER, and PPRINT-OUT-HANDLER.  If the optional
-EVAL-ERROR-HANDLER is nil, the default `nrepl-err-handler' is used.  If any
-of the other supplied handlers are nil nothing happens for the
-corresponding type of response."
+'out' key is present the response is 'stdout' etc.
+
+Depending on the type, the handler dispatches the appropriate value to one
+of the supplied handlers: VALUE-HANDLER, STDOUT-HANDLER, STDERR-HANDLER,
+DONE-HANDLER, EVAL-ERROR-HANDLER, PPRINT-OUT-HANDLER and
+CONTENT-TYPE-HANDLER.
+
+Handlers are functions of the buffer and the value they handle, except for
+the optional CONTENT-TYPE-HANDLER which should be a function of the buffer,
+content, the content-type to be handled as a list `(type attrs)'.
+
+If the optional EVAL-ERROR-HANDLER is nil, the default `nrepl-err-handler'
+is used.  If any of the other supplied handlers are nil nothing happens for
+the corresponding type of response."
   (lambda (response)
-    (nrepl-dbind-response response (value ns out err status id pprint-out)
+    (nrepl-dbind-response response (content-type content-transfer-encoding body
+                                                 value ns out err status id
+                                                 pprint-out)
       (when (buffer-live-p buffer)
         (with-current-buffer buffer
           (when (and ns (not (derived-mode-p 'clojure-mode)))
             (cider-set-buffer-ns ns))))
-      (cond (value
+      (cond ((and content-type content-type-handler)
+             (funcall content-type-handler buffer
+                      (if (string= content-transfer-encoding "base64")
+                          (base64-decode-string body)
+                        body)
+                      content-type))
+            (value
              (when value-handler
                (funcall value-handler buffer value)))
             (out
@@ -974,13 +992,17 @@ Optional argument TOOLING Tooling is set to t if wanting the tooling session fro
   "Perform :ls-sessions request for CONNECTION."
   (nrepl-send-sync-request '("op" "ls-sessions") connection))
 
-(defun nrepl-sync-request:eval (input connection &optional ns)
+(defun nrepl-sync-request:eval (input connection &optional ns tooling)
   "Send the INPUT to the nREPL server synchronously.
 The request is dispatched via CONNECTION.
-If NS is non-nil, include it in the request."
+If NS is non-nil, include it in the request
+If TOOLING is non-nil the evaluation is done using the tooling nREPL
+session."
   (nrepl-send-sync-request
    (nrepl--eval-request input ns)
-   connection))
+   connection
+   nil
+   tooling))
 
 (defun nrepl-sessions (connection)
   "Get a list of active sessions on the nREPL server using CONNECTION."

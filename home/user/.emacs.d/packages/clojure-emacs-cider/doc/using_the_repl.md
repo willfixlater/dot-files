@@ -13,7 +13,7 @@ Here's a list of the keybindings that are available in CIDER's REPL:
 
 Keyboard shortcut                    | Description
 -------------------------------------|------------------------------
-<kbd>RET</kbd>        | Evaluate the current input in Clojure if it is complete. If incomplete, open a new line and indent. If invoked with a prefix argument is given then the input is evaluated without checking for completeness.
+<kbd>RET</kbd>        | Evaluate the current input in Clojure if it is complete. If incomplete, open a new line and indent. If the current input is a blank string (containing only whitespace including newlines) then clear the input without evaluating and print a fresh prompt. If invoked with a prefix argument is given then the input is evaluated without checking for completeness.
 <kbd>C-RET</kbd>      | Close any unmatched parenthesis and then evaluate the current input in Clojure.
 <kbd>C-j</kbd>        | Open a new line and indent.
 <kbd>C-c C-o</kbd>    | Remove the output of the previous evaluation from the REPL buffer. With a prefix argument it will clear the entire REPL buffer, leaving only a prompt.
@@ -208,6 +208,22 @@ To make this behavior the default:
 (setq cider-repl-use-pretty-printing t)
 ```
 
+#### Displaying images in the REPL
+
+Starting with CIDER 0.17 (Andalucía) expressions that evaluate to
+images will be rendered as images in the REPL. You can disable this
+behavior if you don't like it.
+
+```el
+(setq cider-repl-use-content-types nil)
+```
+
+Alternatively you can toggle this behaviour on and off using <kbd>M-x
+cider-repl-toggle-content-types</kbd>.
+
+Currently the feature doesn't work well with pretty-printing in the REPL,
+so you're advised not to enable both of them at the same time.
+
 #### Limiting printed output in the REPL
 
 Accidentally printing large objects can be detrimental to your
@@ -218,6 +234,38 @@ section of your Leiningen project's configuration.
 
 ```clojure
 :repl-options {:init (set! *print-length* 50)}
+```
+
+or via `cider-repl-print-length` (set to 100 by default). In case both are
+present, CIDER's config will take precedence over what came from Lein.
+
+All of this applies to `*print-level*` as well. CIDER's configuration
+variable for it is named `cider-repl-print-level` (set to `nil` by default).
+
+#### Customizing the initial REPL namespace
+
+Normally the CIDER REPL will start with the `user` namespace.
+You can supply a default value for REPL sessions via the `repl-options` section
+of your Leiningen project's configuration.
+
+```clojure
+:repl-options {:init-ns 'my-ns}
+```
+
+#### Customizing newline interaction
+
+Ordinarily <kbd>Return</kbd> sends a form for evaluation meaning entering a
+newline requires a special chord: <kbd>C-j</kbd>. When entering forms that span
+multiple lines, it may be desirable to make evaluation require the special
+invocation and have entering a new-line be the default.
+
+The following customization of the `cider-repl-mode-map` will change these
+keybindings so that <kbd>Return</kbd> will introduce a new-line and
+<kbd>C-<return></kbd> will send the form off for evaluation.
+
+``` el
+(define-key cider-repl-mode-map (kbd "RET") #'cider-repl-newline-and-indent)
+(define-key cider-repl-mode-map (kbd "C-<return>") #'cider-repl-return)
 ```
 
 #### REPL history

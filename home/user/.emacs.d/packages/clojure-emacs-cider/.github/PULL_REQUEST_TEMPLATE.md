@@ -9,10 +9,10 @@ by checking the relevant checkboxes):
 - [ ] The commits are consistent with our [contribution guidelines][1]
 - [ ] You've added tests (if possible) to cover your change(s)
 - [ ] All tests are passing (`make test`)
-- [ ] The new code is not generating bytecode or `M-x checkdoc` warnings
-- [ ] You've updated the changelog (if adding/changing user-visible functionality)
-- [ ] You've updated the readme (if adding/changing user-visible functionality)
-- [ ] You've updated the refcard (if you made changes to the commands listed there)
+- [ ] All code passes the linter (`make lint`) which is based on [`elisp-lint`](https://github.com/gonewest818/elisp-lint) and includes
+  - [byte-compilation](https://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html), [`checkdoc`](https://www.gnu.org/software/emacs/manual/html_node/elisp/Tips.html), [check-declare](https://www.gnu.org/software/emacs/manual/html_node/elisp/Declaring-Functions.html), packaging metadata, indentation, and trailing whitespace checks.
+- [ ] You've updated the [changelog][3] (if adding/changing user-visible functionality)
+- [ ] You've updated the [user manual][4] (if adding/changing user-visible functionality)
 
 Thanks!
 
@@ -21,3 +21,5 @@ manual][2] extremely useful.*
 
 [1]: https://github.com/clojure-emacs/cider/blob/master/.github/CONTRIBUTING.md
 [2]: https://cider.readthedocs.io/en/latest/hacking_on_cider/
+[3]: https://github.com/clojure-emacs/cider/blob/master/CHANGELOG.md
+[4]: https://github.com/clojure-emacs/cider/tree/master/doc

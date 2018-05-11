@@ -36,12 +36,12 @@
 
 (require 'cider-client)
 (require 'cider-compat)
-(require 'cider-interaction)
 (require 'cider-util)
 (require 'cl-lib)
 (require 'nrepl-dict)
 (require 'seq)
 (require 'subr-x)
+(require 'help-mode)
 
 ;; The buffer names used by the spec browser
 (defconst cider-browse-spec-buffer "*cider-spec-browser*")
@@ -233,15 +233,31 @@ Display TITLE at the top and SPECS are indented underneath."
             ;; prettier (s/fspec )
             ((cider--spec-fn-p form-tag "fspec")
              (thread-last (seq-partition (cl-rest form) 2)
+               (cl-remove-if (lambda (s) (and (stringp (cl-second s))
+                                              (string-empty-p (cl-second s)))))
                (mapcar (lambda (s)
-                         (concat "\n" (cl-first s) " " (cider-browse-spec--pprint (cl-second s)))))
+                         (format "\n%-11s: %s" (pcase (cl-first s)
+                                                 (":args" "arguments")
+                                                 (":ret" "returns")
+                                                 (":fn" "invariants"))
+                                 (cider-browse-spec--pprint (cl-second s)))))
                (cl-reduce #'concat)
-               (format "(s/fspec \n %s)")))
+               (format "%s")))
             ;; every other with no special management
             (t (format "(%s %s)"
                        (cider-browse-spec--pprint form-tag)
                        (string-join (mapcar #'cider-browse-spec--pprint (cl-rest form)) " "))))))
         (t (format "%s" form))))
+
+(defun cider-browse-spec--pprint-indented (spec-form)
+  "Indent (pretty-print) and font-lock SPEC-FORM.
+Return the result as a string."
+  (with-temp-buffer
+    (clojure-mode)
+    (insert (cider-browse-spec--pprint spec-form))
+    (indent-region (point-min) (point-max))
+    (cider--font-lock-ensure)
+    (buffer-string)))
 
 (defun cider-browse-spec--draw-spec-buffer (buffer spec spec-form)
   "Reset contents of BUFFER and draws everything needed to browse the SPEC-FORM.
@@ -252,12 +268,7 @@ a more user friendly representation of SPEC-FORM."
       (cider--help-setup-xref (list #'cider-browse-spec spec) nil buffer)
       (goto-char (point-max))
       (insert (cider-font-lock-as-clojure spec) "\n\n")
-      (insert (with-temp-buffer
-                (clojure-mode)
-                (insert (cider-browse-spec--pprint spec-form))
-                (indent-region (point-min) (point-max))
-                (cider--font-lock-ensure)
-                (buffer-string)))
+      (insert (cider-browse-spec--pprint-indented spec-form))
       (cider--make-back-forward-xrefs)
       (current-buffer))))
 
@@ -320,16 +331,12 @@ Generates a new example for the current spec."
                                       (cider-symbol-at-point))))
   (cider-browse-spec--browse spec))
 
-;;;###autoload
-(defun cider-browse-spec-all (&optional arg)
-  "Open list of specs in a popup buffer.
-
-With a prefix argument ARG, prompts for a regexp to filter specs.
-No filter applied if the regexp is the empty string."
-  (interactive "P")
+(defun cider-browse-spec-regex (regex)
+  "Open the list of specs that matches REGEX in a popup buffer.
+Displays all specs when REGEX is nil."
   (cider-ensure-connected)
   (cider-ensure-op-supported "spec-list")
-  (let ((filter-regex (if arg (read-string "Filter regex: ") "")))
+  (let ((filter-regex (or regex "")))
     (with-current-buffer (cider-popup-buffer cider-browse-spec-buffer t)
       (let ((specs (cider-sync-request:spec-list filter-regex)))
         (cider-browse-spec--draw-list-buffer (current-buffer)
@@ -337,6 +344,15 @@ No filter applied if the regexp is the empty string."
                                                  "All specs in registry"
                                                (format "All specs matching regex `%s' in registry" filter-regex))
                                              specs)))))
+
+;;;###autoload
+(defun cider-browse-spec-all (&optional arg)
+  "Open list of specs in a popup buffer.
+
+With a prefix argument ARG, prompts for a regexp to filter specs.
+No filter applied if the regexp is the empty string."
+  (interactive "P")
+  (cider-browse-spec-regex (if arg (read-string "Filter regex: ") "")))
 
 (provide 'cider-browse-spec)
 

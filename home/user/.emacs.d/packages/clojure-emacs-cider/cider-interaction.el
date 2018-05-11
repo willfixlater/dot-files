@@ -660,9 +660,9 @@ has started."
 Returns the cons of the buffer itself and the location of VAR's definition
 in the buffer."
   (when-let* ((info (cider-var-info var))
-             (file (nrepl-dict-get info "file"))
-             (line (nrepl-dict-get info "line"))
-             (buffer (cider-find-file file)))
+              (file (nrepl-dict-get info "file"))
+              (line (nrepl-dict-get info "line"))
+              (buffer (cider-find-file file)))
     (with-current-buffer buffer
       (save-excursion
         (goto-char (point-min))
@@ -856,16 +856,16 @@ COMMENT-PREFIX is the comment prefix for the first line of output.
 CONTINUED-PREFIX is the comment prefix to use for the remaining lines.
 COMMENT-POSTFIX is the text to output after the last line."
   (cl-flet ((multiline-comment-handler (buffer value)
-             (with-current-buffer buffer
-               (save-excursion
-                 (goto-char location)
-                 (let ((lines (split-string value "[\n]+" t)))
-                   ;; only the first line gets the normal comment-prefix
-                   (insert (concat comment-prefix (pop lines)))
-                   (dolist (elem lines)
-                     (insert (concat "\n" continued-prefix elem)))
-                   (unless (string= comment-postfix "")
-                     (insert comment-postfix)))))))
+              (with-current-buffer buffer
+                (save-excursion
+                  (goto-char location)
+                  (let ((lines (split-string value "[\n]+" t)))
+                    ;; only the first line gets the normal comment-prefix
+                    (insert (concat comment-prefix (pop lines)))
+                    (dolist (elem lines)
+                      (insert (concat "\n" continued-prefix elem)))
+                    (unless (string= comment-postfix "")
+                      (insert comment-postfix)))))))
     (nrepl-make-response-handler buffer
                                  '()
                                  #'multiline-comment-handler
@@ -1236,6 +1236,37 @@ If invoked with OUTPUT-TO-CURRENT-BUFFER, output the result to current buffer."
     (goto-char (cadr (cider-sexp-at-point 'bounds)))
     (cider-eval-last-sexp output-to-current-buffer)))
 
+(defvar-local cider-previous-eval-context nil
+  "The previous evaluation context if any.
+
+That's set by commands like `cider-eval-last-sexp-in-context'.")
+
+(defun cider--eval-in-context (code)
+  "Evaluate CODE in user-provided evaluation context."
+  (let* ((code (string-trim-right code))
+         (eval-context (read-string
+                        (format "Evaluation context (let-style) for `%s': " code)
+                        cider-previous-eval-context))
+         (code (concat "(let [" eval-context "]\n  " code ")")))
+    (cider-interactive-eval code)
+    (setq-local cider-previous-eval-context eval-context)))
+
+(defun cider-eval-last-sexp-in-context ()
+  "Evaluate the preceding sexp in user-supplied context.
+
+The context is just a let binding vector (without the brackets).
+The context is remembered between command invocations."
+  (interactive)
+  (cider--eval-in-context (cider-last-sexp)))
+
+(defun cider-eval-sexp-at-point-in-context ()
+  "Evaluate the preceding sexp in user-supplied context.
+
+The context is just a let binding vector (without the brackets).
+The context is remembered between command invocations."
+  (interactive)
+  (cider--eval-in-context (cider-sexp-at-point)))
+
 (defun cider-eval-defun-to-comment (&optional insert-before)
   "Evaluate the \"top-level\" form and insert result as comment.
 
@@ -1406,6 +1437,50 @@ command `cider-debug-defun-at-point'."
                               (concat "#dbg\n" (cider-defun-at-point)))
                             nil (cider-defun-at-point 'bounds))))
 
+(defun cider--calculate-opening-delimiters ()
+  "Walks up the list of expressions to collect all sexp opening delimiters.
+
+The result is a list of the delimiters.
+
+That function is used in `cider-eval-defun-to-point' so it can make an
+incomplete expression complete."
+  (interactive)
+  (let ((result nil))
+    (save-excursion
+      (condition-case nil
+          (while t
+            (backward-up-list)
+            (push (char-after) result))
+        (error result)))))
+
+(defun cider--matching-delimiter (delimiter)
+  "Get the matching (opening/closing) delimiter for DELIMITER."
+  (pcase delimiter
+    (?\( ?\))
+    (?\[ ?\])
+    (?\{ ?\})
+    (?\) ?\()
+    (?\] ?\[)
+    (?\} ?\{)))
+
+(defun cider--calculate-closing-delimiters ()
+  "Compute the list of closing delimiters to make the defun before point valid."
+  (mapcar #'cider--matching-delimiter (cider--calculate-opening-delimiters)))
+
+(defun cider-eval-defun-to-point ()
+  "Evaluate the current toplevel form up to point.
+
+It constructs an expression to eval in the following manner:
+
+- It find the code between the point and the start of the toplevel expression;
+- It balances this bit of code by closing all open expressions;
+- It evaluates the resulting code using `cider-interactive-eval'."
+  (interactive)
+  (let* ((beg-of-defun (save-excursion (beginning-of-defun) (point)))
+         (code (buffer-substring-no-properties beg-of-defun (point)))
+         (code (concat code (cider--calculate-closing-delimiters))))
+    (cider-interactive-eval code)))
+
 (defun cider-pprint-eval-defun-at-point (&optional output-to-current-buffer)
   "Evaluate the \"top-level\" form at point and pprint its value.
 If invoked with OUTPUT-TO-CURRENT-BUFFER, insert as comment in the current
@@ -1458,12 +1533,18 @@ passing arguments."
     (define-key map (kbd "n") #'cider-eval-ns-form)
     (define-key map (kbd "v") #'cider-eval-sexp-at-point)
     (define-key map (kbd ".") #'cider-read-and-eval-defun-at-point)
+    (define-key map (kbd "z") #'cider-eval-defun-to-point)
+    (define-key map (kbd "c") #'cider-eval-last-sexp-in-context)
+    (define-key map (kbd "b") #'cider-eval-sexp-at-point-in-context)
     ;; duplicates with C- for convenience
     (define-key map (kbd "C-w") #'cider-eval-last-sexp-and-replace)
     (define-key map (kbd "C-r") #'cider-eval-region)
     (define-key map (kbd "C-n") #'cider-eval-ns-form)
     (define-key map (kbd "C-v") #'cider-eval-sexp-at-point)
-    (define-key map (kbd "C-.") #'cider-read-and-eval-defun-at-point)))
+    (define-key map (kbd "C-.") #'cider-read-and-eval-defun-at-point)
+    (define-key map (kbd "C-z") #'cider-eval-defun-to-point)
+    (define-key map (kbd "C-c") #'cider-eval-last-sexp-in-context)
+    (define-key map (kbd "C-b") #'cider-eval-sexp-at-point-in-context)))
 
 
 ;; Connection and REPL
@@ -1735,7 +1816,7 @@ refresh functions (defined in `cider-refresh-before-fn' and
   "Load (eval) BUFFER's file in nREPL.
 If no buffer is provided the command acts on the current buffer.
 
-If the buffer is for a cljc or cljx file, and both a Clojure and
+If the buffer is for a cljc file, and both a Clojure and
 ClojureScript REPL exists for the project, it is evaluated in both REPLs."
   (interactive)
   (check-parens)
@@ -1769,7 +1850,7 @@ ClojureScript REPL exists for the project, it is evaluated in both REPLs."
 (defun cider-load-file (filename)
   "Load (eval) the Clojure file FILENAME in nREPL.
 
-If the file is a cljc or cljx file, and both a Clojure and ClojureScript
+If the file is a cljc file, and both a Clojure and ClojureScript
 REPL exists for the project, it is evaluated in both REPLs.
 
 The heavy lifting is done by `cider-load-buffer'."
@@ -1874,6 +1955,7 @@ of the buffer into a formatted string."
 (defun cider-format-buffer ()
   "Format the Clojure code in the current buffer."
   (interactive)
+  (check-parens)
   (cider-ensure-connected)
   (cider--format-buffer #'cider-sync-request:format-code))
 
@@ -1883,6 +1965,7 @@ of the buffer into a formatted string."
 (defun cider-format-edn-buffer ()
   "Format the EDN data in the current buffer."
   (interactive)
+  (check-parens)
   (cider-ensure-connected)
   (cider--format-buffer (lambda (edn)
                           (cider-sync-request:format-edn edn (cider--pretty-print-width)))))
@@ -1931,7 +2014,7 @@ START and END represent the region's boundaries."
   (interactive)
   (cider-ensure-connected)
   (nrepl-sync-request:close (cider-current-connection))
-      (message "Closed nREPL session"))
+  (message "Closed nREPL session"))
 
 ;;; quiting
 (defun cider--close-buffer (buffer)
@@ -1983,6 +2066,8 @@ and all ancillary CIDER buffers."
   (unless (cider-connected-p)
     (cider-close-ancillary-buffers)))
 
+(declare-function cider-connect "cider")
+(declare-function cider-jack-in "cider")
 (defun cider--restart-connection (conn)
   "Restart the connection CONN."
   (let ((project-dir (with-current-buffer conn nrepl-project-dir))

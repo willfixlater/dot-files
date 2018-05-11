@@ -33,6 +33,7 @@
 
 (require 'clojure-mode)
 (require 'cider-interaction)
+(require 'cider-profile)
 (require 'cider-test)
 (require 'cider-eldoc)
 (require 'cider-resolve)
@@ -47,9 +48,9 @@
   :package-version '(cider "0.10.0"))
 
 (defun cider--modeline-info ()
-  "Return info for the `cider-mode' modeline.
+  "Return info for the cider mode modeline.
 
-Info contains project name and host:port endpoint."
+Info contains the connection type, project name and host:port endpoint."
   (if-let* ((current-connection (ignore-errors (cider-current-connection))))
       (with-current-buffer current-connection
         (concat
@@ -66,16 +67,15 @@ Info contains project name and host:port endpoint."
 ;;;###autoload
 (defcustom cider-mode-line
   '(:eval (format " cider[%s]" (cider--modeline-info)))
-  "Mode line lighter for `cider-mode'.
+  "Mode line lighter for cider mode.
 
 The value of this variable is a mode line template as in
-`mode-line-format'.  See Info Node `(elisp)Mode Line Format' for
-details about mode line templates.
+`mode-line-format'.  See Info Node `(elisp)Mode Line Format' for details
+about mode line templates.
 
-Customize this variable to change how `cider-mode' displays its
-status in the mode line.  The default value displays the current connection.
-Set this variable to nil to disable the mode line
-entirely."
+Customize this variable to change how cider mode displays its status in the
+mode line.  The default value displays the current connection.  Set this
+variable to nil to disable the mode line entirely."
   :group 'cider
   :type 'sexp
   :risky t
@@ -172,7 +172,10 @@ Clojure buffer and the REPL buffer."
 (defun cider-find-and-clear-repl-output (&optional clear-repl)
   "Find the current REPL buffer and clear it.
 With a prefix argument CLEAR-REPL the command clears the entire REPL buffer.
-Returns to the buffer in which the command was invoked."
+Returns to the buffer in which the command was invoked.
+
+See also the related commands `cider-repl-clear-buffer' and
+`cider-repl-clear-output'."
   (interactive "P")
   (let ((origin-buffer (current-buffer)))
     (switch-to-buffer (cider-current-repl-buffer))
@@ -189,16 +192,17 @@ Returns to the buffer in which the command was invoked."
      :help "Starts an nREPL server (with Leiningen, Boot, or Gradle) and connects a REPL to it."]
     ["Connect to a REPL" cider-connect
      :help "Connects to a REPL that's already running."]
+    ["Replicate connection" cider-replicate-connection
+     :help "Opens another connection based on a existing one. The new connection uses the same host and port as the base connection."]
     ["Quit" cider-quit :active cider-connections]
     ["Restart" cider-restart :active cider-connections]
     ("ClojureScript"
      ["Start a Clojure REPL, and a ClojureScript REPL" cider-jack-in-clojurescript
       :help "Starts an nREPL server, connects a Clojure REPL to it, and then a ClojureScript REPL.
-Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your build tool."]
-     ["Create a ClojureScript REPL from a Clojure REPL" cider-create-sibling-cljs-repl]
-     ["Form for launching a ClojureScript REPL via Leiningen" (customize-variable 'cider-cljs-lein-repl)]
-     ["Form for launching a ClojureScript REPL via Boot" (customize-variable 'cider-cljs-boot-repl)]
-     ["Form for launching a ClojureScript REPL via Gradle" (customize-variable 'cider-cljs-gradle-repl)])
+Configure `cider-cljs-repl-types' to change the ClojureScript REPL to use for your build tool."]
+     ["Connect to a ClojureScript REPL" cider-connect-clojurescript
+      :help "Connects to a ClojureScript REPL that's already running."]
+     ["Create a ClojureScript REPL from a Clojure REPL" cider-create-sibling-cljs-repl])
     "--"
     ["Connection info" cider-display-connection-info
      :active cider-connections]
@@ -225,8 +229,11 @@ Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your b
 (defconst cider-mode-eval-menu
   '("CIDER Eval" :visible cider-connections
     ["Eval top-level sexp" cider-eval-defun-at-point]
+    ["Eval top-level sexp to point" cider-eval-defun-to-point]
     ["Eval current sexp" cider-eval-sexp-at-point]
+    ["Eval current sexp in context" cider-eval-sexp-at-point-in-context]
     ["Eval last sexp" cider-eval-last-sexp]
+    ["Eval last sexp in context" cider-eval-last-sexp-in-context]
     ["Eval selected region" cider-eval-region]
     ["Eval ns form" cider-eval-ns-form]
     "--"
@@ -240,6 +247,9 @@ Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your b
     ["Eval last sexp and pretty-print to REPL" cider-pprint-eval-last-sexp-to-repl]
     ["Eval last sexp and pretty-print to comment" cider-pprint-eval-last-sexp-to-comment]
     ["Insert last sexp in REPL" cider-insert-last-sexp-in-repl]
+    ["Insert top-level sexp in REPL" cider-insert-defun-in-repl]
+    ["Insert region in REPL" cider-insert-region-in-repl]
+    ["Insert ns form in REPL" cider-insert-ns-form-in-repl]
     ["Eval top-level sexp to comment" cider-eval-defun-to-comment]
     ["Eval top-level sexp and pretty-print to comment" cider-pprint-eval-defun-to-comment]
     "--"
@@ -272,6 +282,14 @@ Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your b
      ["Find resource" cider-find-resource]
      ["Find keyword" cider-find-keyword]
      ["Go back" cider-pop-back])
+    ("Browse"
+     ["Browse namespace" cider-browse-ns]
+     ["Browse all namespaces" cider-browse-ns-all]
+     ["Browse spec" cider-browse-spec]
+     ["Browse all specs" cider-browse-spec-all]
+     ["Browse REPL input history" cider-repl-history]
+     ["Browse classpath" cider-classpath]
+     ["Browse classpath entry" cider-open-classpath-entry])
     ("Macroexpand"
      ["Macroexpand-1" cider-macroexpand-1]
      ["Macroexpand-all" cider-macroexpand-all])
@@ -286,18 +304,15 @@ Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your b
      ["List instrumented defs" cider-browse-instrumented-defs]
      "--"
      ["Configure the Debugger" (customize-group 'cider-debug)])
-    ("Browse"
-     ["Browse namespace" cider-browse-ns]
-     ["Browse all namespaces" cider-browse-ns-all]
-     ["Browse spec" cider-browse-spec]
-     ["Browse all specs" cider-browse-spec-all]
-     ["Browse REPL input history" cider-repl-history]
-     ["Browse classpath" cider-classpath]
-     ["Browse classpath entry" cider-open-classpath-entry])
+    ,cider-profile-menu
     ("Misc"
+     ["Clojure Cheatsheet" cider-cheatsheet]
      ["Flush completion cache" cider-completion-flush-caches]))
   "Menu for CIDER interactions.")
 
+(declare-function cider-macroexpand-1 "cider-macroexpansion")
+(declare-function cider-macroexpand-all "cider-macroexpansion")
+(declare-function cider-selector "cider-selector")
 (defconst cider-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-c C-d") 'cider-doc-map)
@@ -337,6 +352,7 @@ Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your b
     (define-key map (kbd "C-c M-s") #'cider-selector)
     (define-key map (kbd "C-c M-r") #'cider-rotate-default-connection)
     (define-key map (kbd "C-c M-d") #'cider-display-connection-info)
+    (define-key map (kbd "C-c C-=") #'cider-profile-map)
     (define-key map (kbd "C-c C-x") #'cider-refresh)
     (define-key map (kbd "C-c C-q") #'cider-quit)
     (dolist (variable '(cider-mode-interactions-menu
@@ -357,13 +373,14 @@ Configure `cider-cljs-*-repl' to change the ClojureScript REPL to use for your b
      "Menu for Clojure mode.
   This is displayed in `clojure-mode' buffers, if `cider-mode' is not active."
      `("CIDER" :visible (not cider-mode)
-       ["Start a REPL" cider-jack-in
+       ["Start a Clojure REPL" cider-jack-in
         :help "Starts an nREPL server (with Leiningen, Boot, or Gradle) and connects a REPL to it."]
-       ["Connect to a REPL" cider-connect
+       ["Connect to a Clojure REPL" cider-connect
         :help "Connects to a REPL that's already running."]
+       ["Connect to a ClojureScript REPL" cider-connect-clojurescript
+        :help "Connects to a ClojureScript REPL that's already running."]
        ["Start a Clojure REPL, and a ClojureScript REPL" cider-jack-in-clojurescript
-        :help "Starts an nREPL server, connects a Clojure REPL to it, and then a ClojureScript REPL.
-  Configure `cider-cljs-lein-repl', `cider-cljs-boot-repl' and `cider-cljs-gradle-repl' to change the ClojureScript REPL to use."]
+        :help "Starts an nREPL server, connects a Clojure REPL to it, and then a ClojureScript REPL."]
        "--"
        ["View manual online" cider-view-manual])))
 
