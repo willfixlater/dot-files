@@ -15,6 +15,7 @@
                                 (geiser "jaor-geiser/elisp")
                                 (rjsx-mode "felipeochoa-rjsx-mode")))))
 
+(require 'git)
 (load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/clojure.el")
 (load "~/.emacs.d/haskell.el")
