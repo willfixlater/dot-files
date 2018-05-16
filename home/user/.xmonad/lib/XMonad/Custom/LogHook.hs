@@ -6,7 +6,7 @@ import XMonad.Hooks.FadeInactive (fadeOutLogHook, fadeIf)
 myLogHook = opacityLogHook alpha
   where
     opacityLogHook = fadeOutLogHook . fadeIf isTerminalOrEditor
-    alpha = 210/255
+    alpha = 235/255
 
 isTerminalOrEditor = do
     cn <- className
