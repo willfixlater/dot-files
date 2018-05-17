@@ -6,7 +6,10 @@
                                 (dash "magnars-dash")
                                 (s "magnars-s")
                                 (ag "wilfred-ag")
+                                (avy "abo-abo-avy")
+                                (ace-window "abo-abo-ace-window")
                                 (shell-pop "kyagi-shell-pop")
+                                (projectile "bbatsov-projectile")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
@@ -20,6 +23,7 @@
 (load "~/.emacs.d/clojure.el")
 (load "~/.emacs.d/haskell.el")
 (load "~/.emacs.d/web.el")
+(load "~/.emacs.d/keybindings.el")
 (load "~/.emacs.d/mode-line.el")
 
 (custom-set-variables
@@ -37,6 +41,7 @@
                    "%p [%l,%c]"
                    "")
 
+(projectile-global-mode)
 (setq create-lockfiles nil)
 (setq inhibit-startup-screen t)
 (setq backup-directory-alist
