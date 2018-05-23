@@ -49,6 +49,7 @@
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (put 'dired-find-alternate-file 'disabled nil)
+(fset 'yes-or-no-p 'y-or-n-p)
 (set-cursor-color "#ffffff")
 (add-to-list 'default-frame-alist `(cursor-type . hbar))
 (set-face-attribute 'default nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
