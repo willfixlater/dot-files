@@ -13,3 +13,5 @@ Users/user/.xmonad/xmonad-x86_64-linux
 Users/user/.xmonad/xmonad.errors
 
 Users/user/.config/Code/User/workspaceStorage/**/*
+
+Users/user/.boot/cache/**/*

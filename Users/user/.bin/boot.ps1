@@ -1,0 +1,1 @@
+java -jar C:\Users\shayd\.boot\boot.jar $args
