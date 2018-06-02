@@ -1,15 +1,15 @@
-home/user/.lein/repl-history
+Users/user/.lein/repl-history
 
-home/user/.emacs.d/backup/**/*
-home/user/.emacs.d/backups/**/*
-home/user/.emacs.d/auto-save/**/*
-home/user/.emacs.d/auto-save-list/**/*
-home/user/.emacs.d/ido.last
-home/user/.emacs.d/projectile-bookmarks.eld
+Users/user/.emacs.d/backup/**/*
+Users/user/.emacs.d/backups/**/*
+Users/user/.emacs.d/auto-save/**/*
+Users/user/.emacs.d/auto-save-list/**/*
+Users/user/.emacs.d/ido.last
+Users/user/.emacs.d/projectile-bookmarks.eld
 
-home/user/.xmonad/**/*.o
-home/user/.xmonad/**/*.hi
-home/user/.xmonad/xmonad-x86_64-linux
-home/user/.xmonad/xmonad.errors
+Users/user/.xmonad/**/*.o
+Users/user/.xmonad/**/*.hi
+Users/user/.xmonad/xmonad-x86_64-linux
+Users/user/.xmonad/xmonad.errors
 
-home/user/.config/Code/User/workspaceStorage/**/*
+Users/user/.config/Code/User/workspaceStorage/**/*
