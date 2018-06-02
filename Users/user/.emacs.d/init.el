@@ -3,12 +3,8 @@
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
-                                (dash "magnars-dash")
-                                (s "magnars-s")
-                                (ag "wilfred-ag")
                                 (avy "abo-abo-avy")
                                 (ace-window "abo-abo-ace-window")
-                                (shell-pop "kyagi-shell-pop")
                                 (projectile "bbatsov-projectile")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
@@ -29,14 +25,7 @@
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
  '(custom-safe-themes
    (quote
-    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
- '(shell-pop-shell-type
-   (quote
-    ("ansi-term" "*term*"
-     (lambda nil
-       (ansi-term shell-pop-term-shell)))))
- '(shell-pop-term-shell "powershell")
- '(shell-pop-universal-key "C-t"))
+    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
 
 (aligned-mode-line " "
                    '(list "%b   " mode-line-modes)
