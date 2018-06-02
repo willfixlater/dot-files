@@ -5,6 +5,7 @@ Users/user/.emacs.d/backups/**/*
 Users/user/.emacs.d/auto-save/**/*
 Users/user/.emacs.d/auto-save-list/**/*
 Users/user/.emacs.d/ido.last
+Users/user/.emacs.d/projectile.cache
 Users/user/.emacs.d/projectile-bookmarks.eld
 
 Users/user/.xmonad/**/*.o
