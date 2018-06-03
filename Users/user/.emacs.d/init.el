@@ -19,6 +19,7 @@
 (load "~/.emacs.d/haskell.el")
 (load "~/.emacs.d/web.el")
 (load "~/.emacs.d/keybindings.el")
+(load "~/.emacs.d/prettify.el")
 (load "~/.emacs.d/mode-line.el")
 
 (custom-set-variables
@@ -28,7 +29,7 @@
     ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
 
 (aligned-mode-line " "
-                   '(list "%b   " mode-line-modes)
+                   '(list "%b   " mode-name)
                    '(list (buffer-state-*) "λ" (buffer-state-+))
                    "%p [%l,%c]"
                    "")
