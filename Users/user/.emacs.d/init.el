@@ -35,6 +35,7 @@
                    "")
 
 (projectile-global-mode)
+(setq-default truncate-lines t)
 (setq create-lockfiles nil)
 (setq inhibit-startup-screen t)
 (setq backup-directory-alist
