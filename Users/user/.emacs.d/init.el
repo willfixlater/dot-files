@@ -3,6 +3,9 @@
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
+                                (dash "magnars-dash")
+                                (s "magnars-s")
+                                (ag "wilfred-ag")
                                 (avy "abo-abo-avy")
                                 (ace-window "abo-abo-ace-window")
                                 (projectile "bbatsov-projectile")
