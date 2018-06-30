@@ -41,6 +41,7 @@
 (setq-default truncate-lines t)
 (setq create-lockfiles nil)
 (setq inhibit-startup-screen t)
+(setq ag-highlight-search t)
 (setq backup-directory-alist
       `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms
