@@ -35,7 +35,7 @@
 
 (aligned-mode-line " "
                    '(list "%b   " mode-name)
-                   '(list (buffer-state-*) "λ" (buffer-state-+))
+                   '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
                    "%p [%l,%c]"
                    "")
 
