@@ -54,3 +54,4 @@
 (add-to-list 'default-frame-alist `(cursor-type . hbar))
 (set-face-attribute 'default nil :font "Fira Code:antialias=true")
 (set-face-attribute 'mode-line nil :font "Fira Code:antialias=true")
+(set-face-attribute 'markdown-code-face nil :font "Fira Code:antialias=true")
