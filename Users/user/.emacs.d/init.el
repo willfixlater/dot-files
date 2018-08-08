@@ -7,6 +7,7 @@
                                 (s "magnars-s")
                                 (ag "wilfred-ag")
                                 (avy "abo-abo-avy")
+                                (sesman "vspinu-sesman")
                                 (ace-window "abo-abo-ace-window")
                                 (projectile "bbatsov-projectile")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
