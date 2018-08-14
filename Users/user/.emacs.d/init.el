@@ -29,10 +29,18 @@
 (load "~/.emacs.d/mode-line.el")
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
  '(custom-safe-themes
    (quote
-    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
+    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
+ '(safe-local-variable-values
+   (quote
+    ((cider-refresh-after-fn . "listsure.dev/go")
+     (cider-refresh-before-fn . "listsure.dev/stop")))))
 
 (aligned-mode-line " "
                    '(list "%b   " mode-name)
@@ -53,6 +61,12 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-cursor-color "#ffffff")
 (add-to-list 'default-frame-alist `(cursor-type . hbar))
-(set-face-attribute 'default nil :font "Fira Code:antialias=true")
-(set-face-attribute 'mode-line nil :font "Fira Code:antialias=true")
-(set-face-attribute 'markdown-code-face nil :font "Fira Code:antialias=true")
+(set-face-attribute 'default nil :font "Fira Code-11:antialias=true")
+(set-face-attribute 'mode-line nil :font "Fira Code-11:antialias=true")
+(set-face-attribute 'markdown-code-face nil :font "Fira Code-11:antialias=true")
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
