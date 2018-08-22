@@ -12,6 +12,7 @@
                                 (ghub "magit-ghub")
                                 (with-editor "magit-with-editor")
                                 (magit "magit-magit/lisp")
+                                (magit-gitflow "jtatarik-magit-gitflow")
                                 (ace-window "abo-abo-ace-window")
                                 (projectile "bbatsov-projectile")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
