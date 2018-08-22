@@ -8,6 +8,10 @@
                                 (ag "wilfred-ag")
                                 (avy "abo-abo-avy")
                                 (sesman "vspinu-sesman")
+                                (magit-popup "magit-magit-popup")
+                                (ghub "magit-ghub")
+                                (with-editor "magit-with-editor")
+                                (magit "magit-magit/lisp")
                                 (ace-window "abo-abo-ace-window")
                                 (projectile "bbatsov-projectile")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
@@ -29,18 +33,10 @@
 (load "~/.emacs.d/mode-line.el")
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
  '(custom-safe-themes
    (quote
-    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default)))
- '(safe-local-variable-values
-   (quote
-    ((cider-refresh-after-fn . "listsure.dev/go")
-     (cider-refresh-before-fn . "listsure.dev/stop")))))
+    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
 
 (aligned-mode-line " "
                    '(list "%b   " mode-name)
@@ -49,24 +45,18 @@
                    "")
 
 (projectile-global-mode)
-(setq-default truncate-lines t)
-(setq create-lockfiles nil)
-(setq inhibit-startup-screen t)
-(setq ag-highlight-search t)
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
-(setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
-(put 'dired-find-alternate-file 'disabled nil)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-cursor-color "#ffffff")
-(add-to-list 'default-frame-alist `(cursor-type . hbar))
-(set-face-attribute 'default nil :font "Fira Code-11:antialias=true")
-(set-face-attribute 'mode-line nil :font "Fira Code-11:antialias=true")
-(set-face-attribute 'markdown-code-face nil :font "Fira Code-11:antialias=true")
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(setq-default truncate-lines t)
+(set-face-attribute 'fringe nil :background "#1d1f21")
+
+(setq default-frame-alist
+      '((font . "Fira Code-11:antialias=true")
+        (cursor-type . hbar)
+        (cursor-color . "#ffffff")
+        (vertical-scroll-bars . nil)
+        (create-lockfiles . nil)
+        (ag-highlight-search . t)        
+        (backup-directory-alist
+         . ((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
+        (auto-save-file-name-transforms
+         . ((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))))
