@@ -22,7 +22,9 @@
                                 (haskell-mode "haskell-haskell-mode")
                                 (geiser "jaor-geiser/elisp")
                                 (rjsx-mode "felipeochoa-rjsx-mode")
-                                (markdown-mode "jrblevin-markdown-mode")))))
+                                (markdown-mode "jrblevin-markdown-mode")
+                                (haml-mode "nex3-haml-mode")
+                                (sass-mode "nex3-sass-mode")))))
 
 (load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/clojure.el")
