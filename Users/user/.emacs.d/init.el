@@ -46,9 +46,12 @@
                    "")
 
 (projectile-global-mode)
+(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default truncate-lines t)
 (set-face-attribute 'fringe nil :background "#1d1f21")
+(setq backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
+(setq auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 
 (setq default-frame-alist
       '((font . "Fira Code-11:antialias=true")
@@ -56,8 +59,4 @@
         (cursor-color . "#ffffff")
         (vertical-scroll-bars . nil)
         (create-lockfiles . nil)
-        (ag-highlight-search . t)        
-        (backup-directory-alist
-         . ((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
-        (auto-save-file-name-transforms
-         . ((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))))
+        (ag-highlight-search . t)))
