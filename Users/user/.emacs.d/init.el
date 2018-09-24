@@ -62,3 +62,4 @@
         (vertical-scroll-bars . nil)
         (create-lockfiles . nil)
         (ag-highlight-search . t)))
+(put 'dired-find-alternate-file 'disabled nil)
