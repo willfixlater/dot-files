@@ -43,25 +43,23 @@
    (quote
     ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
 
-(aligned-mode-line " "
-                   '(list "%b   " mode-name)
+(aligned-mode-line '(list "%b   " mode-name)
                    '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
-                   "%p [%l,%c]"
-                   "")
+                   "[%l,%c] %p%%")
 
 (projectile-global-mode)
 (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default truncate-lines t)
 (set-face-attribute 'fringe nil :background "#1d1f21")
+(setq ag-highlight-search t)
+(setq create-lockfiles nil)
 (setq backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
+(put 'dired-find-alternate-file 'disabled nil)
 
 (setq default-frame-alist
       '((font . "Fira Code-11:antialias=true")
         (cursor-type . hbar)
         (cursor-color . "#ffffff")
-        (vertical-scroll-bars . nil)
-        (create-lockfiles . nil)
-        (ag-highlight-search . t)))
-(put 'dired-find-alternate-file 'disabled nil)
+        (vertical-scroll-bars . nil)))
