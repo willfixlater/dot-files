@@ -1,0 +1,133 @@
+2014-10-22  Helmut Eller  <eller.helmut@gmail.com>
+
+	* peg.el (merge-error):  Add a method for (NOT X).
+
+2009-11-04  Helmut Eller  <eller.helmut@gmail.com>
+
+	Add some error reporting.  If a parse fails, move to the
+	right-most position and show the alternatives for that position.
+
+	Also only return a signle value: the stack.  Failures are
+	signalled with an error.  To avoid signalling errors you can add a
+	rule which matches everything but indicates failure in some other
+	way e.g. by setting a global variable.
+
+	* peg.el (peg-errors): New variable.
+	(peg-translate-rules): Use it.  Also raise errors at the
+	right-most point of failure.
+	(peg-translate-exp): Record failures.
+	(peg-record-failure): New function.
+	(peg-merge-errors): Used for error reporting.
+	(peg-postprocess): Just return the stack. Errors can be indicated
+	by leaving something on the stack.
+	(peg-parse-string): Add a NOERROR argument.  Hopefully more in
+	line with string-match. Update tests accordingly.
+
+2009-03-06  Helmut Eller  <eller.helmut@gmail.com>
+
+	* peg.el (peg-ex-arith): Minor cleanups.
+
+2009-03-06  Helmut Eller  <eller.helmut@gmail.com>
+
+	Introduce an operator to match string literals.
+
+	* peg.el (translate =): Add = operator.
+	(peg-ex-split): Example use.
+
+2008-12-22  Helmut Eller  <eller.helmut@gmail.com>
+
+	Fix typo.
+
+2008-12-21  Helmut Eller  <eller.helmut@gmail.com>
+
+	Version 0.5 for savannah.
+
+2008-12-18  Helmut Eller  <eller.helmut@gmail.com>
+
+	Remove *list op.
+
+2008-12-17  Helmut Eller  <eller.helmut@gmail.com>
+
+	Bump version number to 0.4.
+
+2008-12-17  Helmut Eller  <eller.helmut@gmail.com>
+
+	Add some more operators for actions.
+	list: Factored out of *list.  Collects all items on the stack.
+	region: New. Pushes start and end.
+	replaces: Replaces match.
+
+2008-12-17  Helmut Eller  <eller.helmut@gmail.com>
+
+	Fix normalizer for \`: Push values in left-to-right order.
+	peg-postprocess: turn positions in to markers to
+	support replacement ops in the actions.
+
+2008-12-01  Helmut Eller  <eller.helmut@gmail.com>
+
+	(peg-ex-lisp): Minor change to allow comments in more places.
+
+2008-12-01  Helmut Eller  <eller.helmut@gmail.com>
+
+	(peg-ex-uri): Fix some stack actions so that the file: example works.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Remove dups from char sets to avoid clashes with [:CLASS:] syntax.
+	There's still no way to include syntax classes in charsets. There
+	really should be.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Handle ^ in charsets.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Use (declare (indent )) again.  Emacs 21 compatibility is to hard
+	due to broken ,@ or something.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Don't use (declare (indent 3)) because that doesn' work in Emacs 21.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Fix minor spelling error.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Fix range translator: we need to check for eob.
+	Thanks to Hugo Schmitt.
+
+2008-11-28  Helmut Eller  <eller.helmut@gmail.com>
+
+	Make file byte-compileable in Emacs 22.
+
+2008-11-27  Helmut Eller  <eller.helmut@gmail.com>
+
+	Add mini test suite
+	Restore subtring operator.
+	Add translate method for <fail>.
+
+2008-11-27  Helmut Eller  <eller.helmut@gmail.com>
+
+	Add *list operator.
+
+2008-11-08  Helmut Eller  <eller.helmut@gmail.com>
+
+	More friendly syntax for character sets.
+	For example (set A-Z 0-9 "_!-" ?%).
+	[A-Z] is now the same as (set A-Z) which should look familiar.
+
+	Fix bug in *-loops.  We must backtrack.
+
+	Add somewhat bigger examples to parse URIs and Lisp-style Sexps.
+
+2008-11-06  Helmut Eller  <eller.helmut@gmail.com>
+
+	Detect infinite loops.
+	Use a single peg-add-method macro for all gfs.
+
+2008-11-06  Helmut Eller  <eller.helmut@gmail.com>
+
+	Add peg.el.
