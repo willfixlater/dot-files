@@ -1,4 +1,6 @@
 (load "~/.emacs.d/packaging.el")
+(load "~/.emacs.d/packages/ellerh-peg/peg.el")
+(load "~/.emacs.d/packages/cask-epl/epl.el")
 
 (load-package-list
  '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
@@ -8,6 +10,12 @@
                                 (ag "wilfred-ag")
                                 (avy "abo-abo-avy")
                                 (sesman "vspinu-sesman")
+                                (yasnippet "joaotavora-yasnippet")
+                                (multiple-cursors "magnars-multiple-cursors")
+                                (edn "expez-edn")
+                                (inflections "eschulte-jump")
+                                (hydra "abo-abo-hydra")
+                                (pkg-info "lunaryorn-pkg-info")
                                 (magit-popup "magit-magit-popup")
                                 (ghub "magit-ghub")
                                 (with-editor "magit-with-editor")
@@ -19,6 +27,7 @@
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
                                 (cider "clojure-emacs-cider")
+                                (clj-refactor "clojure-emacs-clj-refactor")
                                 (haskell-mode "haskell-haskell-mode")
                                 (rust-mode "rust-lang-rust-mode")
                                 (geiser "jaor-geiser/elisp")
