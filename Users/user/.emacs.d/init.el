@@ -56,6 +56,11 @@
                    '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
                    "[%l,%c] %p%%")
 
+(defun bash-shell ()
+  (interactive)
+  (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
+    (shell)))
+
 (projectile-global-mode)
 (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -63,6 +68,7 @@
 (set-face-attribute 'fringe nil :background "#1d1f21")
 (setq ag-highlight-search t)
 (setq create-lockfiles nil)
+(setq comint-prompt-read-only t)
 (setq backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (put 'dired-find-alternate-file 'disabled nil)
