@@ -40,6 +40,7 @@
 (load "~/.emacs.d/clojure.el")
 (load "~/.emacs.d/haskell.el")
 (load "~/.emacs.d/rust.el")
+(load "~/.emacs.d/sql.el")
 (load "~/.emacs.d/web.el")
 (load "~/.emacs.d/markdown.el")
 (load "~/.emacs.d/keybindings.el")
