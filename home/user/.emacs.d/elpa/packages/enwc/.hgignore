@@ -1,4 +1,0 @@
-syntax: glob
-
-*.elc
-enwc-autoloads.el

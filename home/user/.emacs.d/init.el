@@ -1,56 +1,51 @@
-(load "~/.emacs.d/packaging.el")
+; Initialize packages
+; (packages listed in ~/.config/nixos/home.nix)
+(require 'package)
+(setq package-archives nil)
+(setq package-enable-at-startup nil)
+(package-initialize)
 
-(load-package-list
- '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
-   ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
-                                (dash "magnars-dash")
-                                (s "magnars-s")
-                                (ag "wilfred-ag")
-                                (avy "abo-abo-avy")
-                                (ace-window "abo-abo-ace-window")
-                                (shell-pop "kyagi-shell-pop")
-                                (projectile "bbatsov-projectile")
-                                (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
-                                (paredit "campbell-paredit")
-                                (clojure-mode "clojure-emacs-clojure-mode")
-                                (cider "clojure-emacs-cider")
-                                (haskell-mode-autoloads "haskell-haskell-mode")
-                                (geiser "jaor-geiser/elisp")
-                                (rjsx-mode "felipeochoa-rjsx-mode")))))
-
-(require 'git)
+; Load elisp modules
 (load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/clojure.el")
 (load "~/.emacs.d/haskell.el")
+(load "~/.emacs.d/rust.el")
+(load "~/.emacs.d/sql.el")
 (load "~/.emacs.d/web.el")
+(load "~/.emacs.d/markdown.el")
 (load "~/.emacs.d/keybindings.el")
+(load "~/.emacs.d/prettify.el")
 (load "~/.emacs.d/mode-line.el")
 
-(custom-set-variables
- '(shell-pop-universal-key "C-t")
- '(shell-pop-shell-type (quote ("ansi-term" "*term*" (lambda nil (ansi-term shell-pop-term-shell)))))
- '(shell-pop-term-shell "/bin/zsh")
- '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
- '(custom-safe-themes
-   (quote
-     ("06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
+; Set mode line
+(aligned-mode-line '(list "%b   " mode-name)
+                   '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
+                   "[%l,%c] %p%%")
 
-(aligned-mode-line " "
-                   '(list "%b   " mode-line-modes)
-                   '(list (buffer-state-*) "λ" (buffer-state-+))
-                   "%p [%l,%c]"
-                   "")
+; Set theme
+(load-theme 'sanityinc-tomorrow-night t)
 
-(projectile-global-mode)
-(setq create-lockfiles nil)
-(setq inhibit-startup-screen t)
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
-(setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
-(put 'dired-find-alternate-file 'disabled nil)
+; Set frame defaults
+(setq-default default-frame-alist
+	      '((font . "Fira Code-11:bold:antialias=true")
+		(cursor-type . hbar)
+		(cursor-color . "#ffffff")
+		(vertical-scroll-bars . nil)))
+
+; Set misc. settings
+(setq-default truncate-lines t)
+(setq-default ag-highlight-search t)
+(setq-default create-lockfiles nil)
+(setq-default comint-prompt-read-only t)
+(setq-default backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
+(setq-default auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
+(setq-default header-line-format "")
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-cursor-color "#ffffff")
-(add-to-list 'default-frame-alist `(cursor-type . hbar))
-(set-face-attribute 'default nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
-(set-face-attribute 'mode-line nil :font "Triplicate T3c-11:weight=semi-bold:antialias=true")
+(set-face-attribute 'mode-line nil :font "Fira Code-11:bold:antialias=true")
+(set-face-attribute 'mode-line-inactive nil :font "Fira Code-11:bold:antialias=true")
+(set-face-attribute 'header-line nil :background "#1d1f21" :box "#1d1f21")
+(set-face-attribute 'fringe nil :background "#1d1f21")
+(put 'dired-find-alternate-file 'disabled nil)
+(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)

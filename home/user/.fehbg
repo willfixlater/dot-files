@@ -1,2 +1,2 @@
 #!/bin/sh
-'feh' '--bg-fill' '--randomize' '/home/shdzzl/.feh' 
+/home/shdzzl/.nix-profile/bin/feh --bg-fill 

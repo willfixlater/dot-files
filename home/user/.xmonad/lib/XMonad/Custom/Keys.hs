@@ -3,6 +3,8 @@ module XMonad.Custom.Keys
     , mergeMyKeys
     ) where
 
+import XMonad ( def )
+
 import XMonad.Core
     ( XConfig
         ( XConfig
@@ -70,8 +72,8 @@ myKeys config =
 
         , ((modMask, K.xK_r), spawn "~/.fehbg")
 
-        , ((modMask, K.xK_w), viewScreen 0)
-        , ((modMask, K.xK_e), viewScreen 1)
+        , ((modMask, K.xK_w), viewScreen def 0)
+        , ((modMask, K.xK_e), viewScreen def 1)
 
         , ((0, XF.xF86XK_AudioMute), spawn "pamixer --toggle-mute")
         , ((0, XF.xF86XK_AudioRaiseVolume), spawn "pamixer -i 10")

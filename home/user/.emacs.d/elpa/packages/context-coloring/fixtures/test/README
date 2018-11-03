@@ -1,4 +1,0 @@
-Files in this directory contain text which is matched against some data in
-context-coloring-test.el.  No change can be performed on one without
-matching changes to the other (not even adding/removing whitespace or
-comments).
