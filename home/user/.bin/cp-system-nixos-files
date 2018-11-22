@@ -1,0 +1,2 @@
+cp /home/shdzzl/.dot-files/etc/nixos/configuration.nix /etc/nixos/configuration.nix
+cp /home/shdzzl/.dot-files/etc/nixos/emacs.nix /etc/nixos/emacs.nix
