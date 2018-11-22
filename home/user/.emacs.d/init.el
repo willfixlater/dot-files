@@ -47,4 +47,6 @@
 (set-face-attribute 'header-line nil :background "#1d1f21" :box "#1d1f21")
 (set-face-attribute 'fringe nil :background "#1d1f21")
 (put 'dired-find-alternate-file 'disabled nil)
-(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
+;; TODO: Add hook once magit-gitflow can be installed in nixos
+;(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
+
