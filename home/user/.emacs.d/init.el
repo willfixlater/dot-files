@@ -40,7 +40,7 @@
 (setq-default backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq-default auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (setq-default header-line-format "")
-(fringe-mode '(16 . 16))
+(fringe-mode '(18 . 18))
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-face-attribute 'mode-line nil :font "Fira Code-11:bold:antialias=true")
 (set-face-attribute 'mode-line-inactive nil :font "Fira Code-11:bold:antialias=true")
