@@ -70,14 +70,10 @@ myKeys config =
         , ((modMask .|. K.shiftMask, K.xK_comma), sendMessage (IncMasterN 1))
         , ((modMask .|. K.shiftMask, K.xK_period), sendMessage (IncMasterN (-1)))
 
-        , ((modMask, K.xK_r), spawn "~/.fehbg")
+        , ((modMask .|. K.shiftMask, K.xK_b), spawn "~/.fehbg")
 
         , ((modMask, K.xK_w), viewScreen def 0)
         , ((modMask, K.xK_e), viewScreen def 1)
-
-        , ((0, XF.xF86XK_AudioMute), spawn "pamixer --toggle-mute")
-        , ((0, XF.xF86XK_AudioRaiseVolume), spawn "pamixer -i 10")
-        , ((0, XF.xF86XK_AudioLowerVolume), spawn "pamixer -d 10")
         ] ++
         [((modMask .|. m, k), windows $ f i)
             | (i, k) <- zip (workspaces config) [K.xK_1 .. K.xK_9]
