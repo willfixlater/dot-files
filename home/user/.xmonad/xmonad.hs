@@ -1,5 +1,6 @@
 import XMonad
 
+import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Custom.Keys (myKeys)
 import XMonad.Custom.LogHook (myLogHook)
 import XMonad.Custom.LayoutHook(myLayoutHook)
@@ -19,4 +20,5 @@ main = xmonad =<< myStatusBar myConfig
         , logHook = myLogHook
         , layoutHook = myLayoutHook
         , manageHook = myManageHook
+        , startupHook = spawnOnce "~/.fehbg"
         }

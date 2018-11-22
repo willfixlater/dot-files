@@ -12,7 +12,7 @@ isTerminalOrEditor = do
     cn <- className
     return $ cn `elem`
         [ "Emacs"
-	, "Atom"
+        , "Atom"
         , "Code"
         , "URxvt"
         , "XTerm"
