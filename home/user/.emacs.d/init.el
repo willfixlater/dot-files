@@ -1,5 +1,5 @@
 ; Initialize packages
-; (packages listed in ~/.config/nixos/home.nix)
+; (packages listed in /etc/nixos/configuration.nix)
 (require 'package)
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
@@ -18,7 +18,7 @@
 (load "~/.emacs.d/mode-line.el")
 
 ; Set mode line
-(aligned-mode-line '(list "%b   " mode-name)
+(aligned-mode-line '(list " %b   " mode-name)
                    '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
                    "[%l,%c] %p%%")
 
@@ -40,8 +40,7 @@
 (setq-default backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq-default auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (setq-default header-line-format "")
-(menu-bar-mode -1)
-(tool-bar-mode -1)
+(fringe-mode '(16 . 16))
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-face-attribute 'mode-line nil :font "Fira Code-11:bold:antialias=true")
 (set-face-attribute 'mode-line-inactive nil :font "Fira Code-11:bold:antialias=true")
