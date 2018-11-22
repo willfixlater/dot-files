@@ -30,10 +30,9 @@
 URxvt.scrollBar: false
 URxvt.cursorBlink: 1
 URxvt.cursorUnderline: 1
-URxvt.font: xft:Triplicate T3c:bold:antialias=true:pixelsize=14,\
+URxvt.font: xft:Fira Code:bold:antialias=true:pixelsize=14,\
             xft:Symbola:antialias=true:pixelsize=10
-URxvt.letterSpace: -1
-URxvt.internalBorder: 36
+URxvt.internalBorder: 18
 
 URxvt.perl-ext-common: default,matcher
 URxvt.url-launcher: /usr/bin/xdg-open
