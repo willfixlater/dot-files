@@ -82,31 +82,5 @@
       userName = "shdzzl";
       userEmail = "mail@shayden.me";
     };
-
-    emacs = {
-      enable = true;
-      extraPackages = epkgs: [
-        epkgs.better-defaults
-        epkgs.color-theme-sanityinc-tomorrow
-        epkgs.ag
-        epkgs.ace-window
-        epkgs.paredit
-        epkgs.projectile
-        epkgs.geiser
-        epkgs.magit
-        epkgs.magit-gitflow
-        epkgs.nix-mode
-        epkgs.markdown-mode
-        epkgs.haml-mode
-        epkgs.sass-mode
-        epkgs.js2-mode
-        epkgs.rjsx-mode
-        epkgs.clojure-mode
-        epkgs.cider
-        epkgs.clj-refactor
-        epkgs.haskell-mode
-        epkgs.rust-mode
-      ];
-    };
   };
 }

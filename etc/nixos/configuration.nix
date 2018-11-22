@@ -18,14 +18,13 @@
 
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "Lat2-Terminus16";
+    consoleFont = "Fira Code";
     consoleKeyMap = "us";
     defaultLocale = "en_AU.UTF-8";
   };
 
   # Set your time zone.
   time.timeZone = "Australia/Sydney";
-
 
   # Disable firewall
   networking.firewall.enable = false;
@@ -34,7 +33,9 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  environment.systemPackages = [ ];
+  environment.systemPackages = [
+    (import /etc/nixos/emacs.nix { inherit pkgs; })
+  ];
 
   services = {
     openssh.enable = true;
