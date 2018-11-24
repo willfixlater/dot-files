@@ -11,6 +11,12 @@
     };
   };
 
+  home = {
+    sessionVariables = {
+      EDITOR = "emacs -nw";
+    };
+  };
+
   services = {
     compton = {
       enable = true;
