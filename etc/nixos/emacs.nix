@@ -27,7 +27,7 @@ in
       cider
       clj-refactor
       haskell-mode
-      rust-mode      
+      rust-mode
     ])
     ++
     (with epkgs.melpaPackages; [ ])

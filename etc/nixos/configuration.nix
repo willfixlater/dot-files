@@ -9,6 +9,9 @@
   # should.
   system.stateVersion = "18.09"; # Did you read the comment?
 
+  # Allow "unfree" packages
+  nixpkgs.config.allowUnfree = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -35,10 +38,11 @@
 
   environment = {
     systemPackages = with pkgs; [
-      (import /etc/nixos/emacs.nix { inherit pkgs; })
+      (import ./emacs.nix { inherit pkgs; })
       git
       dmenu
       rxvt_unicode
+      google-chrome
     ];
   };
 
@@ -59,6 +63,7 @@
 
   fonts.fonts = [
     pkgs.fira-code
+    pkgs.twemoji-color-font
   ];
 
   users.users = {
