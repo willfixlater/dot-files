@@ -33,9 +33,14 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  environment.systemPackages = [
-    (import /etc/nixos/emacs.nix { inherit pkgs; })
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      (import /etc/nixos/emacs.nix { inherit pkgs; })
+      git
+      dmenu
+      rxvt_unicode
+    ];
+  };
 
   services = {
     openssh.enable = true;
