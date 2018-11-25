@@ -17,6 +17,7 @@ in
       # TODO: Get magit-gitflow packages to build correctly
       # Error appears similar to https://github.com/NixOS/nixpkgs/issues/45868
       # magit-gitflow
+      emojify
       nix-mode
       markdown-mode
       haml-mode

@@ -61,9 +61,10 @@
     };
   };
 
-  fonts.fonts = [
-    pkgs.fira-code
-    pkgs.twemoji-color-font
+  fonts.fonts = with pkgs; [
+    fira-code
+    symbola
+    twemoji-color-font
   ];
 
   users.users = {
