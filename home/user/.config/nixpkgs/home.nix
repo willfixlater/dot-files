@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  nixpkgs.config.allowUnfree = true;
+
   xsession = {
     enable = true;
     windowManager = {
@@ -28,9 +30,7 @@
       path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
     };
 
-    rofi = {
-      enable = true;
-    };
+    rofi = import ./rofi.nix { inherit pkgs; };
 
     feh = {
       enable = true;
