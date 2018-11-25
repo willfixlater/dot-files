@@ -11,7 +11,13 @@
         enableContribAndExtras = true;
       };
     };
+    pointerCursor = {
+      name = "Vanilla-DMZ";
+      package = pkgs.vanilla-dmz;
+    };
   };
+
+  xresources.properties = import ./xresources { inherit pkgs; };
 
   services = {
     compton = {
@@ -30,6 +36,7 @@
       path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
     };
 
+    urxvt = import ./urxvt.nix { inherit pkgs; };
     rofi = import ./rofi.nix { inherit pkgs; };
 
     feh = {
