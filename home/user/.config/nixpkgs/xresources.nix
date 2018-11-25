@@ -1,4 +1,4 @@
-{ pgks, ... }:
+{ pkgs, ... }:
 
 {
   "*background" = "rgb:1d/1f/21";

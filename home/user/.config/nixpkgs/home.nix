@@ -17,16 +17,10 @@
     };
   };
 
-  xresources.properties = import ./xresources { inherit pkgs; };
+  xresources.properties = import ./xresources.nix { inherit pkgs; };
 
   services = {
-    compton = {
-      enable = true;
-      shadow = false;
-      noDockShadow = true;
-      shadowOffsets = [ (-6) (-6) ];
-    };
-
+    compton = import ./compton.nix { inherit pkgs; };
     polybar = import ./polybar.nix { inherit pkgs; };
   };  
 
