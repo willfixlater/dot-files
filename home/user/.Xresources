@@ -1,6 +1,0 @@
-// Urxvt Settings
-URxvt.perl-ext-common: default,matcher
-URxvt.url-launcher: /usr/bin/xdg-open
-URxvt.matcher.button: 1
-URxvt.matcher.rend.0: Uline Bold fg5
-URxvt.keysym.Control-l: command:\033c
