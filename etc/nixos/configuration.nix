@@ -71,7 +71,8 @@
     shdzzl = {
       isNormalUser = true;
       home = "/home/shdzzl";
-      description = "Shayden Martin";
+      description = "Shayden";
+      shell = pkgs.zsh;
       extraGroups = [ "wheel" ];
     };
   };
