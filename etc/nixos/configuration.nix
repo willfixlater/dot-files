@@ -45,6 +45,7 @@
       google-chrome
       leiningen
       wavebox
+      awscli
     ];
   };
 
