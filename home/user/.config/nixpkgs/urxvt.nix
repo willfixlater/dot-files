@@ -9,6 +9,6 @@
   extraConfig = {
     cursorBlink = 1;
     cursorUnderline = 1;
-    internalBorder = 18;
+    internalBorder = 22;
   };
 }
