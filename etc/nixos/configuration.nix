@@ -44,6 +44,7 @@
       rxvt_unicode
       google-chrome
       leiningen
+      wavebox
     ];
   };
 
@@ -66,6 +67,7 @@
     fira-code
     symbola
     twemoji-color-font
+    liberation_ttf
   ];
 
   users.users = {
