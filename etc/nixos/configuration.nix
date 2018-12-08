@@ -43,6 +43,7 @@
       dmenu
       rxvt_unicode
       google-chrome
+      leiningen
     ];
   };
 
