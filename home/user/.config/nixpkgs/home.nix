@@ -6,6 +6,16 @@ in
 {
   nixpkgs.config.allowUnfree = true;
 
+  home = {
+    sessionVariables = {
+      EDITOR = "emacs -nw";
+    };
+
+    file = {
+      ".lein".source = ./sources/lein;
+    };
+  };
+
   xsession = {
     enable = true;
     windowManager = {
@@ -60,12 +70,6 @@ in
       enable = true;
       userName = "shdzzl";
       userEmail = "mail@shayden.me";
-    };
-  };
-
-  home = {
-    sessionVariables = {
-      EDITOR = "emacs -nw";
     };
   };
 }
