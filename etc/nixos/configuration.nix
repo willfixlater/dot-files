@@ -62,6 +62,13 @@
         gnome3.enable = true;
       };
     };
+
+    postgresql = {
+      enable = true;
+      initialScript = pkgs.writeText "backend.initScript" ''
+        create role shdzzl with login superuser;
+      '';
+    };
   };
 
   fonts.fonts = with pkgs; [
