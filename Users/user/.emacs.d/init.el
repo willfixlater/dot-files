@@ -23,6 +23,7 @@
                                 (magit-gitflow "jtatarik-magit-gitflow")
                                 (ace-window "abo-abo-ace-window")
                                 (projectile "bbatsov-projectile")
+                                (flycheck "flycheck-flycheck")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
@@ -65,6 +66,7 @@
 
 (projectile-global-mode)
 (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
+(add-hook 'after-init-hook #'global-flycheck-mode)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default truncate-lines t)
 (set-face-attribute 'fringe nil :background "#1d1f21")
