@@ -24,6 +24,7 @@
                                 (ace-window "abo-abo-ace-window")
                                 (projectile "bbatsov-projectile")
                                 (flycheck "flycheck-flycheck")
+                                (company "company-mode-company-mode")
                                 (color-theme-sanityinc-tomorrow "purcell-color-theme-sanityinc-tomorrow")
                                 (paredit "campbell-paredit")
                                 (clojure-mode "clojure-emacs-clojure-mode")
@@ -33,6 +34,8 @@
                                 (rust-mode "rust-lang-rust-mode")
                                 (geiser "jaor-geiser/elisp")
                                 (rjsx-mode "felipeochoa-rjsx-mode")
+                                (typescript-mode "ananthakumaran-typescript")
+                                (tide "ananthakumaran-tide")
                                 (markdown-mode "jrblevin-markdown-mode")
                                 (haml-mode "nex3-haml-mode")
                                 (sass-mode "nex3-sass-mode")))))
@@ -41,6 +44,7 @@
 (load "~/.emacs.d/clojure.el")
 (load "~/.emacs.d/haskell.el")
 (load "~/.emacs.d/rust.el")
+(load "~/.emacs.d/typescript.el")
 (load "~/.emacs.d/sql.el")
 (load "~/.emacs.d/web.el")
 (load "~/.emacs.d/markdown.el")
@@ -60,6 +64,7 @@
                    "[%l,%c] %p%%")
 
 (defun bash-shell ()
+  "Start a WSL Bash shell."
   (interactive)
   (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
     (shell)))
