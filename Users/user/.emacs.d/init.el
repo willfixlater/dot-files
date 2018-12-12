@@ -46,6 +46,7 @@
 (load "~/.emacs.d/keybindings.el")
 (load "~/.emacs.d/prettify.el")
 (load "~/.emacs.d/mode-line.el")
+(load "~/.emacs.d/packages/floobits-floobits-emacs/floobits.el")
 
 (custom-set-variables
  '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
