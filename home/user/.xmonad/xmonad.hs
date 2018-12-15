@@ -20,5 +20,5 @@ main = xmonad =<< myStatusBar myConfig
         , logHook = myLogHook
         , layoutHook = myLayoutHook
         , manageHook = myManageHook
-        , startupHook = spawnOnce "~/.fehbg"
+        , startupHook = spawnOnce "~/.fehbg" >> spawn "run-polybar"
         }

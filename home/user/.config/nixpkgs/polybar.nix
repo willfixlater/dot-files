@@ -2,7 +2,11 @@
 
 {
   enable = true;
-  script = "polybar main &";
+  # NOTE: When starting polybar from the systemd user service, it uses the
+  # default cursor theme and not the one selected in home.nix. The no-op script
+  # below is a hacky work-around and I have handed the starting of polybar off
+  # to xmonad.
+  script = "";
   extraConfig = ''
     [colors]
       bar-background = #00000000
