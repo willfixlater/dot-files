@@ -6,6 +6,7 @@
 (package-initialize)
 
 ; Load elisp modules
+(load "~/.emacs.d/utils.el")
 (load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/clojure.el")
 (load "~/.emacs.d/haskell.el")
@@ -25,6 +26,12 @@
 ; Set theme
 (load-theme 'sanityinc-tomorrow-night t)
 
+; Set and create auto-save and backup dirs
+(defconst backup-dir-path (expand-file-name "~/.emacs.d/backup/"))
+(defconst auto-save-dir-path (expand-file-name "~/.emacs.d/auto-save/"))
+(make-new-directory backup-dir-path)
+(make-new-directory auto-save-dir-path)
+
 ; Set frame defaults
 (setq-default default-frame-alist
 	      '((font . "Fira Code-11:bold:antialias=true")
@@ -36,9 +43,9 @@
 (setq-default truncate-lines t)
 (setq-default ag-highlight-search t)
 (setq-default create-lockfiles nil)
+(setq-default backup-directory-alist `((".*" . ,backup-dir-path)))
+(setq-default auto-save-file-name-transforms `((".*" ,auto-save-dir-path t)))
 (setq-default comint-prompt-read-only t)
-(setq-default backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
-(setq-default auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (setq-default header-line-format "")
 (fringe-mode '(22 . 22))
 (fset 'yes-or-no-p 'y-or-n-p)
