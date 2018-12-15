@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-aliases = { em = "emacs -nw"; };
+  aliases = { em = "emacs -nw"; };
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -12,7 +12,10 @@ in
     };
 
     file = {
+      bin.source = ./sources/bin;
       ".lein".source = ./sources/lein;
+      ".fehbg".source = ./sources/feh/fehbg;
+      ".fehbg_image".source = ./sources/feh/fehbg_image;
     };
   };
 
