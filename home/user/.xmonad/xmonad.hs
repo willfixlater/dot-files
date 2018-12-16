@@ -20,5 +20,8 @@ main = xmonad =<< myStatusBar myConfig
         , logHook = myLogHook
         , layoutHook = myLayoutHook
         , manageHook = myManageHook
-        , startupHook = spawnOnce "~/.fehbg" >> spawn "run-polybar"
+        , startupHook = do
+            spawnOnce "~/.fehbg"
+            spawnOnce "emacs --daemon"
+            spawn "run-polybar"
         }

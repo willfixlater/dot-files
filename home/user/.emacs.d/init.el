@@ -57,3 +57,12 @@
 ;; TODO: Add hook once magit-gitflow can be installed in nixos
 ;(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
 
+;; NOTE: Run this after creating a frame, mainly to work around emacsclient not
+;; respecting these settings.
+(defun face-attributes-new-frame-hook (_)
+  (set-face-attribute 'mode-line nil :font "Fira Code-11:bold:antialias=true")
+  (set-face-attribute 'mode-line-inactive nil :font "Fira Code-11:bold:antialias=true")
+  (set-face-attribute 'header-line nil :background "#1d1f21" :box "#1d1f21")
+  (set-face-attribute 'fringe nil :background "#1d1f21"))
+
+(add-hook 'after-make-frame-functions #'face-attributes-new-frame-hook)
