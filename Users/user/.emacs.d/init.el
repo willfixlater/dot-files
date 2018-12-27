@@ -86,4 +86,6 @@
       '((font . "Fira Code-11:antialias=true")
         (cursor-type . hbar)
         (cursor-color . "#ffffff")
-        (vertical-scroll-bars . nil)))
+        (vertical-scroll-bars . nil)
+        (left-fringe . 20)
+        (right-fringe . 20)))
