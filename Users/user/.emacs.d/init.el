@@ -1,4 +1,27 @@
+;;; init.el --- Initialization file for Emacs
+
+;;; Commentary:
+
+;;; Emacs Startup File
+
+;;; Code:
+
+;; Front matter
+
+; Declarations
+
+(defvar ag-highlight-search)
+(defvar comint-prompt-read-only)
+
+(declare-function load-package-list "~/.emacs.d/packaging.el")
+(declare-function aligned-mode-line "~/.emacs.d/mode-line.el")
+(declare-function projectile-global-mode "ext:projectile")
+(declare-function global-flycheck-mode "ext:flycheck")
+
+; Packages
+
 (load "~/.emacs.d/packaging.el")
+
 (load "~/.emacs.d/packages/ellerh-peg/peg.el")
 (load "~/.emacs.d/packages/cask-epl/epl.el")
 
@@ -51,23 +74,30 @@
 (load "~/.emacs.d/keybindings.el")
 (load "~/.emacs.d/prettify.el")
 (load "~/.emacs.d/mode-line.el")
+
 (load "~/.emacs.d/packages/floobits-floobits-emacs/floobits.el")
 
-(custom-set-variables
- '(custom-enabled-themes (quote (sanityinc-tomorrow-night)))
- '(custom-safe-themes
-   (quote
-    ("8b9d07b01f2a9566969c2049faf982cab6a4b483dd43de7fd6a016bb861f7762" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))))
+;; Initialisation
+
+; Theme
+
+(load-theme 'sanityinc-tomorrow-night t)
+
+; Mode Line
 
 (aligned-mode-line '(list "%b   " mode-name)
                    '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
                    "[%l,%c] %p%%")
+
+; Misc. code
 
 (defun bash-shell ()
   "Start a WSL Bash shell."
   (interactive)
   (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
     (shell)))
+
+; Misc. settings
 
 (projectile-global-mode)
 (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
@@ -89,3 +119,8 @@
         (vertical-scroll-bars . nil)
         (left-fringe . 20)
         (right-fringe . 20)))
+
+;; Back matter
+
+(provide 'init)
+;;; init.el ends here
