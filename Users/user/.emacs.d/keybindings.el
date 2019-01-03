@@ -13,7 +13,9 @@
 (define-keys (current-global-map)
   "C-z" 'undo
   "C-/" 'comment-or-uncomment-region
-  "C-x o" 'ace-window
   "C->" 'paredit-forward-slurp-sexp
   "C-<" 'paredit-backward-slurp-sexp
+  "M-n" 'scroll-down-line
+  "M-p" 'scroll-up-line
+  "C-x o" 'ace-window
   "C-c C-g" 'magit-status)
