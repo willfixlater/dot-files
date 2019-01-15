@@ -3,7 +3,8 @@
 
 ((emacs-lisp-mode
   (bug-reference-url-format . "https://github.com/clojure-emacs/cider/issues/%s")
-  (indent-tabs-mode)
+  (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")
+  (indent-tabs-mode . nil)
   (fill-column . 80)
   (sentence-end-double-space . t)
   (emacs-lisp-docstring-fill-column . 75)
@@ -17,6 +18,8 @@
                               (nrepl-dbind-response . 2)
                               (cider-save-marker . 1)
                               (cider-propertize-region . 1)
+                              (cider-map-repls . 1)
+                              (cider--jack-in . 1)
                               (cider--make-result-overlay . 1)
                               ;; need better solution for indenting cl-flet bindings
                               (multiline-comment-handler . defun) ;; cl-flet
@@ -26,9 +29,7 @@
                               (cl-defun . 2)
                               (with-parsed-tramp-file-name . 2)
                               (thread-first . 1)
-                              (thread-last . 1))))
- (emacs-lisp-mode
-  (bug-reference-bug-regexp . "#\\(?2:[[:digit:]]+\\)")))
+                              (thread-last . 1)))))
 
 ;; To use the bug-reference stuff, do:
 ;;     (add-hook 'text-mode-hook #'bug-reference-mode)

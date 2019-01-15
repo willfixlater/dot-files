@@ -1,3 +1,5 @@
+# Additional Resources
+
 ## Quick reference
 
 A single-page quick reference PDF for CIDER commands is available
@@ -25,3 +27,4 @@ dedicated to CIDER 0.12.
 ## Podcasts
 
 * [Cognicast's episode on CIDER](http://blog.cognitect.com/cognicast/080)
+* [defn's episode on CIDER](https://soundcloud.com/defn-771544745/36-a-long-glass-of-cider-with-bozhidar-batsov-aka-bbatsov)

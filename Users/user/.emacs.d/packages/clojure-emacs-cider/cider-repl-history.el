@@ -37,7 +37,6 @@
 (require 'pulse)
 
 (defconst cider-repl-history-buffer "*cider-repl-history*")
-(add-to-list 'cider-ancillary-buffers cider-repl-history-buffer)
 
 (defgroup cider-repl-history nil
   "A package for browsing and inserting the items in the CIDER command history."
@@ -258,18 +257,14 @@ call `cider-repl-history' again.")
 (defun cider-repl-history-read-regexp (msg use-default-p)
   "Get a regular expression from the user, prompting with MSG; previous entry is default if USE-DEFAULT-P."
   (let* ((default (car regexp-history))
+         (prompt (if (and default use-default-p)
+                     (format "%s for regexp (default `%s'): "
+                             msg
+                             default)
+                   (format "%s (regexp): " msg)))
          (input
-          (read-from-minibuffer
-           (if (and default use-default-p)
-               (format "%s for regexp (default `%s'): "
-                       msg
-                       default)
-             (format "%s (regexp): " msg))
-           nil
-           nil
-           nil
-           'regexp-history
-           (if use-default-p nil default))))
+          (read-from-minibuffer prompt nil nil nil 'regexp-history
+                                (if use-default-p nil default))))
     (if (equal input "")
         (if use-default-p default nil)
       input)))
@@ -697,6 +692,7 @@ text from the *cider-repl-history* buffer."
   "Major mode for browsing the entries in the command input history.
 
 \\{cider-repl-history-mode-map}"
+  (setq-local sesman-system 'CIDER)
   (define-key cider-repl-history-mode-map (kbd "n") 'cider-repl-history-forward)
   (define-key cider-repl-history-mode-map (kbd "p") 'cider-repl-history-previous)
   (define-key cider-repl-history-mode-map (kbd "SPC") 'cider-repl-history-insert-and-quit)

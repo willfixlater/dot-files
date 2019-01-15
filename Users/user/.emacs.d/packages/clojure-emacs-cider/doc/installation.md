@@ -1,22 +1,27 @@
+# Installation
+
 The canonical way to install CIDER is via `package.el` (Emacs's built-in package
 manager), but it can be installed manually or via alternative package managers such
 as `el-get`.
 
 ## Prerequisites
 
-You'll need to have Emacs installed (preferably the latest stable
-release). If you're new to Emacs you might want to go through
+You'll need to have Emacs installed, preferably the latest stable
+release. If you're new to Emacs you might want to go through
 [the guided tour of Emacs](https://www.gnu.org/software/emacs/tour/index.html)
 and the built-in tutorial (just press <kbd>C-h t</kbd>).
 
-CIDER officially supports Emacs 24.4+, Java 7+ and Clojure(Script) 1.7+.
-CIDER 0.10 was the final release which supported Java 6 and Clojure 1.5 and 1.6.
+CIDER officially supports Emacs 25.1+, Java 8+ and Clojure(Script)
+1.8+.  CIDER 0.17 (Andalucía) was the final release which supported
+Java 7 and Clojure(Script) 1.7.
 
-You'll also need a recent version of your favorite build tool (Leiningen, Boot
-or Gradle) to be able to start CIDER via `cider-jack-in`. Generally it's a good
-idea to use their latest stable versions.
+You'll also need a recent version of either the Clojure CLI tools or your
+favorite build tool (Leiningen, Boot, or Gradle) to be able to start CIDER via
+`cider-jack-in`. Generally it's a good idea to use the latest stable versions.
 
-**CIDER does not support ClojureCLR.**
+!!! warning
+
+    CIDER does not support ClojureCLR.
 
 ## Installation via package.el
 
@@ -41,24 +46,33 @@ If the installation doesn't work try refreshing the package list:
 
 <kbd>M-x package-refresh-contents [RET]</kbd>
 
-Keep in mind that MELPA packages are built automatically from
-the `master` branch, meaning bugs might creep in there from time to
-time. Never-the-less, installing from MELPA is a reasonable way of
-obtaining CIDER, as the `master` branch is normally quite stable
-and serious regressions there are usually fixed pretty quickly.
+It's important to note that MELPA packages are built automatically
+from the `master` branch, and that means you'll be right on the
+leading edge of development. This has upsides and downsides; you'll
+see new features first, but you might experience some bugs from
+time to time. Nevertheless, installing from MELPA is a reasonable way
+to obtain CIDER. The `master` branch is normally quite stable
+and serious regressions there are usually fixed quickly.
 
-Generally, users of the non-adventurous kind are advised to stick
-with the stable releases, available from MELPA Stable.
-In Emacs 24.4+, you can pin CIDER to always use MELPA
-Stable by adding this to your Emacs initialization:
+If you have concerns about living on the leading edge of CIDER
+deveopment, you can always pin CIDER to use MELPA Stable like this:
 
 ```el
 (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 ```
 
-**CIDER has dependencies (e.g. `queue` & `seq`) that are only available in the
-  [GNU ELPA repository](https://elpa.gnu.org/). It's the only package repository
-  enabled by default in Emacs and you should not disable it!**
+!!! Tip
+
+    If you don't want to (or can't) wait for MELPA to rebuild CIDER,
+    you can easily build and install an up-to-date MELPA package locally yourself. Check out
+    [this article](http://emacsredux.com/blog/2015/05/10/building-melpa-packages-locally/)
+    for details on the subject.
+
+!!! note
+
+    CIDER has dependencies (e.g. `queue` & `seq`) that are only available in the
+    [GNU ELPA repository](https://elpa.gnu.org/). It's the only package repository
+    enabled by default in Emacs and you should not disable it!
 
 ## Installation via use-package
 
@@ -100,46 +114,50 @@ following command:
 
 <kbd>M-x el-get-install [RET] cider [RET]</kbd>
 
-## Manual installation
+## Manual Installation
 
-Alternatively you can simply load CIDER in your Emacs straight from its source
-repo. Assuming you've already obtained the code you should add something like
-this to your Emacs configuration:
+Installing CIDER manually is discouraged unless you plan to work with CIDER's
+codebase. The manual installation is relatively involved as it requires manual
+installation of the dependencies. Check out the section
+[Hacking on CIDER](hacking_on_cider.md) for more details.
 
-```el
-;; load CIDER from its source code
-(add-to-list 'load-path "~/projects/cider")
-(require 'cider)
-```
+## CIDER's nREPL Middleware
 
-Just keep in mind that you'll have to manually install all the packages CIDER
-depends on in advance.
+Much of CIDER's functionality depends on its own [nREPL
+middleware](https://github.com/clojure-emacs/cider-nrepl). Starting
+with version 0.11, `cider-jack-in` (<kbd>C-c C-x (C-)j (C-)j</kbd>)
+automatically injects this middle and other dependencies as required.
 
-## CIDER's nREPL middleware
+!!! Note
+    In the past, if you were setting up CIDER, you might have had to
+    modify `profiles.clj` or `profile.boot`. CIDER now handles
+    everything automatically and you don't need to add anything
+    special to these files.
 
-Much of CIDER's functionality depends on the presence of CIDER's
-own [nREPL middleware](https://github.com/clojure-emacs/cider-nrepl). Starting
-with version 0.11, When `cider-jack-in` (<kbd>C-c M-j</kbd>) is used, CIDER
-takes care of injecting it and its other dependencies.
+!!! Tip
 
-**`profiles.clj` or `profile.boot` don't need to be modified anymore for the above use case!**
-
-If you don't want `cider-jack-in` to inject dependencies automatically, set
-`cider-inject-dependencies-at-jack-in` to `nil`. Note that you'll have to setup
-the dependencies yourself (see the section below), just as in CIDER 0.10 and older.
+    If you don't want `cider-jack-in` to inject dependencies automatically, set
+    `cider-inject-dependencies-at-jack-in` to `nil`. Note that you'll have to setup
+    the dependencies yourself (see the section below), just as in CIDER 0.10 and older.
 
 CIDER can also inject a Clojure dependency into your project, which is useful,
 for example, if your project defaults to an older version of Clojure than that
 supported by the CIDER middleware. Set `cider-jack-in-auto-inject-clojure`
 appropriately to enable this.
 
-If a standalone REPL is preferred, you need to invoke `cider-connect` (instead
-of `cider-jack-in`) and you'll need to manually add the dependencies to your
-Clojure project (explained in the following section).
+If you prefer a standalone REPL, you will need to invoke
+`cider-connect` instead of `cider-jack-in` and manually add the
+dependencies to your Clojure project (explained in the following
+section).
 
-### Setting up a standalone REPL
+### Setting Up a Standalone REPL
 
 #### Using Leiningen
+
+!!! Note
+
+    It's highly recommended to use Leiningen 2.8.3 or newer, as 2.8.3 is the first
+    release to ship with nREPL 0.5.
 
 Use the convenient plugin for defaults, either in your project's
 `project.clj` file or in the :repl profile in `~/.lein/profiles.clj`.
@@ -151,14 +169,21 @@ Use the convenient plugin for defaults, either in your project's
 A minimal `profiles.clj` for CIDER would be:
 
 ```clojure
-{:repl {:plugins [[cider/cider-nrepl "0.17.0"]]}}
+{:repl {:plugins [[cider/cider-nrepl "0.20.0"]]}}
 ```
 
-**Be careful not to place this in the `:user` profile, as this way CIDER's
-middleware will always get loaded, causing `lein` to start slower.  You really
-need it just for `lein repl` and this is what the `:repl` profile is for.**
+!!! warning
+
+    Be careful not to place this in the `:user` profile, as this way CIDER's
+    middleware will always get loaded, causing `lein` to start slower.  You really
+    need it just for `lein repl` and this is what the `:repl` profile is for.
 
 #### Using Boot
+
+!!! Note
+
+    It's highly recommended to use Boot 2.8.2 or newer, as 2.8.2 is the first
+    release to ship with nREPL 0.4.
 
 Boot users can configure the tool to include the middleware automatically in
 all of their projects using a `~/.boot/profile.boot` file like so:
@@ -167,7 +192,7 @@ all of their projects using a `~/.boot/profile.boot` file like so:
 (require 'boot.repl)
 
 (swap! boot.repl/*default-dependencies*
-       concat '[[cider/cider-nrepl "0.17.0"]])
+       concat '[[cider/cider-nrepl "0.20.0"]])
 
 (swap! boot.repl/*default-middleware*
        conj 'cider.nrepl/cider-middleware)
@@ -175,14 +200,14 @@ all of their projects using a `~/.boot/profile.boot` file like so:
 
 For more information visit [boot-clj wiki](https://github.com/boot-clj/boot/wiki/Cider-REPL).
 
-### Using embedded nREPL server
+### Using Embedded nREPL Server
 
-If you're embedding nREPL in your application you'll have to start the
+If you're embedding nREPL in your application, you'll have to start the
 server with CIDER's own nREPL handler.
 
 ```clojure
 (ns my-app
-  (:require [clojure.tools.nrepl.server :as nrepl-server]
+  (:require [nrepl.server :as nrepl-server]
             [cider.nrepl :refer (cider-nrepl-handler)]))
 
 (defn -main
@@ -192,8 +217,13 @@ server with CIDER's own nREPL handler.
 
 It goes without saying that your project should depend on `cider-nrepl`.
 
-***
+!!! note
 
-`x.y.z` should match the version of CIDER you're currently using (say `0.17.0`).
-For snapshot releases of CIDER you should use the snapshot of the plugin as well
-(say `0.17.0-SNAPSHOT`).
+    Prior to CIDER 0.18, CIDER and cider-nrepl were always released together
+    and their versions had to match for things to work. But as the prominence
+    of cider-nrepl grew and many other tools started using it, the two
+    projects evolved separately and are no longer in tight
+    lock-step. Any recent version of cider-nrepl should be compatible
+    with a recent version of CIDER. You can check the required version
+    of cider-nrepl for your version of CIDER by looking at
+    `cider-required-middleware-version`.

@@ -1,7 +1,7 @@
 ;; cider-util.el --- Common utility functions that don't belong anywhere else -*- lexical-binding: t -*-
 
 ;; Copyright © 2012-2013 Tim King, Phil Hagelberg, Bozhidar Batsov
-;; Copyright © 2013-2018 Bozhidar Batsov, Artur Malabarba and CIDER contributors
+;; Copyright © 2013-2019 Bozhidar Batsov, Artur Malabarba and CIDER contributors
 ;;
 ;; Author: Tim King <kingtim@gmail.com>
 ;;         Phil Hagelberg <technomancy@gmail.com>
@@ -36,6 +36,7 @@
 (require 'color)
 (require 'seq)
 (require 'subr-x)
+(require 'thingatpt)
 
 ;; clojure-mode and CIDER
 (require 'cider-compat)
@@ -96,6 +97,14 @@ If BUFFER is provided act on that buffer instead."
 
 
 ;;; Thing at point
+
+(defun cider--text-or-limits (bounds start end)
+  "Returns the substring or the bounds of text.
+If BOUNDS is non-nil, returns the list (START END) of character
+positions.  Else returns the substring from START to END."
+  (funcall (if bounds #'list #'buffer-substring-no-properties)
+           start end))
+
 (defun cider-defun-at-point (&optional bounds)
   "Return the text of the top level sexp at point.
 If BOUNDS is non-nil, return a list of its starting and ending position
@@ -105,8 +114,7 @@ instead."
       (end-of-defun)
       (let ((end (point)))
         (clojure-backward-logical-sexp 1)
-        (funcall (if bounds #'list #'buffer-substring-no-properties)
-                 (point) end)))))
+        (cider--text-or-limits bounds (point) end)))))
 
 (defun cider-ns-form ()
   "Retrieve the ns form."
@@ -396,7 +404,7 @@ plugin or dependency with:
 
 (defvar cider-version)
 
-(defconst cider-manual-url "http://cider.readthedocs.io/en/%s/"
+(defconst cider-manual-url "https://docs.cider.mx/en/%s/"
   "The URL to CIDER's manual.")
 
 (defun cider--manual-version ()
@@ -647,6 +655,8 @@ through a stack of help buffers.  Variables `help-back-label' and
     "The only thing worse than a rebel without a cause is a REPL without a clause."
     "In the absence of parentheses, chaos prevails."
     "One REPL to rule them all, One REPL to find them, One REPL to bring them all, and in parentheses bind them!"
+    "A blank REPL promotes creativity."
+    "A blank REPL is infinitely better than a blank cheque."
     ,(format "%s, I've a feeling we're not in Kansas anymore."
              (cider-user-first-name))
     ,(format "%s, this could be the start of a beautiful program."
@@ -666,9 +676,9 @@ through a stack of help buffers.  Variables `help-back-label' and
     "Press <\\[describe-mode]> to see a list of the keybindings available (this will work in every Emacs buffer)."
     "Press <\\[cider-repl-handle-shortcut]> to quickly invoke some REPL command."
     "Press <\\[cider-switch-to-last-clojure-buffer]> to switch between the REPL and a Clojure source buffer."
-    "Press <\\[cider-find-var]> to jump to the source of something (e.g. a var, a Java method)."
     "Press <\\[cider-doc]> to view the documentation for something (e.g. a var, a Java method)."
     "Press <\\[cider-find-resource]> to find a resource on the classpath."
+    "Press <\\[cider-find-var]> to jump to the source of something (e.g. a var, a Java method)."
     "Press <\\[cider-selector]> to quickly select a CIDER buffer."
     "Press <\\[cider-test-run-ns-tests]> to run the tests for the current namespace."
     "Press <\\[cider-test-run-loaded-tests]> to run all loaded tests."
@@ -676,6 +686,10 @@ through a stack of help buffers.  Variables `help-back-label' and
     "Press <\\[cider-apropos]> to look for a symbol by some search string."
     "Press <\\[cider-apropos-documentation]> to look for a symbol that has some string in its docstring."
     "Press <\\[cider-eval-defun-at-point]> to eval the top-level form at point."
+    "Press <\\[cider-eval-defun-up-to-point]> to eval the top-level form up to the point."
+    "Press <\\[cider-eval-sexp-up-to-point]> to eval the current form up to the point."
+    "Press <\\[cider-eval-sexp-at-point]> to eval the current form around the point."
+    "Press <\\[cider-eval-sexp-at-point-in-context]> to eval the current form around the point in a user-provided context."
     "Press <\\[cider-eval-buffer]> to eval the entire source buffer."
     "Press <\\[cider-scratch]> to create a Clojure scratchpad. Pretty handy for prototyping."
     "Press <\\[cider-read-and-eval]> to evaluate some Clojure expression directly in the minibuffer."
@@ -687,9 +701,9 @@ through a stack of help buffers.  Variables `help-back-label' and
     "Press <\\[cider-inspect]> to inspect the preceding expression's result."
     "Press <C-u \\[cider-inspect]> to inspect the defun at point's result."
     "Press <C-u C-u \\[cider-inspect]> to read Clojure code from the minibuffer and inspect its result."
-    "Press <\\[cider-refresh]> to reload modified and unloaded namespaces."
-    "You can define Clojure functions to be called before and after `cider-refresh' (see `cider-refresh-before-fn' and `cider-refresh-after-fn'."
-    "Press <\\[cider-display-connection-info]> to view information about the connection."
+    "Press <\\[cider-ns-refresh]> to reload modified and unloaded namespaces."
+    "You can define Clojure functions to be called before and after `cider-ns-refresh' (see `cider-ns-refresh-before-fn' and `cider-ns-refresh-after-fn'."
+    "Press <\\[cider-describe-connection]> to view information about the connection."
     "Press <\\[cider-undef]> to undefine a symbol in the current namespace."
     "Press <\\[cider-interrupt]> to interrupt an ongoing evaluation."
     "Use <M-x customize-group RET cider RET> to see every possible setting you can customize."
@@ -700,7 +714,9 @@ through a stack of help buffers.  Variables `help-back-label' and
     "Exploring CIDER's menu-bar entries is a great way to discover features."
     "Keep in mind that some commands don't have a keybinding by default. Explore CIDER!"
     "Tweak `cider-repl-prompt-function' to customize your REPL prompt."
-    "Tweak `cider-eldoc-ns-function' to customize the way namespaces are displayed by eldoc.")
+    "Tweak `cider-eldoc-ns-function' to customize the way namespaces are displayed by eldoc."
+    "For no middleware, low-tech and reliable namespace reloading use <\\[cider-ns-reload]>."
+    "Press <\\[cider-load-buffer-and-switch-to-repl-buffer]> to load the current buffer and switch to the REPL buffer afterwards.")
   "Some handy CIDER tips."
   )
 

@@ -1,6 +1,6 @@
 ;;; cider-stacktrace.el --- Stacktrace navigator -*- lexical-binding: t -*-
 
-;; Copyright © 2014-2018 Jeff Valk, Bozhidar Batsov and CIDER contributors
+;; Copyright © 2014-2019 Jeff Valk, Bozhidar Batsov and CIDER contributors
 
 ;; Author: Jeff Valk <jv@jeffvalk.com>
 
@@ -58,43 +58,34 @@ If nil, messages will not be wrapped.  If truthy but non-numeric,
   :group 'cider-stacktrace
   :package-version '(cider . "0.6.0"))
 
-(defcustom cider-stacktrace-print-length 50
+(make-obsolete 'cider-stacktrace-print-length 'cider-stacktrace-print-options "0.20")
+(make-obsolete 'cider-stacktrace-print-level 'cider-stacktrace-print-options "0.20")
+
+(defcustom cider-stacktrace-print-options '(dict "length" 50 "level" 50)
   "Set the maximum length of sequences in displayed cause data.
 
 This sets the value of Clojure's `*print-length*` when pretty printing the
 `ex-data` map for exception causes in the stacktrace that are instances of
 `IExceptionInfo`.
 
-Be advised that setting this to `nil` will cause the attempted printing of
-infinite data structures."
-  :type '(choice integer (const nil))
+Be advised that setting \"print-length\" to `nil` will cause the attempted
+printing of infinite data structures and that setting \"print-level\" to
+nil cause the attempted printing of cyclical data structures."
+  :type 'listp
   :group 'cider-stacktrace
-  :package-version '(cider . "0.9.0"))
-
-(defcustom cider-stacktrace-print-level 50
-  "Set the maximum level of nesting in displayed cause data.
-
-This sets the value of Clojure's `*print-level*` when pretty printing the
-`ex-data` map for exception causes in the stacktrace that are instances of
-`IExceptionInfo`.
-
-Be advised that setting this to `nil` will cause the attempted printing of
-cyclical data structures."
-  :type '(choice integer (const nil))
-  :group 'cider-stacktrace
-  :package-version '(cider . "0.8.0"))
+  :package-version '(cider . "0.20.0"))
 
 (defvar cider-stacktrace-detail-max 2
   "The maximum detail level for causes.")
 
 (defvar-local cider-stacktrace-hidden-frame-count 0)
 (defvar-local cider-stacktrace-filters nil)
-(defvar-local cider-stacktrace-prior-filters nil)
 (defvar-local cider-stacktrace-cause-visibility nil)
 (defvar-local cider-stacktrace-positive-filters nil)
 
 (defconst cider-error-buffer "*cider-error*")
-(add-to-list 'cider-ancillary-buffers cider-error-buffer)
+
+(make-obsolete 'cider-visit-error-buffer 'cider-selector "0.18")
 
 (defcustom cider-stacktrace-suppressed-errors '()
   "Errors that won't make the stacktrace buffer 'pop-over' your active window.
@@ -225,7 +216,7 @@ The error types are represented as strings."
         ["Show/hide REPL frames" cider-stacktrace-toggle-repl]
         ["Show/hide tooling frames" cider-stacktrace-toggle-tooling]
         ["Show/hide duplicate frames" cider-stacktrace-toggle-duplicates]
-        ["Show only project frames" cider-stacktrace-show-only-project]
+        ["Toggle only project frames" cider-stacktrace-show-only-project]
         ["Show/hide all frames" cider-stacktrace-toggle-all]))
     map))
 
@@ -235,8 +226,8 @@ The error types are represented as strings."
 \\{cider-stacktrace-mode-map}"
   (when cider-special-mode-truncate-lines
     (setq-local truncate-lines t))
+  (setq-local sesman-system 'CIDER)
   (setq-local electric-indent-chars nil)
-  (setq-local cider-stacktrace-prior-filters nil)
   (setq-local cider-stacktrace-hidden-frame-count 0)
   (setq-local cider-stacktrace-filters cider-stacktrace-default-filters)
   (setq-local cider-stacktrace-cause-visibility (make-vector 10 0)))
@@ -249,7 +240,7 @@ The error types are represented as strings."
   "Filters that remove stackframes.")
 
 (defvar cider-stacktrace--all-positive-filters
-  '(project)
+  '(project all)
   "Filters that ensure stackframes are shown.")
 
 (defun cider-stacktrace--face-for-filter (filter neg-filters pos-filters)
@@ -265,10 +256,6 @@ override this and ensure that those frames are shown."
            'cider-stacktrace-filter-inactive-face))
         ((member filter cider-stacktrace--all-positive-filters)
          (if (member filter pos-filters)
-             'cider-stacktrace-filter-active-face
-           'cider-stacktrace-filter-inactive-face))
-        ((null filter)                               ; "all" filter
-         (if (null neg-filters)
              'cider-stacktrace-filter-active-face
            'cider-stacktrace-filter-inactive-face))))
 
@@ -315,18 +302,22 @@ NEG-FILTERS dictate which frames should be hidden while POS-FILTERS can
 override this and ensure that those frames are shown.
 Argument FLAGS are the flags set on the stackframe, ie: clj dup, etc."
   (let ((neg (seq-intersection neg-filters flags))
-        (pos (seq-intersection pos-filters flags)))
-    (cond ((and pos neg) nil)
+        (pos (seq-intersection pos-filters flags))
+        (all (memq 'all pos-filters)))
+    (cond (all nil) ;; if all filter is on then we should not hide
+          ((and pos neg) nil) ;; if hidden and "resurrected" we should not hide
           (pos nil)
           (neg t)
           (t nil))))
 
-(defun cider-stacktrace-apply-filters (neg-filters pos-filters)
+(defun cider-stacktrace--apply-filters (neg-filters pos-filters)
   "Set visibility on stack frames.
-Update `cider-stacktrace-hidden-frame-count' and indicate filters applied.
-Currently collapsed stacktraces are ignored, and do not contribute to the
-hidden count.  NEG-FILTERS remove frames with the flag in that list and
-POS-FILTERS ensure that frames with flag is shown."
+Should be called by `cider-stacktrace-apply-filters' which has the logic of
+how to interpret the combinations of the positive and negative filters.
+For instance, the presence of the positive filter `project' requires all of
+the other negative filters to be applied so that only project frames are
+shown.  NEG-FILTERS are the tags that should be hidden.  POS-FILTERS are
+the tags that must be shown."
   (with-current-buffer cider-error-buffer
     (save-excursion
       (goto-char (point-min))
@@ -345,6 +336,29 @@ POS-FILTERS ensure that frames with flag is shown."
           (forward-line 1))
         (setq cider-stacktrace-hidden-frame-count hidden)))
     (cider-stacktrace-indicate-filters neg-filters pos-filters)))
+
+(defun cider-stacktrace-apply-filters (filters)
+  "Takes a single list of filters and applies them.
+Update `cider-stacktrace-hidden-frame-count' and indicate
+filters applied.  Currently collapsed stacktraces are ignored, and do not
+contribute to the hidden count.  FILTERS is the list of filters to be
+applied, positive and negative all together.  This function defines how
+those choices interact and separates them into positive and negative
+filters for the resulting machinery."
+  (let ((neg-filters (seq-intersection filters cider-stacktrace--all-negative-filters))
+        (pos-filters (seq-intersection filters cider-stacktrace--all-positive-filters)))
+    ;; project and all are mutually exclusive. when both are present we check to
+    ;; see the most recent one (as cons onto the list would put it) and use that
+    ;; interaction.
+    (cond
+     ((memq 'all (memq 'project pos-filters)) ;; project is most recent
+      (cider-stacktrace--apply-filters cider-stacktrace--all-negative-filters '(project)))
+     ((memq 'project (memq 'all pos-filters)) ;; all is most recent
+      (cider-stacktrace--apply-filters nil '(all)))
+     ((memq 'all pos-filters) (cider-stacktrace--apply-filters nil '(all)))
+     ((memq 'project pos-filters) (cider-stacktrace--apply-filters cider-stacktrace--all-negative-filters
+                                                                   pos-filters))
+     (t (cider-stacktrace--apply-filters neg-filters pos-filters)))))
 
 (defun cider-stacktrace-apply-cause-visibility ()
   "Apply `cider-stacktrace-cause-visibility' to causes and reapply filters."
@@ -369,8 +383,7 @@ POS-FILTERS ensure that frames with flag is shown."
                   (add-text-properties (point) detail-end
                                        (list 'invisible hide
                                              'collapsed hide))))))))
-      (cider-stacktrace-apply-filters cider-stacktrace-filters
-                                      cider-stacktrace-positive-filters))))
+      (cider-stacktrace-apply-filters cider-stacktrace-filters))))
 
 ;;; Internal/Middleware error suppression
 
@@ -469,42 +482,23 @@ When it reaches 3, it wraps to 0."
   (interactive)
   (cider-stacktrace-cycle-cause 5))
 
-(defun cider-stacktrace-toggle-all ()
-  "Reset `cider-stacktrace-filters' if present; otherwise restore prior filters."
-  (interactive)
-  (when cider-stacktrace-filters
-    (setq-local cider-stacktrace-prior-filters
-                cider-stacktrace-filters))
-  (cider-stacktrace-apply-filters
-   (setq cider-stacktrace-filters
-         (unless cider-stacktrace-filters      ; when current filters are nil,
-           cider-stacktrace-prior-filters))    ; reenable prior filter set
-   cider-stacktrace-positive-filters))
-
 (defun cider-stacktrace-toggle (flag)
   "Update `cider-stacktrace-filters' to add or remove FLAG, and apply filters."
   (cider-stacktrace-apply-filters
    (setq cider-stacktrace-filters
          (if (memq flag cider-stacktrace-filters)
              (remq flag cider-stacktrace-filters)
-           (cons flag cider-stacktrace-filters)))
-   cider-stacktrace-positive-filters))
+           (cons flag cider-stacktrace-filters)))))
+
+(defun cider-stacktrace-toggle-all ()
+  "Toggle `all' in filter list."
+  (interactive)
+  (cider-stacktrace-toggle 'all))
 
 (defun cider-stacktrace-show-only-project ()
-  "Display only the stackframes from the project.
-BUTTON is the button at the top of the error buffer as the button calls
-with the button."
+  "Display only the stackframes from the project."
   (interactive)
-  (if (null cider-stacktrace-positive-filters)
-      (progn
-        (setq-local cider-stacktrace-prior-filters cider-stacktrace-filters)
-        (setq-local cider-stacktrace-filters cider-stacktrace--all-negative-filters)
-        (setq-local cider-stacktrace-positive-filters '(project)))
-    (progn
-      (setq-local cider-stacktrace-filters cider-stacktrace-prior-filters)
-      (setq-local cider-stacktrace-positive-filters nil)))
-  (cider-stacktrace-apply-filters cider-stacktrace-filters
-                                  cider-stacktrace-positive-filters))
+  (cider-stacktrace-toggle 'project))
 
 (defun cider-stacktrace-toggle-java ()
   "Toggle display of Java stack frames."
@@ -584,6 +578,8 @@ Achieved by destructively manipulating the `cider-stacktrace-suppressed-errors' 
     (forward-line line-shift)
     (back-to-indentation)))
 
+(declare-function cider-find-var "cider-find")
+
 (defun cider-stacktrace-jump (&optional arg)
   "Find definition for stack frame at point, if available.
 The prefix ARG and `cider-prompt-for-symbol' decide whether to
@@ -596,6 +592,10 @@ prompt and whether to use a new window.  Similar to `cider-find-var'."
 
 
 ;; Rendering
+(defvar cider-use-tooltips)
+(defun cider-stacktrace-tooltip (tooltip)
+  "Return TOOLTIP if `cider-use-tooltips' is set to true, nil otherwise."
+  (when cider-use-tooltips tooltip))
 
 (defun cider-stacktrace-emit-indented (text &optional indent fill fontify)
   "Insert TEXT, and optionally FILL and FONTIFY as clojure the entire block.
@@ -633,8 +633,9 @@ others."
                           'filter (cadr filter)
                           'follow-link t
                           'action 'cider-stacktrace-filter
-                          'help-echo (format "Toggle %s stack frames"
-                                             (car filter)))
+                          'help-echo (cider-stacktrace-tooltip
+                                      (format "Toggle %s stack frames"
+                                              (car filter))))
       (insert " "))
     (insert "\n")
     (insert "  Hide: ")
@@ -643,8 +644,9 @@ others."
                           'filter (cadr filter)
                           'follow-link t
                           'action 'cider-stacktrace-filter
-                          'help-echo (format "Toggle %s stack frames"
-                                             (car filter)))
+                          'help-echo (cider-stacktrace-tooltip
+                                      (format "Toggle %s stack frames"
+                                              (car filter))))
       (insert " "))
 
     (let ((hidden "(0 frames hidden)"))
@@ -659,7 +661,8 @@ others."
       (insert-text-button "M-x cider-report-bug"
                           'follow-link t
                           'action (lambda (_button) (cider-report-bug))
-                          'help-echo "Report bug to the CIDER team.")
+                          'help-echo (cider-stacktrace-tooltip
+                                      "Report bug to the CIDER team."))
       (insert "`.\n\n")
       (insert "\
   If these stacktraces are occuring frequently, consider using the
@@ -677,8 +680,9 @@ others."
                               'face (if suppressed
                                         'cider-stacktrace-suppressed-button-face
                                       'cider-stacktrace-promoted-button-face)
-                              'help-echo (format "Click to %s these stacktraces."
-                                                 (if suppressed "promote" "suppress"))))
+                              'help-echo (cider-stacktrace-tooltip
+                                          (format "Click to %s these stacktraces."
+                                                  (if suppressed "promote" "suppress")))))
         (insert " ")))))
 
 (defun cider-stacktrace-render-frame (buffer frame)
@@ -695,7 +699,8 @@ This associates text properties to enable filtering and source navigation."
                             'name name 'file file 'line line
                             'flags flags 'follow-link t
                             'action 'cider-stacktrace-navigate
-                            'help-echo "View source at this location"
+                            'help-echo (cider-stacktrace-tooltip
+                                        "View source at this location")
                             'font-lock-face 'cider-stacktrace-face
                             'type 'cider-plain-button)
         (save-excursion
@@ -709,8 +714,6 @@ This associates text properties to enable filtering and source navigation."
                                'cider-stacktrace-frame t)))
         (insert "\n")))))
 
-(declare-function cider-jump-to "cider-interaction")
-
 (defun cider-stacktrace-render-compile-error (buffer cause)
   "Emit into BUFFER the compile error CAUSE, and enable jumping to it."
   (with-current-buffer buffer
@@ -723,7 +726,9 @@ This associates text properties to enable filtering and source navigation."
                             'file file 'line line 'column column 'follow-link t
                             'action (lambda (_button)
                                       (cider-jump-to (cider-find-file file)
-                                                     (cons line column))))
+                                                     (cons line column)))
+                            'help-echo (cider-stacktrace-tooltip
+                                        "Jump to the line that caused the error"))
         (insert (propertize (format " at (%d:%d)" line column)
                             'font-lock-face message-face))))))
 
@@ -874,7 +879,7 @@ through the `cider-stacktrace-suppressed-errors' variable."
       ;; Stacktrace filters
       (cider-stacktrace-render-filters
        buffer
-       `(("Project-Only" project) ("All" ,nil))
+       `(("Project-Only" project) ("All" all))
        `(("Clojure" clj) ("Java" java) ("REPL" repl)
          ("Tooling" tooling) ("Duplicates" dup)))
       (insert "\n")

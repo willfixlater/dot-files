@@ -1,3 +1,5 @@
+# Frequently Asked Questions
+
 ## What does CIDER stand for?
 
 CIDER stands for **C**lojure **I**nteractive **D**evelopment **E**nvironment that **R**ocks.
@@ -8,8 +10,12 @@ Yes.
 
 ## What are CIDER's installation prerequisites?
 
-CIDER officially supports Emacs 24.4+, Java 7+ and Clojure(Script) 1.7+.
-CIDER 0.10 was the final release which supported Java 6 and Clojure 1.5 and 1.6.
+CIDER officially supports Emacs 25.1+, Java 8+ and Clojure(Script) 1.8+.
+
+
+!!! note
+
+    CIDER 0.17 was the final release which supported Java 7 and Clojure(Script) 1.7.
 
 ## What's the relationship between CIDER and nrepl.el?
 
@@ -26,7 +32,7 @@ version before the time we started relying on nREPL middleware.
 
 ## What's the relationship between CIDER and inf-clojure?
 
-There's pretty much no relationship. `inf-clojure` provides a REPL based on the
+There's pretty much no relationship. [inf-clojure][] provides a REPL based on the
 `comint` Emacs package - you're basically running an external REPL process
 inside of Emacs (there's no network connectivity involved).  The advantage of
 this is that you have no external dependencies what-so-ever - you just need some
@@ -34,7 +40,7 @@ command to start a REPL process for you.
 
 ## Isn't IntelliJ's Cursive the best Clojure IDE?
 
-Cursive is pretty awesome. Depending on your programming preferences (using an IDE vs
+Cursive is pretty awesome! Depending on your programming preferences (using an IDE vs
 building a custom editing experience tailored to your needs) it might be a better
 option for you than CIDER.
 
@@ -42,6 +48,12 @@ option for you than CIDER.
 
 The codenames are usually some of the favourite places of CIDER's head
 maintainer (Bozhidar).
+
+!!! Tip
+
+    Bozhidar really loves Spain and the West Coast of the US, so he tends
+    to name really special releases with codenames related to them (e.g.
+    Seattle, California, Andalucia, etc).
 
 ## Is using CIDER a good idea if I'm new to both Emacs and Clojure?
 
@@ -74,9 +86,20 @@ when the most important refactoring functionality from our sibling
 project [clj-refactor](https://github.com/clojure-emacs/clj-refactor.el) lands
 into CIDER.
 
+!!! Note
+
+    While there's no exact roadmap for the 1.0 release, we do have *a*
+    [roadmap](https://github.com/clojure-emacs/cider/blob/master/ROADMAP.md).
+
 ## Is it true that stable CIDER releases often happen around major Clojure conferences?
 
 Yep. We want to give people a reason to talk about CIDER at such events. :-)
+
+!!! Tip
+
+    Inviting Bozhidar or any other core CIDER developers to present at Clojure
+    conferences is likely going to results in more CIDER releases,
+    so you should totally do this!
 
 ## How unstable is the MELPA build of CIDER?
 
@@ -96,11 +119,16 @@ for the socket REPL.
 That's extremely unlikely. Even if we eventually add support for the new socket REPL,
 we'll continue supporting nREPL as well.
 
+!!! Note
+
+    Recently nREPL was migrated out of `clojure-contrib` and its development
+    has once again picked up. Check out nREPL's new home [here](https://github.com/nrepl/nREPL).
+
 ## Is CIDER's nREPL middleware Emacs specific?
 
 Not at all. The functionality in `cider-nrepl` is pretty editor-agnostic and is
 utilized by various editor plugins. Some prominent examples would be
-`vim-fireplace` and Eclipse's CCW.
+`vim-fireplace` and Visual Studio Code's `calva`.
 
 ## How can I see all the configuration options available in CIDER?
 
@@ -112,7 +140,7 @@ Sure! See [additional packages](additional_packages.md) for details.
 
 ## Where can I get help regarding CIDER?
 
-See the [Support](support.md) section of the manual.
+See the [Support](about/support.md) section of the manual.
 
 ## What should I do if I run into some issues with CIDER?
 
@@ -129,3 +157,5 @@ There are many ways in which you can help CIDER
 * File bug reports and suggestions for improvements
 * Promote CIDER via blog posts or at meetups and conferences
 * Invite members of the CIDER team to speak about CIDER at meetups and conferences
+
+[inf-clojure]: https://github.com/clojure-emacs/inf-clojure

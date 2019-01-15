@@ -1,6 +1,6 @@
 ;;; cider-repl-tests.el
 
-;; Copyright © 2012-2018 Tim King, Bozhidar Batsov
+;; Copyright © 2012-2019 Tim King, Bozhidar Batsov
 
 ;; Author: Tim King <kingtim@gmail.com>
 ;;         Bozhidar Batsov <bozhidar@batsov.com>
@@ -35,9 +35,8 @@
   (before-all
     (spy-on 'cider--java-version :and-return-value "1.8.0_31")
     (spy-on 'cider--clojure-version :and-return-value "1.8.0")
-    (spy-on 'cider--nrepl-version :and-return-value "0.2.12")
-    (spy-on 'cider--connection-host :and-return-value "localhost")
-    (spy-on 'cider--connection-port :and-return-value "54018")
+    (spy-on 'cider--nrepl-version :and-return-value "0.5.3")
+    (setq nrepl-endpoint (list :host "localhost" :port "54018"))
     (setq cider-version "0.12.0")
     (setq cider-codename "Seattle"))
 
@@ -46,7 +45,7 @@
       (spy-on 'pkg-info-version-info :and-return-value "0.12.0")
       (expect (cider-repl--banner) :to-equal
               ";; Connected to nREPL server - nrepl://localhost:54018
-;; CIDER 0.12.0 (Seattle), nREPL 0.2.12
+;; CIDER 0.12.0 (Seattle), nREPL 0.5.3
 ;; Clojure 1.8.0, Java 1.8.0_31
 ;;     Docs: (doc function-name)
 ;;           (find-doc part-of-name)
@@ -60,7 +59,7 @@
       (spy-on 'pkg-info-version-info :and-throw-error '(error "No package version"))
       (expect (cider-repl--banner) :to-equal
               ";; Connected to nREPL server - nrepl://localhost:54018
-;; CIDER 0.12.0 (Seattle), nREPL 0.2.12
+;; CIDER 0.12.0 (Seattle), nREPL 0.5.3
 ;; Clojure 1.8.0, Java 1.8.0_31
 ;;     Docs: (doc function-name)
 ;;           (find-doc part-of-name)
@@ -154,3 +153,73 @@ PROPERTY shoudl be a symbol of either 'text, 'ansi-context or
       (expect (cider-repl--build-config-expression)
               :to-equal
               "(do (set! *print-length* 10) (set! *print-level* 10))"))))
+
+(describe "cider-locref-at-point"
+  (it "works with stdout-stacktrace refs"
+    (with-temp-buffer
+      (insert "\n\tat clojure.lang.AFn.applyToHelper(AFn.java:160)")
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type stdout-stacktrace :highlight (3 . 50) :var "clojure.lang.AFn.applyToHelper" :file "AFn.java" :line 160))
+      (insert "\n\tat cljs.analyzer$macroexpand_1_STAR_$fn__4642.invoke(analyzer.cljc:3286)")
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type stdout-stacktrace :highlight (52 . 124) :var "cljs.analyzer" :file "analyzer.cljc" :line 3286))
+      (insert "\n\tat cljs.closure$compile_file.invoke(closure.clj:531)")
+	  (expect (cider-locref-at-point)
+              :to-equal
+              '(:type stdout-stacktrace :highlight (126 . 178) :var "cljs.closure" :file "closure.clj" :line 531))))
+  (it "works with print-stacktrace"
+    (with-temp-buffer
+      (insert "\n[clojure.core$eval invoke core.clj 3202]")
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type print-stacktrace :highlight (2 . 42) :var "clojure.core" :file "core.clj" :line 3202))))
+  (it "works with avis exceptions"
+    (with-temp-buffer
+      (insert "\n                        java.util.concurrent.ThreadPoolExecutor$Worker.run  ThreadPoolExecutor.java:  624
+             nrepl.middleware.interruptible-eval/run-next/fn   interruptible_eval.clj:  190")
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type aviso-stacktrace :highlight (121 . 199) :var "nrepl.middleware.interruptible-eval" :file "interruptible_eval.clj" :line 190))
+      (line-move -1)
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type aviso-stacktrace :highlight (26 . 107) :var "java.util.concurrent.ThreadPoolExecutor" :file "ThreadPoolExecutor.java" :line 624))))
+  (it "works with timbre logs"
+    (with-temp-buffer
+      (insert "\n18-05-12 10:17:52 galago ERROR [errors:8] - An error
+18-05-12 10:17:52 galago WARN [errors:8] - A warning
+18-05-12 10:17:52 galago INFO [errors:8] - An info")
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type timbre-log :highlight (138 . 148) :var "errors" :file nil :line 8))
+      (line-move -1)
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type timbre-log :highlight (85 . 95) :var "errors" :file nil :line 8))))
+  (it "works with cljs warnings"
+    (with-temp-buffer
+      (insert "\nWARNING: Wrong number of args (1) passed to aaa/bbb at line 42 /path/to/aaa/bbb.cljc")
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type cljs-message :highlight (54 . 86) :var nil :file "/path/to/aaa/bbb.cljc" :line 42))))
+  (it "works with warnings"
+    (with-temp-buffer
+      (insert "\nReflection warning, cider/nrepl/middleware/slurp.clj:103:16 - reference to field getInputStream can't be resolved.")
+      (move-to-column 20)
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type warning :highlight (22 . 61) :var nil :file "cider/nrepl/middleware/slurp.clj" :line 103)))
+    (with-temp-buffer
+      (insert "\nBoxed math warning, cider/inlined_deps/toolsreader/v1v2v2/clojure/tools/reader/impl/utils.clj:18:9 - call: public static boolean clojure.lang.Numbers.lt(java.lang.Object,long).")
+      (move-to-column 20)
+      (expect (cider-locref-at-point)
+              :to-equal
+              '(:type warning :highlight (22 . 100) :var nil :file "cider/inlined_deps/toolsreader/v1v2v2/clojure/tools/reader/impl/utils.clj" :line 18))))
+  (it "works with compilation exceptions"
+    (insert "\nCompilerException java.lang.RuntimeException: Unable to resolve symbol: pp in this context, compiling:(/path/to/a/file.clj:575:16)")
+    (move-to-column 20)
+    (expect (cider-locref-at-point)
+            :to-equal
+            '(:type compilation :highlight (2 . 132) :var nil :file "/path/to/a/file.clj" :line 575))))

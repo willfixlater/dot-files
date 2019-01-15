@@ -1,7 +1,8 @@
 site_name: "CIDER: The Clojure Interactive Development Environment that Rocks"
 repo_url: https://github.com/clojure-emacs/cider
+edit_uri: edit/master/doc/
 site_favicon: favicon.ico
-copyright: "Copyright (C) 2016-2018 Bozhidar Batsov, Artur Malabarba and CIDER contributors"
+copyright: "Copyright &copy; 2016-2019 Bozhidar Batsov, Artur Malabarba and CIDER contributors"
 docs_dir: doc
 pages:
 - Home: index.md
@@ -9,14 +10,24 @@ pages:
 - Up and Running: up_and_running.md
 - ClojureScript: clojurescript.md
 - Interactive Programming: interactive_programming.md
-- Using the REPL: using_the_repl.md
+- Using the REPL:
+    - Basic Usage: repl/basic_usage.md
+    - Keybindings: repl/keybindings.md
+    - Configuration: repl/configuration.md
+    - REPL History: repl/history_browser.md
+- Managing Connections: managing_connections.md
 - Code Completion: code_completion.md
+- Pretty Printing: pretty_printing.md
 - Navigating Stacktraces: navigating_stacktraces.md
 - Running Tests: running_tests.md
 - Debugging: debugging.md
-- Managing Connections: managing_connections.md
 - Miscellaneous Features: miscellaneous_features.md
-- Configuration: configuration.md
+- Configuration:
+    - Basic Configuration: configuration/basic_configuration.md
+    - Syntax Highlighting: configuration/syntax_highlighting.md
+    - Indentation: configuration/indentation.md
+    - ElDoc: configuration/eldoc.md
+    - Misc: configuration/misc.md
 - Indentation Specification: indent_spec.md
 - Additional Packages: additional_packages.md
 - Caveats: caveats.md
@@ -34,4 +45,6 @@ pages:
     - License: about/license.md
 extra_css:
   - css/extra.css
+markdown_extensions:
+  - admonition
 theme: readthedocs

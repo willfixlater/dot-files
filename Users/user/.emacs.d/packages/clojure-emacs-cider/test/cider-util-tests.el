@@ -1,6 +1,6 @@
 ;;; cider-util-tests.el
 
-;; Copyright © 2012-2018 Tim King, Bozhidar Batsov
+;; Copyright © 2012-2019 Tim King, Bozhidar Batsov
 
 ;; Author: Tim King <kingtim@gmail.com>
 ;;         Bozhidar Batsov <bozhidar@batsov.com>
@@ -28,7 +28,6 @@
 ;;; Code:
 
 (require 'buttercup)
-(require 'cider)
 (require 'cider-util)
 
 ;;; cider-util tests
@@ -184,11 +183,11 @@
   :var (cider-version)
   (it "returns the manual correct url for stable cider versions"
     (setq cider-version "0.11.0")
-    (expect (cider-manual-url) :to-equal "http://cider.readthedocs.io/en/stable/"))
+    (expect (cider-manual-url) :to-equal "https://docs.cider.mx/en/stable/"))
 
   (it "returns the manual correct url for snapshot cider versions"
     (setq cider-version "0.11.0-snapshot")
-    (expect (cider-manual-url) :to-equal "http://cider.readthedocs.io/en/latest/")))
+    (expect (cider-manual-url) :to-equal "https://docs.cider.mx/en/latest/")))
 
 (describe "cider-refcard-url"
   :var (cider-version)

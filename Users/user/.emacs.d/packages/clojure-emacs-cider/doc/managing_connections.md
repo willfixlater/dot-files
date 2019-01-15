@@ -1,60 +1,132 @@
-## Overview
+# Managing Connections
 
-You can connect to multiple nREPL servers using <kbd>M-x</kbd> `cider-jack-in`
-(or `cider-connect`) multiple times.  To close the current nREPL connection, use
-<kbd>C-c C-q</kbd> (`cider-quit`). You can close all connections with
-<kbd>C-u C-c C-q</kbd>.
+!!! Note
 
-CIDER maintains a list of nREPL connections and a single 'default'
-connection. When you execute CIDER commands in a Clojure editing buffer such as
-to compile a namespace, these commands are executed against a specific
-connection. This is controlled by the variable `cider-request-dispatch` - when
-it's set to `'dynamic` (the default), CIDER will try to infer which connection
-to use from the current project and currently visited file; when `'static`
-dispatch is used all requests will always be routed to the default connection
-(this was the default behavior in CIDER before 0.10).
+    Because connections map one-to-one to REPL buffers, for the purpose of this
+    section we use "REPL" and "connection" interchangeably.
 
-There's a handy command called `cider-toggle-request-dispatch`. You can use it
-to quickly switch between dynamic and static request dispatch. A common use-case
-for it would be to force temporary all evaluation commands to be using a
-particular (the default) connection.
+## Sessions
 
-You can display the current nREPL connection using <kbd>C-c M-d</kbd>
-and rotate the default connection using <kbd>C-c M-r</kbd>. Another
-option for setting the default connection is to execute the command
-<kbd>M-x</kbd> `cider-make-connection-default` in the appropriate
-REPL buffer.
+CIDER maintains a grouped view of opened nREPL connections through [Sesman]
+sessions. Each session is a collection of connections which share the same nREPL
+server.
 
-## Connection browser
+Start new sessions with
 
-You can obtain a list of all active connections using <kbd>M-x</kbd>
-`cider-connection-browser`. This buffer provides a few extra keybindings:
+   - <kbd>C-c C-x j j</kbd> `cider-jack-in-clj`
+   - <kbd>C-c C-x j s</kbd> `cider-jack-in-cljs`
+   - <kbd>C-c C-x j m</kbd> `cider-jack-in-clj&cljs`
 
-Command                              |Keyboard shortcut               | Description
--------------------------------------|--------------------------------|-------------------------------
-`cider-connections-make-default`     |<kbd>d</kbd>                    | Make connection at point default.
-`cider-connections-close-connection` |<kbd>k</kbd>                    | Close connection at point.
-`cider-connection-browser`           |<kbd>g</kbd>                    | Refresh connection browser.
-`cider-connections-goto-connection`  |<kbd>RET</kbd>                  | Visit connection buffer.
-`cider-popup-buffer-quit-function`   |<kbd>q</kbd>                    | Close window.
+   - <kbd>C-c C-x c j</kbd> `cider-connect-clj`
+   - <kbd>C-c C-x c s</kbd> `cider-connect-cljs`
+   - <kbd>C-c C-x c m</kbd> `cider-connect-clj&cljs`
 
-## Switch to connection buffer
+Add new REPLs to the current session with
 
-The REPL buffers double as connection buffers.
+   - <kbd>C-c C-x s j</kbd> `cider-connect-sibling-clj`
+   - <kbd>C-c C-x s s</kbd> `cider-connect-sibling-cljs`
 
-To switch to the relevant REPL buffer based on the Clojure namespace
-in the current Clojure buffer, use: <kbd>C-c C-z</kbd>. You can then
-use the same key combination to switch back to the Clojure buffer you
-came from.
+Session life-cycle management commands live on the [Sesman] map (<kbd>C-c
+C-s</kbd>)
 
-The single prefix <kbd>C-u C-c C-z</kbd>, will switch you to the
-relevant REPL buffer and set the namespace in that buffer based on
-namespace in the current Clojure buffer.
+   - <kbd>C-c C-s s</kbd> `sesman-start`
+   - <kbd>C-c C-s r</kbd> `sesman-restart`
+   - <kbd>C-c C-s q</kbd> `sesman-quit`
 
-## Renaming connections
+The command `sesman-start` wraps around all of the aforementioned `jack-in` and
+`connect` commands. You can also invoke same functionality with <kbd>M-x</kbd>
+`cider` or <kbd>C-c M-x</kbd>.
 
-To change the designation used for CIDER buffers use <kbd>M-x</kbd>
-`cider-change-buffers-designation`. This changes the CIDER REPL
-buffer, nREPL connection buffer and nREPL server buffer. For example
-using `cider-change-buffers-designation` with the string "foo" would
-change `*cider-repl localhost*` to `*cider-repl foo*`.
+To quit or restart individual connections use cider commands
+
+  - <kbd>C-c C-q</kbd> `cider-quit`
+  - <kbd>C-c M-r</kbd> `cider-restart`
+
+
+## Context Links
+
+Sessions can be linked to contexts (projects, directories and buffers)
+
+  - <kbd>C-c C-s b</kbd> `sesman-link-with-buffer`
+  - <kbd>C-c C-s d</kbd> `sesman-link-with-directory`
+  - <kbd>C-c C-s p</kbd> `sesman-link-with-project`
+  - <kbd>C-c C-s u</kbd> `sesman-unlink`
+
+## Friendly Sessions
+
+[Sesman] defines "friendly" session to allow for on-the-fly operation on
+sessions from contexts where there are no explicit links. In CIDER friendly
+sessions are defined by the project dependencies. For example when you use
+`cider-find-var` (<kbd>M-.</kbd>) to navigate to a var definition in a
+dependency project the current project's session becomes a friendly session for
+the dependency.
+
+When you evaluate some code from a dependency project and there are no explicit
+links in that project, the most recent friendly session is used to evaluate the
+code. Explicitly linked sessions have precedence over the friendly sessions.
+
+You can disable friendly session inference by customizing
+`sesman-use-friendly-sessions`.
+
+## Displaying Session Info
+
+Get info on all linked and friendly sessions in the current context with
+<kbd>C-c C-s i</kbd> (`sesman-info`). On <kbd>C-u</kbd>, display info on all
+CIDER sessions. For the connection specific information use CIDER's built-in
+`cider-describe-connection` (<kbd>C-c M-d</kbd>).
+
+An interactive view of all CIDER sessions is available through the
+`sesman-browser` (<kbd>C-c C-s w</kbd>).
+
+## Current Session
+
+All CIDER commands (evaluation, completion, switching to REPL etc.) operate on
+the relevant REPL within the current session. The current session is the most
+relevant session among all linked session (or friendly sessions when no links
+exist). Session relevance is decided by the specificity of the linked contexts
+and recency of the REPL buffers.
+
+If the current context is linked to a single session then that session is the
+current one. If multiple sessions are linked to a context (say, a project) then
+the current session is the one containing the most recently viewed REPL.
+
+Links to more specific contexts have precedence. For example, if you have two
+sessions linked to the same project and another to a directory within that
+project, then the session linked to the directory is the current session. Thus,
+again, there is no ambiguity.
+
+By default [Sesman] allows multiple simultaneous links to projects and
+directories, but only one link per buffer. See `sesman-single-link-contexts` if
+you would like to change that.
+
+## Current REPL
+
+The current REPL is the most relevant REPL from the current session. REPL relevance
+is determined by the type of the current buffer. For example if the current
+buffer is a `clj` buffer then a `clj` REPL is selected. Ambiguous situations could
+arise when, for instance, there are multiple `clj` REPLs within a session, or
+the current buffer is a `cljc` buffer and both `clj` and `cljs` REPLs exist in
+the session. In such cases the current REPL is the most recently viewed REPL of
+the relevant type.
+
+Switch to the current REPL buffer with <kbd>C-c C-z</kbd>. You can then use the
+same key combination to switch back to the Clojure(Script) buffer that you came
+from.
+
+The single prefix <kbd>C-u C-c C-z</kbd>, will switch to the current REPL buffer
+and set the namespace in that buffer based on namespace in the current
+Clojure(Script) buffer.
+
+## Customizing Session and REPL Names
+
+By default session names consist of abbreviated project name, host and port
+(e.g. `project/dir:localhost:1234`). REPL buffer name consist of the session
+name and the REPL type specification post-fix
+(e.g. `*project/dir:localhost:1234(cljs:node)*`).
+
+You can customize session names with `cider-session-name-template` and REPL
+names with `nrepl-repl-buffer-name-template`. See also
+`cider-format-connection-params` for available formats.
+
+
+[Sesman]: https://github.com/vspinu/sesman

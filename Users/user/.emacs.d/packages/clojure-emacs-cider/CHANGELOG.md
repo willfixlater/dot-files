@@ -2,6 +2,114 @@
 
 ## master (unreleased)
 
+## 0.20.0 (2019-01-14)
+
+### New features
+
+* Make it possible to pass an options map to the currently selected pprint function via `cider-pprint-options`.
+* Add support for zprint.
+* Make it possible to eval and pprint in the scratch buffer using `C-u C-j`.
+* [#2532](https://github.com/clojure-emacs/cider/pull/2532): Add support for `CompilationException` dynamic source location discovery.
+
+### Changes
+
+* [#2496](https://github.com/clojure-emacs/cider/issues/2496): Replace CIDER's pprint implementation with nREPL 0.5's built-in pprint support.
+* [#2558](https://github.com/clojure-emacs/cider/pull/2558): Load clj, cljc, & cljs (if cljs repl available) files on `cider-load-all-files` (`C-c C-M-l`). Previously, this only loaded clj files.
+* Enable pretty-printing in the REPL by default.
+
+### Bug fixes
+
+* [#2532](https://github.com/clojure-emacs/cider/pull/2532): Fix re-display hangs while dynamically recovering source locations under mouse pointer.
+* [#2560](https://github.com/clojure-emacs/cider/pull/2560): Detect REPL type for completion, eldoc and info ops.
+
+## 0.19.0 (2019-01-01)
+
+### New features
+
+* [#2430](https://github.com/clojure-emacs/cider/issues/2375): `cider-find-var` opens archive files inside [AVFS](http://avf.sourceforge.net) folders if AVFS is detected.
+* [#2446](https://github.com/clojure-emacs/cider/issues/2446): Implement Sesman friendly sessions to allow for on-the-fly association with sessions from dependency projects and jars.
+* [#2253](https://github.com/clojure-emacs/cider/issues/2253): Split `continue` debug command into "continue till next breakpoint" (`c`) and "continue non stop" (`C`) commands.
+
+### Bug fixes
+
+* [#2474](https://github.com/clojure-emacs/cider/issues/2474): Fix incorrect detection of output and out-of-order printing.
+* [#2514](https://github.com/clojure-emacs/cider/issues/2514): Don't auto-jump to warnings when `cider-auto-jump-to-error` is set to 'errors-only.
+* [#2453](https://github.com/clojure-emacs/cider/issues/2453): Make it possible to debug deftype methods by direct insertion of #dbg and #break readers into the deftype methods.
+* [#1869](https://github.com/clojure-emacs/cider/issues/1869),[cider-nrepl#460](https://github.com/clojure-emacs/cider-nrepl/issues/460): Fix `continue` debugger command which was stopping entering debugger on repeated invocations.
+* [#2444](https://github.com/clojure-emacs/cider/issues/2444): Reuse dead REPL buffers on new connections.
+* [#2441](https://github.com/clojure-emacs/cider/issues/2441): Make it possible to use `C-c C-x` keys without loading cider first (autoload `cider-start-map`).
+* [#2440](https://github.com/clojure-emacs/cider/issues/2440): Make `cider-check-cljs-repl-requirements` take effect again.
+* [#2439](https://github.com/clojure-emacs/cider/issues/2439): Remove mentions of `cider-toggle-connection-buffer` from the docs.
+* [#2435](https://github.com/clojure-emacs/cider/issues/2435): Remove killed REPLs from sessions in client sentinel.
+* Fix jack-in from inside of remote buffers.
+* [#2454](https://github.com/clojure-emacs/cider/pull/2454): Fix erratic inspector behavior when multiple REPLs are connected
+* [#2467](https://github.com/clojure-emacs/cider/pull/2467): Make generic CIDER ops use any available nREPL connection.
+* [#2105](https://github.com/clojure-emacs/cider/issues/2105): Fix no comment syntax defined message when loading buffer after running a failing test.
+* [#2115](https://github.com/clojure-emacs/cider/issues/2515): Reset the current buffer after `display-buffer`.
+
+### Changes
+
+* [#2482](https://github.com/clojure-emacs/cider/issues/2482): Don't bind nREPL server started by `cider-jack-in` to `::` (use `localhost` instead).
+* [#2484](https://github.com/clojure-emacs/cider/pull/2484): Fix issues where some functionality in REPL buffers (like eldoc) was broken.
+* [#2484](https://github.com/clojure-emacs/cider/pull/2484): REPL types are now symbols instead of strings.
+* [#1544](https://github.com/clojure-emacs/cider/issues/1544): Add a new defcustom `cider-infer-remote-nrepl-ports` to control whether we use tramp/ssh to infer remote ports.  Now defaulting to `nil` (previously it always tried to infer).
+
+## 0.18.0 (2018-09-02)
+
+### New features
+
+* [#2375](https://github.com/clojure-emacs/cider/issues/2375): Move `cider-eval-toplevel-inside-comment-form` into clojure-mode as `clojure-toplevel-inside-comment-form` so `beginning-of-defun` is aware of comment forms.
+* Add new `cider-session-name-template` variable for flexible customization of cider session and REPL buffer names.
+* Bind `C-c M-r` to `cider-restart`.
+* Add new `cider-start-map` keymap (`C-c C-x`) for jack-in and connection commands.
+* Add new `cider-ns-map` keymap (`C-c M-n`) for namespace related functionality.
+* Allow evaling top level forms in a comment form rather than the entire comment form with `cider-eval-toplevel-inside-comment-form`.
+* Create keymap for inserting forms into the repl at `C-c C-j`.
+* Add new defcustom `cider-invert-insert-eval-p`: Set to cause insert-to-repl commands to eval the forms by default when inserted.
+* Add new defcustom `cider-switch-to-repl-after-insert-p`: Set to prevent cursor from going to the repl when inserting a form in the repl with the insert-to-repl commands.
+* Inject piggieback automatically on `cider-jack-in-clojurescript`.
+* Introduce a new command named `cider` (`C-c M-x`) that acts as a simple wrapper around all commands for starting/connecting to REPLs.
+* [#2305](https://github.com/clojure-emacs/cider/issues/2305): Make it possible to disable the REPL type auto-detection by customizing `cider-repl-auto-detect-type`.
+* [#2373](https://github.com/clojure-emacs/cider/issues/2373): Make it possible to configure the welcome message displayed in scratch buffers via `cider-scratch-initial-message`.
+* Add the ability to jump to the profiler buffer using `cider-selector`.
+* [#1980](https://github.com/clojure-emacs/cider/issues/1980): Echo back missing namespace name on interactive eval (requires nREPL 0.4.3+).
+* [#2397](https://github.com/clojure-emacs/cider/pull/2397): Add shadow-select ClojureScript REPL type.
+* [#2314](https://github.com/clojure-emacs/cider/pull/2314): Add `cider-ns-reload` and `cider-ns-reload-all` interactive commands.
+
+### Bugs fixed
+
+* [#2317](https://github.com/clojure-emacs/cider/issues/2317): The stdin prompt can now be cancelled.
+* [#2328](https://github.com/clojure-emacs/cider/issues/2328): Added `cider-eval-sexp-to-point`.
+* [#2310](https://github.com/clojure-emacs/cider/issues/2310): `cider-format-edn-last-sexp` will format the last sexp.
+* [#2294](https://github.com/clojure-emacs/cider/issues/2294): Fix setting default stacktrace filters.
+* [#2286](https://github.com/clojure-emacs/cider/issues/2286): Fix eldoc issue with images in the REPL.
+* [#2307](https://github.com/clojure-emacs/cider/pull/2307): Use a better error when a cljs repl form cannot be found.
+* Fix the broken test selector functionality.
+* [#2291](https://github.com/clojure-emacs/cider/issues/2291): `cider-use-tooltips` custom variable works as expected.
+* [#2424](https://github.com/clojure-emacs/cider/issues/2424): Fallback to `lein` as the default jack-in command when `clojure` is not present.
+
+### Changes
+
+* **(Breaking)** Move `cider-repl-set-ns`, previously on `C-c M-n`, on `C-c M-n (M-)n` in the `cider-ns-map`.
+* **(Breaking)** Move `cider-ns-refresh`, previously on `C-c C-x`, on `C-c M-n (M-)r` in the `cider-ns-map`.
+* **(Breaking)** Bump the minimum required Emacs version to 25.1.
+* **(Breaking)** Drop support for Java 7 and Clojure(Script) 1.7.
+* **(Breaking)** Use session name as part of CIDER buffers names (REPL, server, messages), and obsolete `nrepl-buffer-name-separator` and `nrepl-buffer-name-show-port`. See `cider-session-name-template` and `cider-format-connection-params` for how to customize CIDER buffer names.
+* **(Breaking)** Use a custom task (`cider.tasks/nrepl-server`) for `cider-jack-in` with Boot (that's done to provide access to newer nREPL features to users of older versions of Boot).
+* Rename `cider-eval-defun-to-point` to `cider-eval-defun-up-to-point`.
+* Add support for printing to the current buffer to `cider-eval-defun-up-to-point`.
+* Remove `cider-ping` command.
+* Remove `cider-visit-error-buffer` in favour of using `cider-selector`.
+* Rename `cider-refresh` to `cider-ns-refresh` (and all the related defcustoms).
+* **(Breaking)** Rewrote connection management (see https://docs.cider.mx/en/latest/managing_connections/ for details).
+* **(Breaking)** `cider-jack-in-clojurescript` now creates only a ClojureScript REPL (use `cider-jack-in-clj&cljs` to create both REPLs).
+* [#2357](https://github.com/clojure-emacs/cider/issues/2357): Support both keywords and strings as test selectors (previously it was only strings).
+* [#2378](https://github.com/clojure-emacs/cider/pull/2378): Add autoloads target to Makefile.
+* Map `cider-pprint-eval-last-sexp` to `C-c C-v (C-)f (C-)e` in the `cider-eval-commands-map`.
+* Map `cider-pprint-eval-defun-at-point` to `C-c C-v (C-)f (C-)d` in the `cider-eval-commands-map`.
+* Accept bare figwheel-main build names (e.g., `dev`). Previously, a keyword (e.g., `:dev`) was required.
+* Stop releasing CIDER and cider-nrepl together. cider-nrepl now has its own release cycle and CIDER introduces `cider-required-middleware-version` to track it.
+
 ## 0.17.0 (2018-05-07)
 
 ### New features
@@ -451,6 +559,7 @@ and try to associate the created connection with this project automatically.
 * [#1422](https://github.com/clojure-emacs/cider/issues/1422): Don't display mismatching parens error on incomplete expressions in REPL buffers.
 * [#1412](https://github.com/clojure-emacs/cider/issues/1412): nREPL messages for separate sessions are tracked in separate buffers.
 * Removed `cider-switch-to-repl-command`.
+* Renamed `cider-default-repl-command` to `cider-jack-in-default`.
 
 ### Bugs fixed
 

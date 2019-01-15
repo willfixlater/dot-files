@@ -1,6 +1,6 @@
 ;;; cider-doc.el --- CIDER documentation functionality -*- lexical-binding: t -*-
 
-;; Copyright © 2014-2018 Bozhidar Batsov, Jeff Valk and CIDER contributors
+;; Copyright © 2014-2019 Bozhidar Batsov, Jeff Valk and CIDER contributors
 
 ;; Author: Jeff Valk <jv@jeffvalk.com>
 
@@ -46,6 +46,11 @@
   :prefix "cider-doc-"
   :group 'cider)
 
+(defcustom cider-doc-auto-select-buffer t
+  "Controls whether to auto-select the doc popup buffer."
+  :type 'boolean
+  :group 'cider-doc
+  :package-version  '(cider . "0.15.0"))
 
 (declare-function cider-apropos "cider-apropos")
 (declare-function cider-apropos-select "cider-apropos")
@@ -101,12 +106,6 @@
   :type 'list
   :group 'cider-docview-mode
   :package-version '(cider . "0.7.0"))
-
-(defcustom cider-doc-auto-select-buffer t
-  "Controls whether to auto-select the doc popup buffer."
-  :type 'boolean
-  :group 'cider-doc
-  :package-version  '(cider . "0.15.0"))
 
 
 ;; Faces
@@ -185,6 +184,7 @@
 
 \\{cider-docview-mode-map}"
   (setq buffer-read-only t)
+  (setq-local sesman-system 'CIDER)
   (when cider-special-mode-truncate-lines
     (setq-local truncate-lines t))
   (setq-local electric-indent-chars nil)
@@ -225,9 +225,6 @@ opposite of what that option dictates."
            "Javadoc for"
            #'cider-javadoc-handler))
 
-(declare-function cider-find-file "cider-common")
-(declare-function cider-jump-to "cider-interaction")
-
 (defun cider-docview-source ()
   "Open the source for the current symbol, if available."
   (interactive)
@@ -264,12 +261,11 @@ opposite of what that option dictates."
     (error "%s cannot be looked up on Grimoire" cider-docview-symbol)))
 
 (defconst cider-doc-buffer "*cider-doc*")
-(add-to-list 'cider-ancillary-buffers cider-doc-buffer)
 
 (defun cider-create-doc-buffer (symbol)
   "Populates *cider-doc* with the documentation for SYMBOL."
   (when-let* ((info (cider-var-info symbol)))
-    (cider-docview-render (cider-make-popup-buffer cider-doc-buffer) symbol info)))
+    (cider-docview-render (cider-make-popup-buffer cider-doc-buffer nil 'ancillary) symbol info)))
 
 (defun cider-doc-lookup (symbol)
   "Look up documentation for SYMBOL."

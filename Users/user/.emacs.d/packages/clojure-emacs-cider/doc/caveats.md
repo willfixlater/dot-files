@@ -1,3 +1,8 @@
+# Caveats
+
+CIDER is certainly not perfect and has some limitations that everyone
+should be aware of.
+
 ## ClojureScript limitations
 
 Currently, the following features are not supported for ClojureScript
@@ -21,7 +26,7 @@ ClojureScript source code (file, line & column) is set only when evaluating the
 entire source buffer (<kbd>C-c C-k</kbd>). All other interactive code evaluation
 commands (e.g. <kbd>C-c C-e</kbd>) don't set this metadata and you won't be able
 to use commands like `find-var` on such vars.  This is a limitation of nREPL and
-piggieback, that's beyond CIDER. You can find some discussions on the subject
+Piggieback, that's beyond CIDER. You can find some discussions on the subject
 [here](http://dev.clojure.org/jira/browse/NREPL-59) and
 [here](https://github.com/clojure-emacs/cider/issues/830).
 
@@ -77,9 +82,13 @@ If someone would like to tackle them, we'd be happy to provide assistance.
 
 ## Injecting dependencies and Leiningen pedantic: abort mode
 
-Because injection currently creates an override of `tools.nrepl` dependency that
+Because injection currently creates an override of the nREPL dependency that
 Leingingen also pulls in starting up the REPL will fail if `:pedantic? :abort`
-is set. Either remove the `:pedantic? :abort` setting or switch off injecting
-the dependencies with setting `cider-inject-dependencies-at-jack-in` to `nil` and
+is set. There are several ways to address this:
+
+* Remove the `:pedantic? :abort` setting.
+* Switch off injecting the dependencies with setting `cider-inject-dependencies-at-jack-in` to `nil` and
 provide the dependencies by editing your `~/.lein/profiles.clj` as described in
 the [standalone REPL](installation.md#setting-up-a-standalone-repl) section.
+* Adjust the value of `cider-jack-in-dependencies`, so it includes the same nREPL value as the
+one that's bundled with Leiningen.

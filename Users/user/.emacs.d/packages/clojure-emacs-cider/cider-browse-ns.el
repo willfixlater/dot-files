@@ -1,6 +1,6 @@
 ;;; cider-browse-ns.el --- CIDER namespace browser
 
-;; Copyright © 2014-2018 John Andrews, Bozhidar Batsov and CIDER contributors
+;; Copyright © 2014-2019 John Andrews, Bozhidar Batsov and CIDER contributors
 
 ;; Author: John Andrews <john.m.andrews@gmail.com>
 
@@ -35,16 +35,17 @@
 
 ;;; Code:
 
-(require 'cider-interaction)
 (require 'cider-client)
-(require 'subr-x)
+(require 'cider-popup)
 (require 'cider-compat)
 (require 'cider-util)
 (require 'nrepl-dict)
+
+(require 'subr-x)
 (require 'easymenu)
+(require 'thingatpt)
 
 (defconst cider-browse-ns-buffer "*cider-ns-browser*")
-(add-to-list 'cider-ancillary-buffers cider-browse-ns-buffer)
 
 (defvar-local cider-browse-ns-current-ns nil)
 
@@ -78,6 +79,7 @@
 
 \\{cider-browse-ns-mode-map}"
   (setq-local electric-indent-chars nil)
+  (setq-local sesman-system 'CIDER)
   (when cider-special-mode-truncate-lines
     (setq-local truncate-lines t))
   (setq-local cider-browse-ns-current-ns nil))
@@ -156,7 +158,7 @@ Each item consists of a ns-var and the first line of its docstring."
 (defun cider-browse-ns (namespace)
   "List all NAMESPACE's vars in BUFFER."
   (interactive (list (completing-read "Browse namespace: " (cider-sync-request:ns-list))))
-  (with-current-buffer (cider-popup-buffer cider-browse-ns-buffer t)
+  (with-current-buffer (cider-popup-buffer cider-browse-ns-buffer 'select nil 'ancillary)
     (cider-browse-ns--list (current-buffer)
                            namespace
                            (cider-browse-ns--items namespace))
@@ -166,7 +168,7 @@ Each item consists of a ns-var and the first line of its docstring."
 (defun cider-browse-ns-all ()
   "List all loaded namespaces in BUFFER."
   (interactive)
-  (with-current-buffer (cider-popup-buffer cider-browse-ns-buffer t)
+  (with-current-buffer (cider-popup-buffer cider-browse-ns-buffer 'select nil 'ancillary)
     (let ((names (cider-sync-request:ns-list)))
       (cider-browse-ns--list (current-buffer)
                              "All loaded namespaces"
@@ -206,6 +208,9 @@ be displayed."
     (if (eq type 'ns)
         (cider-browse-ns value)
       (cider-doc-lookup value))))
+
+(declare-function cider-find-ns "cider-find")
+(declare-function cider-find-var "cider-find")
 
 (defun cider-browse-ns-find-at-point ()
   "Find the definition of the thing at point."
