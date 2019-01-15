@@ -25,6 +25,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;;; Commentary:
+;;
+;; Interactive session browser.
+;;
 ;;; Code:
 
 (require 'seq)
@@ -36,21 +40,21 @@
   :group 'sesman
   :link '(url-link :tag "GitHub" "https://github.com/vspinu/sesman"))
 
+(defface sesman-browser-highligh-face
+  '((default (:inherit highlight :weight bold)))
+  "Face used to highlight currently selected button."
+  :group 'sesman-browser)
+
+(defface sesman-browser-button-face
+  '((default (:inherit button :slant italic)))
+  "Face used to highlight currently selected object."
+  :group 'sesman-browser)
+
 (defvar-local sesman-browser--sort-types '(name relevance))
 (defcustom sesman-browser-sort-type 'name
   "Default sorting type in sesman browser buffers.
 Currently can be either 'name  or 'relevance."
   :type '(choice (const name) (const relevance))
-  :group 'sesman-browser)
-
-(defface sesman-browser-highligh
-  '((default (:inherit highlight :weight bold)))
-  "Face used to highlight currently selected button."
-  :group 'sesman-browser)
-
-(defface sesman-browser-button
-  '((default (:inherit button :slant italic)))
-  "Face used to highlight currently selected object."
   :group 'sesman-browser)
 
 (defvar sesman-browser-map
@@ -328,15 +332,17 @@ See `sesman-browser-sort-type' for the default sorting type."
            (propertize (symbol-name sesman-browser-sort-type) 'face 'bold)))
 
 (define-derived-mode sesman-browser-mode special-mode "SesmanBrowser"
-  "Interactive view of Sesman sessions."
+  "Interactive view of Sesman sessions.
+When applicable, system specific commands are locally bound to j when point is
+on a session object."
   ;; ensure there is a sesman-system here
   (sesman--system)
   (delete-all-overlays)
   (setq-local sesman-browser--stop-overlay (make-overlay (point) (point)))
-  (overlay-put sesman-browser--stop-overlay 'face 'sesman-browser-highligh)
+  (overlay-put sesman-browser--stop-overlay 'face 'sesman-browser-highligh-face)
   (setq-local sesman-browser--section-overlay (make-overlay (point) (point)))
   (when window-system
-    (let* ((fringe-spec '(left-fringe sesman-left-bar sesman-browser-highligh))
+    (let* ((fringe-spec '(left-fringe sesman-left-bar sesman-browser-highligh-face))
            (dummy-string (propertize "|" 'display fringe-spec)))
       (overlay-put sesman-browser--section-overlay 'line-prefix dummy-string)))
   (add-hook 'sesman-post-command-hook 'sesman-browser-revert nil t)
@@ -366,21 +372,18 @@ See `sesman-browser-sort-type' for the default sorting type."
     (let ((link-groups (sesman-grouped-links system ses))
           (vert-stop))
       (dolist (grp link-groups)
-        (let* ((type (car grp))
-               (short-type (or (plist-get sesman--cxt-abbrevs type) type)))
+        (let* ((type (car grp)))
           (dolist (link (cdr grp))
             (when (> (current-column) fill-column)
               (insert "\n" (format head-template " "))
               (setq vert-stop nil))
-            (insert (propertize (format "%s(%s)" short-type
-                                        (sesman--abbrev-path-maybe
-                                         (sesman--lnk-value link)))
-                                :sesman-stop (car link)
-                                :sesman-vertical-stop (unless vert-stop (setq vert-stop t))
-                                :sesman-link link
-                                'cursor-sensor-functions (list #'sesman-browser--sensor-function)
-                                'mouse-face 'highlight
-                                'face 'sesman-browser-button))
+            (let ((val (sesman--abbrev-path-maybe (sesman--lnk-value link))))
+              (insert (propertize (sesman--format-context type val 'sesman-browser-button-face)
+                                  :sesman-stop (car link)
+                                  :sesman-vertical-stop (unless vert-stop (setq vert-stop t))
+                                  :sesman-link link
+                                  'cursor-sensor-functions (list #'sesman-browser--sensor-function)
+                                  'mouse-face 'highlight)))
             (insert "  ")))))
     (insert "\n")
 
@@ -405,7 +408,7 @@ See `sesman-browser-sort-type' for the default sorting type."
                               :sesman-vertical-stop (unless vert-stop (setq vert-stop t))
                               :sesman-object (car kv)
                               'cursor-sensor-functions (list #'sesman-browser--sensor-function)
-                              'face 'sesman-browser-button
+                              'face 'sesman-browser-button-face
                               'mouse-face 'highlight
                               'help-echo "mouse-2: visit in other window"
                               'keymap map)
@@ -421,7 +424,8 @@ See `sesman-browser-sort-type' for the default sorting type."
 
 ;;;###autoload
 (defun sesman-browser ()
-  "Display an interactive session browser."
+  "Display an interactive session browser.
+See `sesman-browser-mode' for more details."
   (interactive)
   (let* ((system (sesman--system))
          (pop-to (called-interactively-p 'any))
@@ -441,7 +445,10 @@ See `sesman-browser-sort-type' for the default sorting type."
                         (_ (error "Invalid `sesman-browser-sort-type'"))))
             (i 0))
         (erase-buffer)
-        (insert (format "\n %s Sessions:\n\n" system))
+        (insert "\n ")
+        (insert (propertize (format "%s Sessions:" system)
+                            'face '(bold font-lock-keyword-face)))
+        (insert "\n\n")
         (dolist (ses sessions)
           (setq i (1+ i))
           (sesman-browser--insert-session system ses i))
@@ -451,5 +458,4 @@ See `sesman-browser-sort-type' for the default sorting type."
         (sesman-browser--sensor-function)))))
 
 (provide 'sesman-browser)
-
 ;;; sesman-browser.el ends here
