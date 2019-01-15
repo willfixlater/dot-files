@@ -1,7 +1,7 @@
 ;;; cider-macroexpansion.el --- Macro expansion support -*- lexical-binding: t -*-
 
 ;; Copyright © 2012-2013 Tim King, Phil Hagelberg, Bozhidar Batsov
-;; Copyright © 2013-2018 Bozhidar Batsov, Artur Malabarba and CIDER contributors
+;; Copyright © 2013-2019 Bozhidar Batsov, Artur Malabarba and CIDER contributors
 ;;
 ;; Author: Tim King <kingtim@gmail.com>
 ;;         Phil Hagelberg <technomancy@gmail.com>
@@ -36,7 +36,6 @@
 (require 'cider-compat)
 
 (defconst cider-macroexpansion-buffer "*cider-macroexpansion*")
-(add-to-list 'cider-ancillary-buffers cider-macroexpansion-buffer)
 
 (defcustom cider-macroexpansion-display-namespaces 'tidy
   "Determines if namespaces are displayed in the macroexpansion buffer.
@@ -163,11 +162,12 @@ and point is placed after the expanded form."
 
 (defun cider-create-macroexpansion-buffer ()
   "Create a new macroexpansion buffer."
-  (with-current-buffer (cider-popup-buffer cider-macroexpansion-buffer t)
-    (clojure-mode)
+  (with-current-buffer (cider-popup-buffer cider-macroexpansion-buffer 'select 'clojure-mode 'ancillary)
     (cider-mode -1)
     (cider-macroexpansion-mode 1)
     (current-buffer)))
+
+(declare-function cider-find-var "cider-find")
 
 (defvar cider-macroexpansion-mode-map
   (let ((map (make-sparse-keymap)))

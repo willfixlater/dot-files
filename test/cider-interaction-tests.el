@@ -1,6 +1,6 @@
-;;; cider-interaction-tests.el
+;;; cider-eval-tests.el
 
-;; Copyright © 2012-2018 Tim King, Bozhidar Batsov
+;; Copyright © 2012-2019 Tim King, Bozhidar Batsov
 
 ;; Author: Tim King <kingtim@gmail.com>
 ;;         Bozhidar Batsov <bozhidar@batsov.com>
@@ -28,7 +28,7 @@
 ;;; Code:
 
 (require 'buttercup)
-(require 'cider-interaction)
+(require 'cider-eval)
 (require 'cider-connection-test-utils)
 
 (describe "cider--var-namespace"
@@ -55,11 +55,6 @@
            (expect (funcall cider-to-nrepl-filename-function unix-file-name)
                    :to-equal unix-file-name)))))
 
-(describe "cider-refresh"
-  (it "raises a user error if cider is not connected"
-    (spy-on 'cider-connected-p :and-return-value nil)
-    (expect (cider-refresh) :to-throw 'user-error)))
-
 (describe "cider-quit"
   (it "raises a user error if cider is not connected"
     (spy-on 'cider-connected-p :and-return-value nil)
@@ -69,14 +64,6 @@
   (it "raises a user error if cider is not connected"
     (spy-on 'cider-connected-p :and-return-value nil)
     (expect (cider-restart) :to-throw 'user-error)))
-
-(describe "cider-find-ns"
-  (it "raises a user error if cider is not connected"
-    (spy-on 'cider-connected-p :and-return-value nil)
-    (expect (cider-find-ns) :to-throw 'user-error))
-  (it "raises a user error if the op is not supported"
-    (spy-on 'cider-nrepl-op-supported-p :and-return-value nil)
-    (expect (cider-find-ns) :to-throw 'user-error)))
 
 (describe "cider-load-all-project-ns"
   (it "raises a user error if cider is not connected"
@@ -89,19 +76,21 @@
 (describe "cider-load-file"
   (it "works as expected in empty Clojure buffers"
     (spy-on 'cider-request:load-file :and-return-value nil)
-    (with-connection-buffer "clj" b
-      (with-temp-buffer
-        (clojure-mode)
-        (setq buffer-file-name (make-temp-name "tmp.clj"))
-        (expect (cider-load-buffer) :not :to-throw)))))
+    (let ((default-directory "/tmp/a-dir"))
+      (with-repl-buffer "load-file-session" 'clj b
+        (with-temp-buffer
+          (clojure-mode)
+          (setq buffer-file-name (make-temp-name "tmp.clj"))
+          (expect (cider-load-buffer) :not :to-throw))))))
 
 (describe "cider-interactive-eval"
   (it "works as expected in empty Clojure buffers"
     (spy-on 'cider-nrepl-request:eval :and-return-value nil)
-    (with-connection-buffer "clj" b
-      (with-temp-buffer
-        (clojure-mode)
-        (expect (cider-interactive-eval "(+ 1)") :not :to-throw)))))
+    (let ((default-directory "/tmp/a-dir"))
+      (with-repl-buffer "interaction-session" 'clj b
+        (with-temp-buffer
+          (clojure-mode)
+          (expect (cider-interactive-eval "(+ 1)") :not :to-throw))))))
 
 (describe "cider--calculate-opening-delimiters"
   (it "returns the right opening delimiters"

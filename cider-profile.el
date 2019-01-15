@@ -1,6 +1,6 @@
 ;;; cider-profile.el --- CIDER support for profiling  -*- lexical-binding: t; -*-
 
-;; Copyright © 2014-2018 Edwin Watkeys and CIDER contributors
+;; Copyright © 2014-2019 Edwin Watkeys and CIDER contributors
 
 ;; Author: Edwin Watkeys <edw@poseur.com>
 ;;         Juan E. Maya <jmayaalv@gmail.com>
@@ -26,6 +26,8 @@
 ;;; Code:
 
 (require 'cider-client)
+(require 'cider-popup)
+(require 'cider-eval)
 
 (defconst cider-profile-buffer "*cider-profile*")
 
@@ -175,7 +177,6 @@ With prefix arg or no symbol at point, prompts for a var."
 ;;;###autoload
 (defun cider-profile-var-summary (query)
   "Display profile data for var under point QUERY.
-
 Defaults to the symbol at point.  With prefix arg or no symbol at point,
 prompts for a var."
   (interactive "P")

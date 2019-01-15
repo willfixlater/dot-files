@@ -1,18 +1,12 @@
+<p align="center">
+  <img src="https://raw.github.com/clojure-emacs/cider/master/logo/cider-logo-w640.png" alt="CIDER Logo"/>
+</p>
+
+-----------
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
 [![MELPA](http://melpa.org/packages/cider-badge.svg)](http://melpa.org/#/cider)
 [![MELPA Stable](http://stable.melpa.org/packages/cider-badge.svg)](http://stable.melpa.org/#/cider)
 [![Build Status](https://travis-ci.org/clojure-emacs/cider.png?branch=master)](https://travis-ci.org/clojure-emacs/cider)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/clojure-emacs/cider?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/bbatsov/donate)
-[![OpenCollective](https://opencollective.com/cider/backers/badge.svg)](#open-collective-backers)
-[![OpenCollective](https://opencollective.com/cider/sponsors/badge.svg)](#open-collective-sponsors)
-[![Patreon](https://img.shields.io/badge/patreon-donate-orange.svg)](https://www.patreon.com/bbatsov)
-[![Paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GRQKNBM6P8VRQ)
-
-<p align="center">
-  <img src="https://raw.github.com/clojure-emacs/cider/master/logo/cider-logo-w640.png" alt="CIDER Logo"/>
-</p>
 
 CIDER is the **C**lojure(Script) **I**nteractive **D**evelopment **E**nvironment
 that **R**ocks!
@@ -24,8 +18,12 @@ features are centered around `cider-mode`, an Emacs minor-mode that complements
 compilation, debugging, definition and documentation lookup, running tests and
 so on.
 
-CIDER is the successor to the now deprecated combination of using [SLIME][] +
-[swank-clojure][] for Clojure development.
+----------
+[![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/bbatsov/donate)
+[![OpenCollective](https://opencollective.com/cider/backers/badge.svg)](#open-collective-backers)
+[![OpenCollective](https://opencollective.com/cider/sponsors/badge.svg)](#open-collective-sponsors)
+[![Patreon](https://img.shields.io/badge/patreon-donate-orange.svg)](https://www.patreon.com/bbatsov)
+[![Paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GRQKNBM6P8VRQ)
 
 **Please consider [supporting financially its ongoing development](#funding).**
 
@@ -33,7 +31,7 @@ CIDER is the successor to the now deprecated combination of using [SLIME][] +
 
 The instructions that follow are meant to get you from zero to a running CIDER
 REPL in under 5 minutes.  See the
-[official manual](http://cider.readthedocs.io/en/latest/) for (way) more
+[official manual](https://docs.cider.mx) for (way) more
 details.
 
 ### Installation
@@ -60,8 +58,8 @@ connect to it.
 Alternatively you can use <kbd>C-u M-x</kbd> `cider-jack-in` to specify the name
 of a `lein` or `boot` project, without having to visit any file in it.
 
-In Clojure(Script) buffers the command `cider-jack-in` is bound to <kbd>C-c
-M-j</kbd>.
+In Clojure(Script) buffers the command `cider-jack-in` is bound to
+<kbd>C-c C-x (C-)j</kbd>.
 
 ### Connect to a running nREPL server
 
@@ -84,14 +82,16 @@ by your project's build tool (Gradle, Maven, etc).
 After you get your nREPL server running go back to Emacs.  Typing there <kbd>M-x</kbd>
 `cider-connect` will allow you to connect to the running nREPL server.
 
-In Clojure(Script) buffers the command `cider-connect` is bound to <kbd>C-c M-c</kbd>.
+In Clojure(Script) buffers the command `cider-connect` is bound to
+<kbd>C-c C-x (C-)c (C-)j</kbd> and the command `cider-connect-cljs` is bound to
+<kbd>C-c C-x (C-)c (C-)s</kbd>.
 
 ## Diving Deeper
 
 CIDER packs a ton of functionality and you really want to be familiar with it,
 so you can fully empower your workflow. The best way to get acquainted with all
 available features is to go over the entire
-[CIDER manual](http://cider.readthedocs.io/).
+[CIDER manual](https://docs.cider.mx/).
 
 If you're into video lessons, you might also check out
 this [intro to CIDER demo](https://www.youtube.com/watch?v=aYA4AAjLfT0) as well.
@@ -109,9 +109,7 @@ group of long-term contributors manage releases, evaluate pull-requests, and
 does a lot of the groundwork on major new features.
 
 * [Bozhidar Batsov](https://github.com/bbatsov) (author & head maintainer)
-* [Artur Malabarba](https://github.com/malabarba)
-* [Michael Griffiths](https://github.com/cichli)
-* [Jeff Valk](https://github.com/jeffvalk)
+* [Vitalie Spinu](https://github.com/vspinu)
 * [Lars Andersen](https://github.com/expez)
 
 ### CIDER Alumni
@@ -123,6 +121,9 @@ core team members. Lovingly known as The Alumni:
 * [Phil Hagelberg](https://github.com/technomancy)
 * [Hugo Duncan](https://github.com/hugoduncan)
 * [Steve Purcell](https://github.com/purcell)
+* [Artur Malabarba](https://github.com/malabarba)
+* [Michael Griffiths](https://github.com/cichli)
+* [Jeff Valk](https://github.com/jeffvalk)
 
 ## Release policy
 
@@ -144,7 +145,7 @@ branch of `cider-nrepl`.
 
 ## Logo
 
-CIDER's logo was created by [@ndr-qef](https://github.com/ndr-qef). You can find
+CIDER's logo was created by [@tapeinosyne](https://github.com/tapeinosyne). You can find
 the logo in various formats
 [here](https://github.com/clojure-emacs/cider/tree/master/logo).
 
@@ -244,15 +245,13 @@ site. [[Become a sponsor](https://opencollective.com/cider#sponsor)]
 
 ## License
 
-Copyright © 2012-2018 Tim King, Phil Hagelberg, Bozhidar Batsov, Artur Malabarba and
+Copyright © 2012-2019 Tim King, Phil Hagelberg, Bozhidar Batsov, Artur Malabarba and
 [contributors](https://github.com/clojure-emacs/cider/contributors).
 
 Distributed under the GNU General Public License, version 3
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
-[nREPL]:https://github.com/cemerick/nREPL
-[SLIME]: https://github.com/slime/slime
-[swank-clojure]: https://github.com/technomancy/swank-clojure
+[nREPL]:https://github.com/nrepl/nrepl
 [Sly]: https://github.com/capitaomorte/sly
 [Geiser]: https://github.com/jaor/geiser
 [clojure-mode]: https://github.com/clojure-emacs/clojure-mode

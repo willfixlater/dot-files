@@ -1,8 +1,10 @@
+# Hacking on CIDER
+
 This section explains the process of working with CIDER's codebase (e.g. to fix
 a bug or implement some new feature). It outlines the recommended workflows when
 working on the Emacs Lisp side (CIDER) and the Clojure side (`cider-nrepl`).
 
-## Hacking on CIDER
+## Hacking on CIDER (Elisp)
 
 ### Obtaining the source code
 
@@ -12,16 +14,28 @@ simply clone the code from GitHub and use it. In general - avoid editing the
 code of an installed package.
 
 Alternatively you can simply load CIDER in your Emacs straight from its source
-repo:
+repo (you'll have to manually install all the packages CIDER depends on
+in advance).
+
+Additionally you will have to generate and require the
+[autoloads](https://www.gnu.org/software/emacs/manual/html_node/elisp/Autoload.html),
+otherwise you'll keep getting errors about missing commands.  That's done
+automatically when installing via `package.el` but you'll have to do it
+manually in this case:
+
+```shell
+make autoloads   # generates cider-autoloads.el
+```
+
+Then:
 
 ```el
 ;; load CIDER from its source code
 (add-to-list 'load-path "~/projects/cider")
-(require 'cider)
+(load "cider-autoloads" t t)
 ```
 
-Just keep in mind that you'll have to manually install all the packages CIDER
-depends on in advance.
+If you want to compile **and** generate autoloads, just run `make`.
 
 ### Changing the code
 
@@ -127,14 +141,14 @@ And then switch to Emacs 26.1 and test again:
 
 ```
 (emacs-25.3-travis) ~/cider$ evm use Emacs-26-pretest-travis
-(emacs-26-pretest-travis) ~/cider$ cask install
-(emacs-26-pretest-travis) ~/cider$ make test
+(emacs-26.1-travis) ~/cider$ cask install
+(emacs-26.1-travis) ~/cider$ make test
 ```
 
 You can test byte compilation too
 
 ```
-(emacs-26-pretest-travis) ~/cider$ make test-bytecomp
+(emacs-26.1-travis) ~/cider$ make test-bytecomp
 ```
 
 When you are done working in docker, just `exit` the bash prompt, and the docker
@@ -148,7 +162,7 @@ repository. The `evm` tool is available should you need to install some other
 specific build. However additional versions of Emacs will be discarded when
 you exit the docker container.
 
-## Hacking on cider-nrepl
+## Hacking on cider-nrepl (Clojure)
 
 ### Obtaining the code
 

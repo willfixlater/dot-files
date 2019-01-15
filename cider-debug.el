@@ -1,6 +1,6 @@
 ;;; cider-debug.el --- CIDER interaction with the cider.debug nREPL middleware  -*- lexical-binding: t; -*-
 
-;; Copyright © 2015-2018 Bozhidar Batsov, Artur Malabarba and CIDER contributors
+;; Copyright © 2015-2019 Bozhidar Batsov, Artur Malabarba and CIDER contributors
 
 ;; Author: Artur Malabarba <bruce.connor.am@gmail.com>
 
@@ -27,7 +27,7 @@
 
 (require 'nrepl-dict)
 (require 'nrepl-client) ; `nrepl--mark-id-completed'
-(require 'cider-interaction)
+(require 'cider-eval)
 (require 'cider-client)
 (require 'cider-util)
 (require 'cider-inspector)
@@ -101,21 +101,15 @@ configure `cider-debug-prompt' instead."
   :group 'cider-debug
   :package-version '(cider . "0.9.1"))
 
-(defcustom cider-debug-print-level 10
-  "The print level for values displayed by the debugger.
-This variable must be set before starting the repl connection."
-  :type '(choice (const :tag "No limit" nil)
-                 (integer :tag "Max depth" 10))
-  :group 'cider-debug
-  :package-version '(cider . "0.10.0"))
+(make-obsolete 'cider-debug-print-length 'cider-debug-print-options "0.20")
+(make-obsolete 'cider-debug-print-level 'cider-debug-print-options "0.20")
 
-(defcustom cider-debug-print-length 10
-  "The print length for values displayed by the debugger.
+(defcustom cider-debug-print-options '(dict "length" 10 "level" 10)
+  "The print options for values displayed by the debugger.
 This variable must be set before starting the repl connection."
-  :type '(choice (const :tag "No limit" nil)
-                 (integer :tag "Max depth" 10))
-  :group 'cider-debug
-  :package-version '(cider . "0.10.0"))
+  :type 'listp
+  :group 'cider-stacktrace
+  :package-version '(cider . "0.20.0"))
 
 
 ;;; Implementation
@@ -163,10 +157,8 @@ This variable must be set before starting the repl connection."
   "Initialize a connection with the cider.debug middleware."
   (cider-nrepl-send-request
    (nconc '("op" "init-debugger")
-          (when cider-debug-print-level
-            `("print-level" ,cider-debug-print-level))
-          (when cider-debug-print-length
-            `("print-length" ,cider-debug-print-length)))
+          (when cider-debug-print-options
+            `("print-options" ,cider-debug-print-options)))
    #'cider--debug-response-handler))
 
 
@@ -292,7 +284,7 @@ of `cider-interactive-eval' in debug sessions."
 (defvar cider--debug-mode-tool-bar-map
   (let ((tool-bar-map (make-sparse-keymap)))
     (tool-bar-add-item "right-arrow" #'cider-debug-mode-send-reply :next :label "Next step")
-    (tool-bar-add-item "next-node" #'cider-debug-mode-send-reply :continue :label "Continue non-stop")
+    (tool-bar-add-item "next-node" #'cider-debug-mode-send-reply :continue :label "Continue")
     (tool-bar-add-item "jump-to" #'cider-debug-mode-send-reply :out :label "Out of sexp")
     (tool-bar-add-item "exit" #'cider-debug-mode-send-reply :quit :label "Quit")
     tool-bar-map))
@@ -344,7 +336,7 @@ In order to work properly, this mode must be activated by
     ;; cider-nrepl has a chance to send the next message, and so that the user
     ;; doesn't accidentally hit `n' between two messages (thus editing the code).
     (when-let* ((proc (unless nrepl-ongoing-sync-request
-                        (get-buffer-process (cider-current-connection)))))
+                        (get-buffer-process (cider-current-repl)))))
       (accept-process-output proc 1))
     (unless cider--debug-mode
       (setq buffer-read-only nil)
@@ -377,7 +369,8 @@ In order to work properly, this mode must be activated by
   "Menu for CIDER debug mode"
   `("CIDER Debugger"
     ["Next step" (cider-debug-mode-send-reply ":next") :keys "n"]
-    ["Continue non-stop" (cider-debug-mode-send-reply ":continue") :keys "c"]
+    ["Continue" (cider-debug-mode-send-reply ":continue") :keys "c"]
+    ["Continue non-stop" (cider-debug-mode-send-reply ":Continue") :keys "C"]
     ["Move out of sexp" (cider-debug-mode-send-reply ":out") :keys "o"]
     ["Quit" (cider-debug-mode-send-reply ":quit") :keys "q"]
     "--"
@@ -411,7 +404,7 @@ message."
                     (symbol-name last-command-event)
                   (ignore-errors
                     (concat ":" (nrepl-dict-get cider--debug-mode-commands-dict
-                                                (downcase (string last-command-event))))))
+                                                (string last-command-event)))))
                 nil
                 (cider--uppercase-command-p)))
   (when (and (string-prefix-p ":" command) force)
@@ -602,7 +595,7 @@ is a coordinate measure in sexps."
                  code ns original-id
                  (if (and line column)
                      "you edited the code"
-                   "your tools.nrepl version is older than 0.2.11"))
+                   "your nREPL version is older than 0.2.11"))
                 (save-excursion
                   (cider--debug-move-point coor)
                   (point-marker)))))))))
