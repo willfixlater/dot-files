@@ -74,6 +74,8 @@
 (load "~/.emacs.d/keybindings.el")
 (load "~/.emacs.d/prettify.el")
 (load "~/.emacs.d/mode-line.el")
+(load "~/.emacs.d/desktop.el")
+(load "~/.emacs.d/wsl.el")
 
 (load "~/.emacs.d/packages/floobits-floobits-emacs/floobits.el")
 
@@ -89,14 +91,6 @@
                    '(list (buffer-state-*) (if window-system "λ" "|") (buffer-state-+))
                    "[%l,%c] %p%%")
 
-; Misc. code
-
-(defun bash-shell ()
-  "Start a WSL Bash shell."
-  (interactive)
-  (let ((explicit-shell-file-name "C:/Windows/System32/bash.exe"))
-    (shell)))
-
 ; Misc. settings
 
 (projectile-global-mode)
@@ -111,6 +105,7 @@
 (setq backup-directory-alist `((".*" . ,(expand-file-name "~/.emacs.d/backup/"))))
 (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "~/.emacs.d/auto-save/") t)))
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'scroll-left 'disabled nil)
 
 (setq default-frame-alist
       '((font . "Fira Code-11:antialias=true")

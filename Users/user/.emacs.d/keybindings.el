@@ -15,7 +15,9 @@
   "C-/" 'comment-or-uncomment-region
   "C->" 'paredit-forward-slurp-sexp
   "C-<" 'paredit-backward-slurp-sexp
-  "M-n" 'scroll-down-line
-  "M-p" 'scroll-up-line
+  "M-p" 'scroll-down-line
+  "M-n" 'scroll-up-line
+  "C-," 'scroll-right
+  "C-." 'scroll-left
   "C-x o" 'ace-window
   "C-c C-g" 'magit-status)
