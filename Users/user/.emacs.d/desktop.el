@@ -11,8 +11,8 @@
     (desktop-release-lock desktop-dir)))
 
 (defun desktop-read-on-init ()
-  (let ((desktop-dir (daemon->desktop (daemonp)))
-        (lock-file (concat desktop-dir "/.emacs.desktop.lock")))
+  (let* ((desktop-dir (daemon->desktop (daemonp)))
+         (lock-file (concat desktop-dir "/.emacs.desktop.lock")))
     (when (not (file-directory-p desktop-dir))
       (make-directory desktop-dir))
     (when (and (file-exists-p lock-file)

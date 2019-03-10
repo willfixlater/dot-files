@@ -19,5 +19,7 @@
   "M-n" 'scroll-up-line
   "C-," 'scroll-right
   "C-." 'scroll-left
+  "C-c r" 'point-to-register
+  "C-c j" 'jump-to-register
   "C-x o" 'ace-window
-  "C-c C-g" 'magit-status)
+  "C-c g" 'magit-status)

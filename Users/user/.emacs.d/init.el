@@ -26,7 +26,7 @@
 (load "~/.emacs.d/packages/cask-epl/epl.el")
 
 (load-package-list
- '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode))
+ '(("~/.emacs.d/elpa/packages" (seq queue spinner js2-mode csv-mode))
    ("~/.emacs.d/packages"      ((better-defaults "technomancy-better-defaults")
                                 (dash "magnars-dash")
                                 (s "magnars-s")
