@@ -62,7 +62,8 @@
                                 (markdown-mode "jrblevin-markdown-mode")
                                 (haml-mode "nex3-haml-mode")
                                 (sass-mode "nex3-sass-mode")
-                                (dart-mode "bradyt-dart-mode")))))
+                                (dart-mode "bradyt-dart-mode")
+                                (flutter "amake-flutter")))))
 
 (load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/clojure.el")
