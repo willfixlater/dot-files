@@ -43,14 +43,28 @@
       dmenu
       rxvt_unicode
       google-chrome
-      leiningen
       wavebox
       awscli
+      gimp
+      unzip
+      android-studio
+      # Clojure
+      leiningen
+      # Dart & Flutter
+      dart
+      xz
     ];
   };
 
+  programs = {
+    adb.enable = true;
+    ssh = {
+      startAgent = true;
+    };
+  };
+
   services = {
-    openssh.enable = true;
+    openssh.enable = false;
     printing.enable = true;
 
     xserver = {
@@ -84,7 +98,7 @@
       home = "/home/shdzzl";
       description = "Shayden";
       shell = pkgs.zsh;
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "adbusers" ];
     };
   };
 }

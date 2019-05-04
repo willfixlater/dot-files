@@ -1,7 +1,16 @@
 { pkgs, ... }:
 
 let
-  aliases = { em = "emacs -nw"; };
+  aliases = {
+    sudo = "sudo ";
+    em = "emacs -nw";
+    copy-nix = "cp-system-nixos-files";
+    switch-nix = "nixos-rebuild switch";
+    switch-home = "home-manager switch";
+    listsure-prod-db-tunnel = "ssh -Av -L9999:localhost:9999 listsure-prod-bastion -t ssh -v -L9999:la1mf6w11oez2v9.cyvjn25ipdu3.ap-southeast-2.rds.amazonaws.com:5432 -N localhost";
+    listsure-test-db-tunnel = "ssh -Av -L9999:localhost:9999 listsure-test-bastion -t ssh -v -L9999:la1c9ef2rahe90v.cyvjn25ipdu3.ap-southeast-2.rds.amazonaws.com:5432 -N localhost";
+    listsure-connect-to-db = "psql -h localhost -p 9999 listsure listsuredba";
+  };
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -9,6 +18,7 @@ in
   home = {
     sessionVariables = {
       EDITOR = "emacs -nw";
+      _JAVA_AWT_WM_NONREPARENTING = 1;
     };
 
     file = {
