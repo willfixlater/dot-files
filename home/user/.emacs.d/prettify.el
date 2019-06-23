@@ -1,6 +1,4 @@
-(global-prettify-symbols-mode 1)
-
-(defconst my-lisp-prettify-alist
+(defconst clojure--prettify-symbols-alist
   '(("fn" . (?λ (Br . Bl) ?.))
     ("*" . "×")
     ("/" . "÷")
@@ -9,10 +7,9 @@
                    (Bl . Bl) ?- (Bc . Br) ?- (Bc . Bc) ?>
                    (Bc . Bl) ?- (Br . Br) ?>))))
 
-(eval-after-load 'clojure-mode
-  '(setq clojure--prettify-symbols-alist
-         my-lisp-prettify-alist))
+(defconst lisp--prettify-symbols-alist
+  '(("*" . "×")
+    ("/" . "÷")))
 
-(eval-after-load 'lisp-mode
-  '(setq lisp--prettify-symbols-alist
-         my-lisp-prettify-alist))
+(add-hook 'clojure-mode-hook 'prettify-symbols-mode)
+(add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)

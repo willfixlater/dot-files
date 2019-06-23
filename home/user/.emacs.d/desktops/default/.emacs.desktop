@@ -1,0 +1,91 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Sun Jun 23 19:34:50 2019
+;; Desktop file format version 208
+;; Emacs version 26.2
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (23823 18362 438914 499000) (desktop . "208") "shdzzl@broken-moor" nil nil ((((minibuffer . t) (menu-bar-lines . 0) (tool-bar-lines . 0) (vertical-scroll-bars) (right-fringe . 20) (left-fringe . 20) (foreground-color . "unspecified-fg") (background-color . "unspecified-bg") (display-type . mono) (background-mode . dark) (cursor-color . "#ffffff") (font . "tty") (height . 11) (width . 10) (modeline . t) (unsplittable) (cursor-type . hbar) (frameset--id . "D0BC-7F1B-BC5F-130B") (frameset--mini t)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 2) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 4) (min-pixel-width . 10) (min-pixel-height-ignore . 3) (min-pixel-width-ignore . 2) (min-pixel-height-safe . 1) (min-pixel-width-safe . 2)) leaf (pixel-width . 10) (pixel-height . 10) (total-width . 10) (total-height . 10) (normal-height . 1.0) (normal-width . 1.0) (buffer "Main.hs" (selected . t) (hscroll . 0) (fringes 0 0 nil) (margins nil) (scroll-bars nil 0 t nil 0 t) (vscroll . 0) (dedicated) (point . 789) (start . 1))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring '("icm" "either" "(" "name" "alias" "inter" "activi" "user" "alias" "tr" "member" "get_member" "ICM" "proj" "socke" "aliases"))
+(setq register-alist nil)
+(setq file-name-history '("/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/service/PokerService.java" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/service/GameService.java" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/infrastructure/FileReader.java" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/infrastructure/PokerGameCommandLineRunner.java" "/home/shdzzl/ICM/guilhermehkr-poker/pom.xml" "~/Projects/validation-book/src/Testing.hs" "/home/shdzzl/ICM/blueridge/shell.nix" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/Projects/validation-book/validation-book.cabal" "/home/shdzzl/Projects/validation-book/stack.yaml" "/home/shdzzl/Projects/validation-book/src/ValidationExample.hs" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/Projects/validation-book/src/ValidationExample.hs" "/home/shdzzl/ICM/the-whisky-list-mobile-app/app/lib/main/pages/login/user_login.dart" "TAGS" "" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/Projects/validation-book/stack.yaml" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/keybindings.el" "/home/shdzzl/.config/nixpkgs/emacs.nix" "/home/shdzzl/.emacs.d/init.el" "/home/shdzzl/.config/plasma-org.kde.plasma.desktop-appletsrc" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/init.el" "/home/shdzzl/.tmux.conf" "/home/shdzzl/.bashrc" "/home/shdzzl/.emacs.d/haskell.el" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/.emacs.d/haskell.el" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/Projects/haskell-success-and-failure/practice.hs" "/home/shdzzl/.bashrc" "~/.tmux.conf" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/ICM/ap-ecommerce-app/ap/ecommerce/app/domain/users.py" "/home/shdzzl/ICM/ap-ecommerce-app/ap/ecommerce/app/api/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.zcml" "/home/shdzzl/ICM/twl-www/alembic/versions/39cb43d08d4d_add_members_table.py" "/home/shdzzl/.bash_profile" "/home/shdzzl/.bashrc" "/home/shdzzl/ICM/twl-www/twl/www/browser/members.py" "/home/shdzzl/ICM/twl-www/twl/www/api/user.py" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/browser/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/browser/configure.py" "/home/shdzzl/ICM/twl-www/twl/www/browser/__init__.py" "/home/shdzzl/ICM/twl-www/twl/www/api/__init__.py" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.py" "/home/shdzzl/ICM/twl-www/twl/www/api/__init__.py" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/browser/configure.zcml" "~/ICM/twl-www" "~/Projects/dot-files/home/user/.emacs.d/python.el" "/home/shdzzl/.config/nixpkgs/emacs.nix" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/Projects/dot-files/home/user/.config/nixpkgs/home.nix" "/home/shdzzl/.bashrc" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/web.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/clojure.el" "~/Projects/dot-files/home/user/.emacs.d/restclient.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/init.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/prettify.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/init.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/prettify.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/utils.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/prettify.el" "/home/shdzzl/.emacs.d/init.el" "/home/shdzzl/.config/nixpkgs/config.nix" "~/ICM/listsure/resources/migrations/" "/home/shdzzl/ICM/listsure/README.md" "/home/shdzzl/.postgres/listsure/data/postgresql.conf" "/home/shdzzl/.postgres/data/postgresql.conf" "/home/shdzzl/.postgres/listsure/postgresql.conf" "/home/shdzzl/ICM/listsure/shell.nix" "/home/shdzzl/.postgres/data/postmaster.opts" "/home/shdzzl/.postgres/data/postgresql.auto.conf" "~/.postgres/socket" "/home/shdzzl/.postgres/data/postgresql.conf" "/home/shdzzl/.bashrc" "/home/shdzzl/.ssh/config" "/home/shdzzl/.bashrc" "/home/shdzzl/.bash_profile" "~/.bashrc" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/Projects/rebl-sandbox/deps.edn" "~/ICM/haskell-guy-poker/src/icm_poker/core.clj" "~/ICM/haskell-guy-poker/src/icm-poker/core.clj" "~/ICM/haskell-guy-poker/src/icm_poker" "~/ICM/haskell-guy-poker/deps.edn" "~/ICM/haskell-guy-poker/src/icm-poker.clj" "~/ICM/haskell-guy-poker/src" "~/ICM/haskell-guy-poker/icm-poker.clj" "~/ICM/haskell-guy-poker" "/home/shdzzl/Downloads/icmPoker-1.clj" "~/Projects/rebl-sandbox/src/rebl_sandbox/core.clj" "~/Projects/rebl-sandbox/src/rebl_sandbox" "~/Projects/rebl-sandbox/src" "/home/shdzzl/.config/nixpkgs/config.nix" "~/Projects/rebl-sandbox/deps.edn" "~/Projects/rebl-sandbox"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 208
+  "/home/shdzzl/Projects/validation-book/src/Main.hs"
+  "Main.hs"
+  'haskell-mode
+  '(eldoc-mode projectile-mode interactive-haskell-mode)
+  789
+  '(837 nil)
+  nil
+  nil
+  '((tab-width . 8) (indent-tabs-mode) (buffer-display-time 23818 9677 867391 679000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring (1372 1372 1372 1372 1447 148 1 348 348 531 1708 1708 1635 1632 1712 1829))))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/Projects/validation-book/src/Testing.hs"
+  "Testing.hs"
+  'haskell-mode
+  '(eldoc-mode projectile-mode interactive-haskell-mode)
+  162
+  '(1 nil)
+  nil
+  nil
+  '((tab-width . 8) (indent-tabs-mode) (buffer-display-time 23816 15334 669287 224000) (buffer-file-coding-system . utf-8-unix))
+  '((mark-ring (393 1))))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/.config/nixpkgs/config.nix"
+  "config.nix"
+  'nix-mode
+  '(projectile-mode)
+  830
+  '(889 nil)
+  nil
+  nil
+  '((tab-width . 2) (indent-tabs-mode) (buffer-display-time 23810 46635 23421 630000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring (889 889 1193 851 937 830))))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/Projects/validation-book/validation-book.cabal"
+  "validation-book.cabal"
+  'haskell-cabal-mode
+  '(projectile-mode)
+  694
+  '(622 nil)
+  nil
+  nil
+  '((indent-tabs-mode) (buffer-display-time 23809 37365 285286 703000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring (659 659 659 682 659 645 1968 694))))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/Projects/validation-book/stack.yaml"
+  "stack.yaml"
+  'fundamental-mode
+  '(projectile-mode)
+  1
+  '(35 nil)
+  nil
+  nil
+  '((buffer-display-time 23809 17034 311441 444000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring (35 22 1))))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/Projects/validation-book/src/ValidationExample.hs"
+  "ValidationExample.hs"
+  'haskell-mode
+  '(eldoc-mode projectile-mode interactive-haskell-mode)
+  82
+  '(nil nil)
+  nil
+  nil
+  '((tab-width . 8) (indent-tabs-mode) (buffer-display-time 23808 22066 540258 315000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring nil)))
+

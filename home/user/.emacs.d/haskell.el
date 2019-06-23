@@ -1,9 +1,20 @@
-(eval-after-load 'haskell-mode
-  '(progn
-     (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
-     (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-     (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-     (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
-     (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)))
+(setq haskell-process-show-debug-tips nil)
 
-(add-to-list 'Info-default-directory-list "~/.emacs.d/packages/haskell-haskell-mode/")
+(custom-set-variables
+  '(haskell-process-suggest-remove-import-lines t)
+  '(haskell-process-auto-import-loaded-modules t)
+  '(haskell-process-log t))
+
+;; (define-keys interactive-haskell-mode-map
+;;   "M-." 'haskell-mode-goto-loc
+;;   "C-c C-t" 'haskell-mode-show-type-at)
+
+;; (define-keys haskell-mode-map
+;;   "C-c C-l" 'haskell-process-load-or-reload
+;;   "C-c C-z" 'haskell-interactive-bring
+;;   "C-c C-t" 'haskell-process-do-type
+;;   "C-c C-i" 'haskell-process-do-info
+;;   "C-c C-c" 'haskell-process-cabal-build
+;;   "C-c C-k" 'haskell-interactive-mode-clear)
+
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
