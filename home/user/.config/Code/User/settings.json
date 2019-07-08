@@ -7,5 +7,6 @@
     "window.zoomLevel": 0,
     "editor.fontFamily": "'Fira Code', 'monospace', monospace",
     "editor.fontLigatures": true,
-    "editor.fontWeight": "bold"
+    "editor.fontWeight": "bold",
+    "update.mode": "none"
 }
