@@ -1,0 +1,12 @@
+{
+    "window.menuBarVisibility": "toggle",
+    "dart.checkForSdkUpdates": false,
+    "workbench.colorTheme": "Tomorrow Night",
+    "explorer.confirmDelete": false,
+    "git.confirmSync": false,
+    "window.zoomLevel": 0,
+    "editor.fontFamily": "'Fira Code', 'monospace', monospace",
+    "editor.fontLigatures": true,
+    "editor.fontWeight": "bold",
+    "update.mode": "none"
+}

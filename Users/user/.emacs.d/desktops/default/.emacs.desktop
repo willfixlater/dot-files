@@ -1,0 +1,79 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Tue Jul  9 03:52:14 2019
+;; Desktop file format version 208
+;; Emacs version 26.2
+
+;; Global section:
+(setq desktop-saved-frameset [frameset 1 (23843 33486 471821 307000) (desktop . "208") "shdzzl@broken-moor" nil nil ((((minibuffer . t) (undecorated) (override-redirect) (font-backend xft x) (font-parameter . "Fira Code-11:bold:antialias=true") (font . "-CTDB-Fira Code-bold-normal-normal-*-15-*-*-*-m-0-iso10646-1") (border-width . 0) (internal-border-width . 0) (right-divider-width . 0) (bottom-divider-width . 0) (vertical-scroll-bars) (horizontal-scroll-bars) (foreground-color . "#c5c8c6") (background-color . "#1d1f21") (mouse-color . "#292f34") (border-color . "#373b41") (screen-gamma) (line-spacing) (left-fringe . 20) (right-fringe . 20) (no-special-glyphs) (scroll-bar-foreground . "#292f34") (scroll-bar-background . "#292f34") (menu-bar-lines . 0) (tool-bar-lines . 0) (title) (wait-for-wm . t) (tool-bar-position . top) (inhibit-double-buffering) (icon-type . t) (auto-raise) (auto-lower) (cursor-type . hbar) (scroll-bar-width . 0) (scroll-bar-height . 0) (alpha) (no-focus-on-map) (no-accept-focus) (fullscreen . maximized) (visibility . t) (skip-taskbar) (z-group) (environment "LC_TIME=en_AU.UTF-8" "SESSION_MANAGER=local/broken-moor:@/tmp/.ICE-unix/1110,unix/broken-moor:/tmp/.ICE-unix/1110" "KDE_SESSION_VERSION=5" "KDE_SESSION_UID=1000" "LC_IDENTIFICATION=en_AU.UTF-8" "PATH=/home/shdzzl/.local/bin:/home/shdzzl/.nix-profile/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/flutter/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl" "QT_AUTO_SCREEN_SCALE_FACTOR=0" "XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session1" "XAUTHORITY=/tmp/xauth-1000-_0" "XDG_RUNTIME_DIR=/run/user/1000" "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus" "LOGNAME=shdzzl" "LC_TELEPHONE=en_AU.UTF-8" "WINDOWID=41943047" "GTK_RC_FILES=/etc/gtk/gtkrc:/home/shdzzl/.gtkrc:/home/shdzzl/.config/gtkrc" "LANGUAGE=" "SHLVL=1" "COLORFGBG=15;0" "XDG_SEAT=seat0" "NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" "KONSOLE_PROFILE_NAME=Shell" "QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1" "XDG_CURRENT_DESKTOP=KDE" "XCURSOR_THEME=breeze_cursors" "LC_MESSAGES=en_AU.UTF-8" "XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0" "XDG_SESSION_CLASS=user" "KONSOLE_DBUS_SERVICE=:1.29" "TERM=xterm-256color" "SHELL=/bin/bash" "MAIL=/var/spool/mail/shdzzl" "GTK_MODULES=canberra-gtk-module" "GDK_PIXBUF_MODULE_FILE=/nix/store/gfa1y5ih9pzn3cnhmww1m3m8xri5jyfk-librsvg-2.44.13/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" "LC_NUMERIC=en_AU.UTF-8" "LC_ADDRESS=en_AU.UTF-8" "GIO_EXTRA_MODULES=/nix/store/h64zysv11nddfhyfyizyj9kkq95qhd9j-dconf-0.32.0-lib/lib/gio/modules:/nix/store/h64zysv11nddfhyfyizyj9kkq95qhd9j-dconf-0.32.0-lib/lib/gio/modules" "XDG_SESSION_DESKTOP=KDE" "KONSOLE_DBUS_SESSION=/Sessions/1" "XDG_DATA_DIRS=/nix/store/553v63c3ms0fh8rrkgw68w8lgy47fvdi-emacs-26.2/share:/nix/store/d5b6yb9jh542gb97mi47n8j68idyi93x-gtk+3-3.24.8/share/gsettings-schemas/gtk+3-3.24.8:/nix/store/m1y7gpwdrpixzcqwpwwsqlsyy2v8pc6k-gsettings-desktop-schemas-3.32.0/share/gsettings-schemas/gsettings-desktop-schemas-3.32.0:/nix/store/d5b6yb9jh542gb97mi47n8j68idyi93x-gtk+3-3.24.8/share/gsettings-schemas/gtk+3-3.24.8:/nix/store/m1y7gpwdrpixzcqwpwwsqlsyy2v8pc6k-gsettings-desktop-schemas-3.32.0/share/gsettings-schemas/gsettings-desktop-schemas-3.32.0:/home/shdzzl/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share" "XDG_SESSION_TYPE=x11" "XCURSOR_SIZE=24" "LC_CTYPE=en_AU.UTF-8" "HOME=/home/shdzzl" "NIX_PATH=nixpkgs=/home/shdzzl/.nix-defexpr/channels/nixpkgs" "PWD=/home/shdzzl" "GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/shdzzl/.gtkrc-2.0:/home/shdzzl/.config/gtkrc-2.0" "KONSOLE_VERSION=190402" "EMACSLOADPATH=/nix/store/i50sm8l5vcsz65rdzcl2g3iayyp466da-emacs-packages-deps/share/emacs/site-lisp:" "LC_COLLATE=en_AU.UTF-8" "DESKTOP_SESSION=/usr/share/xsessions/plasma" "USER=shdzzl" "XDG_SESSION_ID=2" "LC_NAME=en_AU.UTF-8" "PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket" "XDG_VTNR=1" "MOZ_PLUGIN_PATH=/usr/lib/mozilla/plugins" "QT_SCREEN_SCALE_FACTORS=eDP1=1;DP1=1;DP2=1;HDMI1=1;HDMI2=1;VIRTUAL1=1;" "COLORTERM=truecolor" "SHELL_SESSION_ID=0d551be8d9574eea972c7c9cd3e77c5a" "OLDPWD=/home/shdzzl/Projects/dot-files" "CLOJURE_HOME=/usr/share/clojure" "DISPLAY=:0" "PROFILEHOME=" "YAOURT_COLORS=nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35" "LANG=en_AU.UTF-8" "LC_MONETARY=en_AU.UTF-8" "LC_PAPER=en_AU.UTF-8" "LC_MEASUREMENT=en_AU.UTF-8" "LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.pdf=00;32:*.ps=00;32:*.txt=00;32:*.patch=00;32:*.diff=00;32:*.log=00;32:*.tex=00;32:*.doc=00;32:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:" "KDE_FULL_SESSION=true" "GS_LIB=/home/shdzzl/.fonts" "FLUTTER_HOME=/opt/flutter") (display-type . color) (background-mode . dark) (cursor-color . "#ffffff") (sticky) (frameset--id . "3133-AFBA-0B5D-77E2") (frameset--mini t . t) (height . 50) (width . 208) (modeline . t) (unsplittable) (left . 0) (top . 0) (icon-name) (display . ":0") (explicit-name)) ((min-height . 4) (min-width . 10) (min-height-ignore . 4) (min-width-ignore . 7) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 80) (min-pixel-width . 90) (min-pixel-height-ignore . 80) (min-pixel-width-ignore . 63) (min-pixel-height-safe . 20) (min-pixel-width-safe . 18)) leaf (pixel-width . 1920) (pixel-height . 995) (total-width . 213) (total-height . 49) (normal-height . 1.0) (normal-width . 1.0) (buffer ".profile" (selected . t) (hscroll . 0) (fringes 20 20 nil) (margins nil) (scroll-bars nil 0 t nil 0 t) (vscroll . 0) (dedicated) (point . 1) (start . 1))) (((minibuffer . t) (menu-bar-lines . 0) (tool-bar-lines . 0) (vertical-scroll-bars) (right-fringe . 20) (left-fringe . 20) (foreground-color . "unspecified-fg") (background-color . "unspecified-bg") (display-type . mono) (background-mode . dark) (cursor-color . "#ffffff") (font . "tty") (height . 11) (width . 10) (modeline . t) (unsplittable) (cursor-type . hbar) (frameset--id . "86C1-60A9-DBA9-60DA") (frameset--mini t)) ((min-height . 4) (min-width . 10) (min-height-ignore . 3) (min-width-ignore . 2) (min-height-safe . 1) (min-width-safe . 2) (min-pixel-height . 4) (min-pixel-width . 10) (min-pixel-height-ignore . 3) (min-pixel-width-ignore . 2) (min-pixel-height-safe . 1) (min-pixel-width-safe . 2)) leaf (pixel-width . 10) (pixel-height . 10) (total-width . 10) (total-height . 10) (normal-height . 1.0) (normal-width . 1.0) (buffer "config.nix" (selected) (hscroll . 0) (fringes 0 0 nil) (margins nil) (scroll-bars nil 0 t nil 0 t) (vscroll . 0) (dedicated) (point . 830) (start . 1))))])
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring nil)
+(setq regexp-search-ring '("icm" "either" "(" "name" "alias" "inter" "activi" "user" "alias" "tr" "member" "get_member" "ICM" "proj" "socke" "aliases"))
+(setq register-alist nil)
+(setq file-name-history '("/home/shdzzl/.profile" "/home/shdzzl/.bash_profile" "/home/shdzzl/.bashrc" "/home/shdzzl/.tmux.conf" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/service/PokerService.java" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/service/GameService.java" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/infrastructure/FileReader.java" "/home/shdzzl/ICM/guilhermehkr-poker/src/main/java/com/poker/challenge/infrastructure/PokerGameCommandLineRunner.java" "/home/shdzzl/ICM/guilhermehkr-poker/pom.xml" "~/Projects/validation-book/src/Testing.hs" "/home/shdzzl/ICM/blueridge/shell.nix" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/Projects/validation-book/validation-book.cabal" "/home/shdzzl/Projects/validation-book/stack.yaml" "/home/shdzzl/Projects/validation-book/src/ValidationExample.hs" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/Projects/validation-book/src/ValidationExample.hs" "/home/shdzzl/ICM/the-whisky-list-mobile-app/app/lib/main/pages/login/user_login.dart" "TAGS" "" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/Projects/validation-book/stack.yaml" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/keybindings.el" "/home/shdzzl/.config/nixpkgs/emacs.nix" "/home/shdzzl/.emacs.d/init.el" "/home/shdzzl/.config/plasma-org.kde.plasma.desktop-appletsrc" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/init.el" "/home/shdzzl/.tmux.conf" "/home/shdzzl/.bashrc" "/home/shdzzl/.emacs.d/haskell.el" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/.emacs.d/haskell.el" "/home/shdzzl/Projects/validation-book/src/Main.hs" "/home/shdzzl/Projects/haskell-success-and-failure/practice.hs" "/home/shdzzl/.bashrc" "~/.tmux.conf" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/ICM/ap-ecommerce-app/ap/ecommerce/app/domain/users.py" "/home/shdzzl/ICM/ap-ecommerce-app/ap/ecommerce/app/api/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.zcml" "/home/shdzzl/ICM/twl-www/alembic/versions/39cb43d08d4d_add_members_table.py" "/home/shdzzl/.bash_profile" "/home/shdzzl/.bashrc" "/home/shdzzl/ICM/twl-www/twl/www/browser/members.py" "/home/shdzzl/ICM/twl-www/twl/www/api/user.py" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/browser/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/browser/configure.py" "/home/shdzzl/ICM/twl-www/twl/www/browser/__init__.py" "/home/shdzzl/ICM/twl-www/twl/www/api/__init__.py" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.py" "/home/shdzzl/ICM/twl-www/twl/www/api/__init__.py" "/home/shdzzl/ICM/twl-www/twl/www/api/configure.zcml" "/home/shdzzl/ICM/twl-www/twl/www/browser/configure.zcml" "~/ICM/twl-www" "~/Projects/dot-files/home/user/.emacs.d/python.el" "/home/shdzzl/.config/nixpkgs/emacs.nix" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/Projects/dot-files/home/user/.config/nixpkgs/home.nix" "/home/shdzzl/.bashrc" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/web.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/clojure.el" "~/Projects/dot-files/home/user/.emacs.d/restclient.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/init.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/prettify.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/init.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/prettify.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/utils.el" "/home/shdzzl/Projects/dot-files/home/user/.emacs.d/prettify.el" "/home/shdzzl/.emacs.d/init.el" "/home/shdzzl/.config/nixpkgs/config.nix" "~/ICM/listsure/resources/migrations/" "/home/shdzzl/ICM/listsure/README.md" "/home/shdzzl/.postgres/listsure/data/postgresql.conf" "/home/shdzzl/.postgres/data/postgresql.conf" "/home/shdzzl/.postgres/listsure/postgresql.conf" "/home/shdzzl/ICM/listsure/shell.nix" "/home/shdzzl/.postgres/data/postmaster.opts" "/home/shdzzl/.postgres/data/postgresql.auto.conf" "~/.postgres/socket" "/home/shdzzl/.postgres/data/postgresql.conf" "/home/shdzzl/.bashrc" "/home/shdzzl/.ssh/config" "/home/shdzzl/.bashrc" "/home/shdzzl/.bash_profile" "~/.bashrc" "/home/shdzzl/.config/nixpkgs/config.nix" "/home/shdzzl/Projects/rebl-sandbox/deps.edn" "~/ICM/haskell-guy-poker/src/icm_poker/core.clj" "~/ICM/haskell-guy-poker/src/icm-poker/core.clj" "~/ICM/haskell-guy-poker/src/icm_poker" "~/ICM/haskell-guy-poker/deps.edn" "~/ICM/haskell-guy-poker/src/icm-poker.clj" "~/ICM/haskell-guy-poker/src" "~/ICM/haskell-guy-poker/icm-poker.clj" "~/ICM/haskell-guy-poker" "/home/shdzzl/Downloads/icmPoker-1.clj" "~/Projects/rebl-sandbox/src/rebl_sandbox/core.clj" "~/Projects/rebl-sandbox/src/rebl_sandbox" "~/Projects/rebl-sandbox/src"))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 208
+  "/home/shdzzl/.profile"
+  ".profile"
+  'sh-mode
+  '(projectile-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-display-time 23843 33452 689690 907000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/.bash_profile"
+  ".bash_profile"
+  'sh-mode
+  '(projectile-mode)
+  199
+  '(199 nil)
+  nil
+  nil
+  '((buffer-display-time 23843 33451 265035 216000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/.bashrc"
+  ".bashrc"
+  'sh-mode
+  '(projectile-mode)
+  18
+  '(nil nil)
+  nil
+  nil
+  '((buffer-display-time 23843 33409 767239 926000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring nil)))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/.tmux.conf"
+  ".tmux.conf"
+  'conf-unix-mode
+  '(projectile-mode)
+  787
+  '(1332 nil)
+  nil
+  nil
+  '((buffer-display-time 23843 33398 481673 487000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring (1377 1 787))))
+
+(desktop-create-buffer 208
+  "/home/shdzzl/Projects/dot-files/home/user/.config/nixpkgs/config.nix"
+  "config.nix"
+  'nix-mode
+  '(projectile-mode)
+  1054
+  '(889 nil)
+  nil
+  nil
+  '((tab-width . 2) (indent-tabs-mode) (buffer-display-time 23843 33270 979657 260000) (buffer-file-coding-system . undecided-unix))
+  '((mark-ring (889 889 1158 851 937 830 1054))))
+

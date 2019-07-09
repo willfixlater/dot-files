@@ -1,0 +1,31 @@
+(defun buffer-state-* ()
+  (cond (buffer-read-only "·")
+        ((buffer-modified-p) "*")
+        (t "-")))
+
+(defun buffer-state-+ ()
+  (cond ((buffer-modified-p) "*")
+        (buffer-read-only "·")
+        (t "-")))
+
+(defun list->str (l)
+  (mapconcat 'identity l ""))
+
+(defun aligned-mode-line (left center right)
+  (let* ((left-f      `(format-mode-line ,left))
+         (center-f    `(format-mode-line ,center))
+         (right-f     `(concat " " (format-mode-line ,right)))
+         (total-available `(- (window-width) (length ,center-f)))
+         (available   `(/ ,total-available 2))
+         (left-space  `(list->str (make-list (- ,available (length ,left-f)) " ")))
+         (right-space `(list->str (make-list (- ,available (length ,right-f)) " ")))
+         (left        `(if (>= (length ,left-f) ,available)
+                           (concat (seq-take ,left-f (- ,available 4)) "... ")
+                           (concat ,left-f ,left-space)))
+         (right       `(concat ,right-space ,right-f)))
+    (setq-default mode-line-format
+                  `(" "
+                    (:eval ,left)
+                    (:eval ,center)
+                    (:eval ,right)
+                    (if (cl-oddp ,total-available) "  " " ")))))
