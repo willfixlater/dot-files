@@ -31,10 +31,11 @@
           stack
           awscli
           google-cloud-sdk
-          mailcatcher
+          #mailcatcher
           (import ./emacs.nix { inherit pkgs; })
-          vscode
-          android-studio
+          # Flutter
+          #vscode
+          #android-studio
           # Clojure
           leiningen
           # Node
