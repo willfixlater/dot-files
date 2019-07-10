@@ -38,7 +38,7 @@ in
       restclient
     ])
     ++
-    (with epkgs.elpaPackages; [ ])
+    (with epkgs.elpaPackages; [])
     ++
     [ ]
   )

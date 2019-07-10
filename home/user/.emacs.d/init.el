@@ -20,6 +20,7 @@
 (load "~/.emacs.d/prettify.el")
 (load "~/.emacs.d/mode-line.el")
 (load "~/.emacs.d/desktop.el")
+(load "~/.emacs.d/org.el")
 
 ; Set theme
 (load-theme 'sanityinc-tomorrow-night t)
