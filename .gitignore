@@ -4,6 +4,7 @@ home/user/.emacs.d/backup/**/*
 home/user/.emacs.d/backups/**/*
 home/user/.emacs.d/auto-save/**/*
 home/user/.emacs.d/auto-save-list/**/*
+home/user/.emacs.d/desktops/**/*
 home/user/.emacs.d/ido.last
 home/user/.emacs.d/projectile-bookmarks.eld
 
