@@ -8,5 +8,6 @@
     "editor.fontFamily": "'Fira Code', 'monospace', monospace",
     "editor.fontLigatures": true,
     "editor.fontWeight": "bold",
-    "update.mode": "none"
+    "update.mode": "none",
+    "explorer.confirmDragAndDrop": false
 }
