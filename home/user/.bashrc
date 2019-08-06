@@ -90,34 +90,6 @@ fi
 
 unset use_color safe_term match_lhs sh
 
-# Aliases
-
-alias sudo="sudo "
-alias cp="cp -i"                          # confirm before overwriting something
-alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
-alias np='nano -w PKGBUILD'
-alias more=less
-alias em="emacs -nw"
-alias ec="emacsclient -s default -nw"
-alias emacs-default="emacsclient -s default -c &"
-alias emacs-listsure="emacsclient -s listsure -c &"
-alias emacs-blueridge="emacsclient -s blueridge -c &"
-alias emacs-daemons="emacs --daemon=default && \
-                     emacs --daemon=listsure && \
-                     emacs --daemon=blueridge"
-alias ssh-init="eval \`ssh-agent\` && \
-                ssh-add ~/.ssh/listsure-prod.pem && \
-                ssh-add ~/.ssh/all-icm.key"
-alias pg-start="pg_ctl -D ~/.postgres/data -l ~/.postgres/log start"
-alias pg-stop="pg_ctl -D ~/.postgres/data stop"
-alias listsure-db-tunnel-prod="ssh -Av -L9999:localhost:9999 listsure-prod-bastion -t ssh -v -L9999:la1mf6w11oez2v9.cyvjn25ipdu3.ap-southeast-2.rds.amazonaws.com:5432 -N localhost"
-alias listsure-db-tunnel-test="ssh -Av -L9999:localhost:9999 listsure-test-bastion -t ssh -v -L9999:la1c9ef2rahe90v.cyvjn25ipdu3.ap-southeast-2.rds.amazonaws.com:5432 -N localhost"
-# Have to pass ec2 user & instance, e.g. listsure-nrepl-tunnel ec2-user@1.2.3.4
-alias listsure-nrepl-tunnel-prod="ssh -Av -L7888:localhost:7888 listsure-nrepl-bastion -t ssh -v -L7888:localhost:7888 -N"
-alias listsure-connect-to-db="psql -h localhost -p 9999 listsure listsuredba"
-alias listsure-connect-to-nrepl="rlwrap nc localhost 7888"
-
 xhost +local:root > /dev/null 2>&1
 
 complete -cf sudo
@@ -165,3 +137,32 @@ export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1
 
 # env vars
 export PATH=$HOME/.local/bin:$PATH
+export PGHOST=$HOME/.postgres/socket
+
+# Aliases
+
+alias sudo="sudo "
+alias cp="cp -i"                          # confirm before overwriting something
+alias df='df -h'                          # human-readable sizes
+alias free='free -m'                      # show sizes in MB
+alias np='nano -w PKGBUILD'
+alias more=less
+alias em="emacs -nw"
+alias ec="emacsclient -s default -nw"
+alias emacs-default="emacsclient -s default -c &"
+alias emacs-listsure="emacsclient -s listsure -c &"
+alias emacs-blueridge="emacsclient -s blueridge -c &"
+alias emacs-daemons="emacs --daemon=default && \
+                     emacs --daemon=listsure && \
+                     emacs --daemon=blueridge"
+alias ssh-init="eval \`ssh-agent\` && \
+                ssh-add ~/.ssh/listsure-prod.pem && \
+                ssh-add ~/.ssh/all-icm.key"
+alias pg-start="pg_ctl -D ~/.postgres/data -l ~/.postgres/log -s start -o \"-k $PGHOST\""
+alias pg-stop="pg_ctl -D ~/.postgres/data -s stop"
+alias listsure-db-tunnel-prod="ssh -Av -L9999:localhost:9999 listsure-prod-bastion -t ssh -v -L9999:la1mf6w11oez2v9.cyvjn25ipdu3.ap-southeast-2.rds.amazonaws.com:5432 -N localhost"
+alias listsure-db-tunnel-test="ssh -Av -L9999:localhost:9999 listsure-test-bastion -t ssh -v -L9999:la1c9ef2rahe90v.cyvjn25ipdu3.ap-southeast-2.rds.amazonaws.com:5432 -N localhost"
+# Have to pass ec2 user & instance, e.g. listsure-nrepl-tunnel ec2-user@1.2.3.4
+alias listsure-nrepl-tunnel-prod="ssh -Av -L7888:localhost:7888 listsure-nrepl-bastion -t ssh -v -L7888:localhost:7888 -N"
+alias listsure-connect-to-db="psql -h localhost -p 9999 listsure listsuredba"
+alias listsure-connect-to-nrepl="rlwrap nc localhost 7888"
