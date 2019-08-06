@@ -32,10 +32,12 @@ in
       haskell-mode
       rust-mode
       elpy
+      yaml-mode
     ])
     ++
     (with epkgs.melpaPackages; [
       restclient
+      floobits
     ])
     ++
     (with epkgs.elpaPackages; [])
