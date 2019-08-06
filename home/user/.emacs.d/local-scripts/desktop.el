@@ -6,7 +6,7 @@
   (desktop-save (daemon->desktop (daemonp))))
 
 (defun desktop-save-on-kill ()
-  (let ((desktop-dir (daemon->desktop (daemonp))))
+  (let* ((desktop-dir (daemon->desktop (daemonp))))
     (desktop-save desktop-dir)
     (desktop-release-lock desktop-dir)))
 

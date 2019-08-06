@@ -7,6 +7,7 @@
   "M-n" 'scroll-up-line
   "C-," 'scroll-right
   "C-." 'scroll-left
+  "M-Z" 'zap-to-char
   "C-c r" 'point-to-register
   "C-c j" 'jump-to-register
   "C-x o" 'ace-window
