@@ -6,7 +6,9 @@ home/user/.emacs.d/auto-save/**/*
 home/user/.emacs.d/auto-save-list/**/*
 home/user/.emacs.d/desktops/**/*
 home/user/.emacs.d/ido.last
+home/user/.emacs.d/projectile.cache
 home/user/.emacs.d/projectile-bookmarks.eld
+home/user/.emacs.d/bookmarks
 
 home/user/.xmonad/**/*.o
 home/user/.xmonad/**/*.hi
