@@ -36,7 +36,7 @@
           vscode
           android-studio
           # Clojure
-          leiningen
+          # leiningen
           # Node
           nodejs
         ];
