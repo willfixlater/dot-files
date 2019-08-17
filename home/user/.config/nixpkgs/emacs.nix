@@ -19,6 +19,7 @@ in
       # magit-gitflow
       flycheck
       company
+      eglot
       nix-mode
       markdown-mode
       haml-mode
@@ -33,11 +34,13 @@ in
       rust-mode
       elpy
       yaml-mode
+      dart-mode
     ])
     ++
     (with epkgs.melpaPackages; [
       restclient
       floobits
+      flutter
     ])
     ++
     (with epkgs.elpaPackages; [])
