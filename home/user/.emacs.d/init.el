@@ -10,8 +10,8 @@
 
 ;; Load local elisp scripts
 (dolist (module '("utils.el" "keybindings.el" "mode-line.el" "desktop.el"
-                  "git.el" "org.el" "restclient.el"
-                  "lisp.el" "web.el"
+                  "git.el" "org.el" "restclient.el" "note-taking.el"
+                  "eglot.el" "lisp.el" "web.el"
                   "clojure.el"
                   "haskell.el"
                   "rust.el"

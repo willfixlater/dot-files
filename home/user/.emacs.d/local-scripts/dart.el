@@ -1,5 +1,3 @@
-(require 'eglot)
-
 (setq dart-format-on-save t)
 
 (defun project-try-dart (dir)
@@ -11,6 +9,3 @@
 (add-hook 'project-find-functions #'project-try-dart)
 (cl-defmethod project-roots ((project (head dart)))
   (list (cdr project)))
-
-(add-to-list 'eglot-server-programs '(dart-mode "dart" "/opt/flutter/bin/cache/dart-sdk/bin/snapshots/analysis_server.dart.snapshot" "--lsp")) 
-(add-hook 'dart-mode-hook 'eglot-ensure)
