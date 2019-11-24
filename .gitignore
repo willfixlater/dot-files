@@ -16,4 +16,6 @@ home/user/.xmonad/**/*.hi
 home/user/.xmonad/xmonad-x86_64-linux
 home/user/.xmonad/xmonad.errors
 
-home/user/.config/Code/User/workspaceStorage/**/*
+home/user/.config/Code/**/*
+!home/user/.config/Code/keybindings.json
+!home/user/.config/Code/settings.json
