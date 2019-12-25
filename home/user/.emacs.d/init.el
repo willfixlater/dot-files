@@ -73,7 +73,17 @@
 
 ;; Company
 (custom-set-variables
- '(company-backends '(company-capf company-elisp)))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-backends (quote (company-capf company-elisp)))
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(package-selected-packages
+   (quote
+    (company-lsp lsp-ui lsp-mode sbt-mode scala-mode yaml-mode use-package sass-mode rust-mode rjsx-mode restclient projectile nix-mode markdown-mode magit haskell-mode geiser flutter floobits emojify elpy eglot dart-mode color-theme-sanityinc-tomorrow clj-refactor better-defaults ag ace-window))))
 
 ;; Set misc. settings
 (setq-default truncate-lines t)
@@ -86,3 +96,9 @@
 (fringe-mode '(20 . 20))
 (fset 'yes-or-no-p 'y-or-n-p)
 (put 'dired-find-alternate-file 'disabled nil)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
