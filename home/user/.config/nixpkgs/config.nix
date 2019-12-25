@@ -39,6 +39,8 @@
           # leiningen
           # Node
           nodejs
+          sbt
+          coursier
         ];
       };
     };

@@ -6,6 +6,7 @@ home/user/.emacs.d/auto-save/**/*
 home/user/.emacs.d/auto-save-list/**/*
 home/user/.emacs.d/desktops/**/*
 home/user/.emacs.d/url/**/*
+home/user/.emacs.d/.lsp-session-*
 home/user/.emacs.d/ido.last
 home/user/.emacs.d/projectile.cache
 home/user/.emacs.d/projectile-bookmarks.eld

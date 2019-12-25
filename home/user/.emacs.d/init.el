@@ -17,6 +17,7 @@
                   "rust.el"
                   "python.el"
                   "dart.el"
+                  "scala.el"
                   "sql.el"
                   "markdown.el"))
   (load (expand-file-name (concat "~/.emacs.d/local-scripts/" module))))

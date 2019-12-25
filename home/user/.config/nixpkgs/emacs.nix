@@ -7,10 +7,12 @@ in
   emacsWithPackages (epkgs:
     (with epkgs.melpaStablePackages; [
       better-defaults
+      use-package
       color-theme-sanityinc-tomorrow
       emojify
       ag
       ace-window
+      eglot
       paredit
       projectile
       magit
@@ -19,7 +21,7 @@ in
       # magit-gitflow
       flycheck
       company
-      eglot
+      yasnippet
       nix-mode
       markdown-mode
       haml-mode
@@ -28,6 +30,7 @@ in
       rjsx-mode
       clojure-mode
       cider
+      inf-clojure
       clj-refactor
       geiser
       haskell-mode
