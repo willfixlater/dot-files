@@ -14,3 +14,6 @@
 
 (setq cider-font-lock-dynamically '(macro core function var))
 (setq cider-repl-pop-to-buffer-on-connect nil)
+
+(define-keys clojure-mode-map
+  "C-c M-n r")
