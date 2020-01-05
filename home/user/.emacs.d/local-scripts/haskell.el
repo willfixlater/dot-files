@@ -1,9 +1,8 @@
 (setq haskell-process-show-debug-tips nil)
 
-(custom-set-variables
-  '(haskell-process-suggest-remove-import-lines t)
-  '(haskell-process-auto-import-loaded-modules t)
-  '(haskell-process-log t))
+(setq haskell-process-suggest-remove-import-lines t)
+(setq haskell-process-auto-import-loaded-modules t)
+(setq haskell-process-log t)
 
 ;; (define-keys interactive-haskell-mode-map
 ;;   "M-." 'haskell-mode-goto-loc

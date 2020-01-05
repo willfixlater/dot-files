@@ -1,3 +1,12 @@
+;;; my-utils.el
+
+;;; Commentary:
+;;
+;; My utils for use in configuring emacs.
+;;
+
+;;; Code:
+
 (defun make-new-directory (dir)
  (unless (file-exists-p dir)
    (make-directory dir t)))
@@ -18,3 +27,10 @@
   (let* ((file-name (expand-file-name name)))
     (when (file-exists-p file-name)
       file-name)))
+
+(defun daemon->desktop (daemon-name)
+  "Map DAEMON-NAME to a a destination directory for saving the desktop."
+  (concat "~/.emacs.d/desktops/" (or daemon-name "other")))
+
+(provide 'my-utils)
+;;; my-utils.el ends here

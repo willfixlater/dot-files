@@ -13,6 +13,15 @@
 (defvar voice-recording-extension ".wav"
   "This is your sound file extension")
 
+(defun voice-record-command (filename)
+  "Returns voice recording command"
+  (format "arecord \"%s\"" filename))
+
+(defun voice-record-on-termination (process current-group)
+  "Returns voice recording command termination signal, nil implies
+no explicit signal"
+  (interrupt-process process current-group))
+
 (defun record-voice-note ()
   "This function uses SOX sound tools to record voice notes. The
 concept is more important than which tools are used. It starts
@@ -20,7 +29,7 @@ recording the sound file within emacs. It can be your sound
 note. Once you press `q` it will stop recording, and open up the
 directory with sound files"
   (interactive)
-  (let* ((filepath (concat voice-recordings-dir "/"
+  (let* ((filepath (concat (expand-file-name voice-recordings-dir) "/"
                            (format-time-string "%Y/%m/%Y-%m-%d/")))
          (filename (concat filepath
                            (format-time-string "%Y-%m-%d-%H:%M:%S")
@@ -39,15 +48,6 @@ directory with sound files"
                            (find-file filepath)
                            (revert-buffer)))
       (recursive-edit))))
-
-(defun voice-record-command (filename)
-  "Returns voice recording command"
-  (format "arecord \"%s\"" filename))
-
-(defun voice-record-on-termination (process current-group)
-  "Returns voice recording command termination signal, nil implies
-no explicit signal"
-  (interrupt-process process current-group))
 
 (provide 'voice-recording)
 ;;; voice-recording.el ends here

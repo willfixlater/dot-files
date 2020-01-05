@@ -6,14 +6,12 @@ let
 in
   emacsWithPackages (epkgs:
     (with epkgs.melpaStablePackages; [
-      better-defaults
       use-package
+      better-defaults
       color-theme-sanityinc-tomorrow
       emojify
       ag
       ace-window
-      eglot
-      paredit
       projectile
       magit
       # TODO: Get magit-gitflow packages to build correctly
@@ -22,6 +20,9 @@ in
       flycheck
       company
       yasnippet
+      # ---
+      paredit
+      eglot
       nix-mode
       markdown-mode
       haml-mode
