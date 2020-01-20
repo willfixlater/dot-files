@@ -39,6 +39,7 @@ in
       elpy
       yaml-mode
       dart-mode
+      nim-mode
     ])
     ++
     (with epkgs.melpaPackages; [
