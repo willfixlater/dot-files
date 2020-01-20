@@ -2,6 +2,7 @@ home/user/.lein/repl-history
 
 home/user/.emacs.d/backup/**/*
 home/user/.emacs.d/backups/**/*
+home/user/.emacs.d/%backup%~
 home/user/.emacs.d/auto-save/**/*
 home/user/.emacs.d/auto-save-list/**/*
 home/user/.emacs.d/desktops/**/*
