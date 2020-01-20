@@ -155,7 +155,8 @@ alias emacs-listsure="emacsclient -s listsure -c &"
 alias emacs-blueridge="emacsclient -s blueridge -c &"
 alias emacs-daemons="emacs --daemon=default && \
                      emacs --daemon=listsure && \
-                     emacs --daemon=blueridge"
+                     emacs --daemon=blueridge && \
+                     emacs --daemon=copyright-agency"
 alias ssh-init="eval \`ssh-agent\` && \
                 ssh-add ~/.ssh/listsure-prod.pem && \
                 ssh-add ~/.ssh/all-icm.key"
