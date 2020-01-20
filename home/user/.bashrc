@@ -157,6 +157,10 @@ alias emacs-daemons="emacs --daemon=default && \
                      emacs --daemon=listsure && \
                      emacs --daemon=blueridge && \
                      emacs --daemon=copyright-agency"
+alias emacs-kill-default="emacsclient -s default -e \"(kill-emacs)\""
+alias emacs-kill-listsure="emacsclient -s listsure -e \"(kill-emacs)\""
+alias emacs-kill-blueridge="emacsclient -s blueridge -e \"(kill-emacs)\""
+alias emacs-kill-copyright-agency="emacsclient -s copyright-agency -e \"(kill-emacs)\""
 alias ssh-init="eval \`ssh-agent\` && \
                 ssh-add ~/.ssh/listsure-prod.pem && \
                 ssh-add ~/.ssh/all-icm.key"
