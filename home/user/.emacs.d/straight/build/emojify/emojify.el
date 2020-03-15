@@ -1,0 +1,1 @@
+/home/shdzzl/.emacs.d/straight/repos/emacs-emojify/emojify.el

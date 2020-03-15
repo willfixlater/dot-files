@@ -1,0 +1,1 @@
+/home/shdzzl/.emacs.d/straight/repos/magit-popup/magit-popup.el

@@ -1,0 +1,1 @@
+/home/shdzzl/.emacs.d/straight/repos/yasnippet/yasnippet.el

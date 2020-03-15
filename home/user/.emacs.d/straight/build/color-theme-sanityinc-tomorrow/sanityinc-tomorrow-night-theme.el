@@ -1,0 +1,1 @@
+/home/shdzzl/.emacs.d/straight/repos/color-theme-sanityinc-tomorrow/sanityinc-tomorrow-night-theme.el
