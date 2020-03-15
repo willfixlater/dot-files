@@ -14,6 +14,7 @@ home/user/.emacs.d/ido.last
 home/user/.emacs.d/projectile.cache
 home/user/.emacs.d/projectile-bookmarks.eld
 home/user/.emacs.d/bookmarks
+home/user/.emacs.d/straight
 
 home/user/.xmonad/**/*.o
 home/user/.xmonad/**/*.hi
