@@ -1,1 +1,0 @@
-/home/shdzzl/.emacs.d/straight/repos/pyvenv/pyvenv.el
