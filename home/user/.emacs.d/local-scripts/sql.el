@@ -1,5 +1,0 @@
-(setq sql-postgres-login-params '((server :default "localhost")
-                                  (port :default 5432)
-                                  (database)
-                                  (user :default "shdzzl")
-                                  (password)))
