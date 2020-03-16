@@ -37,9 +37,9 @@
 
 (defun desktop-save-on-auto-save ()
   (let* ((daemon-name (resolve-daemon-name))
-         (desktop-dir (daemon-desktop-dir daemon-name))))
-  (make-directory desktop-dir t)
-  (desktop-save desktop-dir))
+         (desktop-dir (daemon-desktop-dir daemon-name)))
+    (make-directory desktop-dir t)
+    (desktop-save desktop-dir)))
 
 (add-hook 'auto-save-hook 'desktop-save-on-auto-save)
 
