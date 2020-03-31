@@ -13,6 +13,9 @@
 ;; Load functional settings
 (load-from-root "functional-settings.el")
 
+;; Load custom keybindings
+(load-from-root "custom-keybindings.el")
+
 ;; Set variables before any packages are initialised
 (setq straight-use-package-by-default t)
 

@@ -36,7 +36,9 @@
   :bind-keymap
   ("C-c p" . projectile-command-map))
 
-(use-package magit)
+(use-package magit
+  :bind
+  ("C-c g" . magit))
 
 (use-package magit-gitflow
   :hook (magit-mode-hook . turn-on-magit-gitflow))
