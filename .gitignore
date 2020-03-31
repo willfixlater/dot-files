@@ -8,6 +8,7 @@ home/user/.emacs.d/auto-save-list/**/*
 home/user/.emacs.d/desktops/**/*
 home/user/.emacs.d/url/**/*
 home/user/.emacs.d/elpa/**/*
+home/user/.emacs.d/elpy/**/*
 home/user/.emacs.d/.lsp-session-*
 home/user/.emacs.d/.org-id-locations
 home/user/.emacs.d/ido.last
