@@ -11,8 +11,8 @@
 ;; Set face attributes
 (defun set-my-face-attributes (_)
   "Set my custom face attributes."
-  (set-face-attribute 'mode-line nil :font "Fira Code-11:bold:antialias=true")
-  (set-face-attribute 'mode-line-inactive nil :font "Fira Code-11:bold:antialias=true")
+  (set-face-attribute 'mode-line nil :font "Fira Code-9:bold:antialias=true")
+  (set-face-attribute 'mode-line-inactive nil :font "Fira Code-9:bold:antialias=true")
   (set-face-attribute 'header-line nil :background "#1d1f21" :foreground "#373b41" :box nil)
   (set-face-attribute 'fringe nil :background "#1d1f21"))
 
@@ -20,7 +20,7 @@
 
 ;; Set default frame values
 (setq default-frame-alist
-      '((font . "Fira Code-11:bold:antialias=true")
+      '((font . "Fira Code-9:bold:antialias=true")
         (cursor-type . hbar)
         (cursor-color . "#ffffff")
         (vertical-scroll-bars . nil)
