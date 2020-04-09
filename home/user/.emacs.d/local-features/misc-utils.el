@@ -7,6 +7,8 @@
 
 ;;; Code:
 
+(require 'seq)
+
 (defun make-dir-path (&rest dirs)
   (seq-reduce (lambda (acc dir)
                 (concat acc (file-name-as-directory dir)))

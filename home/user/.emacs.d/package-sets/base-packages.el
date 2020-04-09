@@ -19,6 +19,13 @@
   :config
   (load-theme 'sanityinc-tomorrow-night t))
 
+(use-package highlight-indent-guides
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-auto-enabled nil)
+  (set-face-foreground 'highlight-indent-guides-character-face "#373b41"))
+
+
 (use-package emojify)
 
 ;; Packages that augment the base functionality of emacs but that do

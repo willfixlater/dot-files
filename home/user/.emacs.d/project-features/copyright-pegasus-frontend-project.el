@@ -16,5 +16,10 @@
   (setq mmm-submode-decoration-level 0)
   (setq js-indent-level 2))
 
+(use-package js2-mode
+  :mode "\\.js\\'"
+  :config
+  (setq js-indent-level 2))
+
 (provide 'copyright-pegasus-frontend-project)
 ;;; copyright-pegasus-frontend-project.el ends here
